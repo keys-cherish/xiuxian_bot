@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XiuXianBot | 公共入口</title>
+    <meta name="description" content="XiuXianBot 公共入口页面，提供项目状态、版本信息与基础指引。">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  </head>
+  <body>
+    <div class="background">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+      <div class="grid"></div>
+    </div>
+
+    <main class="page">
+      <header class="hero">
+        <div class="hero-text">
+          <span class="badge">公测中</span>
+          <h1>修仙世界的自动化中枢</h1>
+          <p class="subtitle">这里是公开入口，用于展示运行状态、版本信息与基础玩法指引。</p>
+          <div class="cta-row">
+            <button class="btn primary" data-action="copy-core" data-port="{{ core_port }}">复制核心 API 地址</button>
+          </div>
+          <div class="hint">
+            <span class="dot"></span>
+            <span>北京时间 <span id="beijing-time">--:--</span> 更新</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="card-header">
+            <div class="pulse"></div>
+            <span>服务概览</span>
+          </div>
+          <div class="card-body">
+            <div class="stat">
+              <span>核心服务</span>
+              <strong>127.0.0.1:{{ core_port }}</strong>
+            </div>
+            <div class="stat">
+              <span>公共入口</span>
+              <strong>127.0.0.1:{{ public_port }}</strong>
+            </div>
+            <div class="stat">
+              <span>核心版本</span>
+              <strong>{{ core_version }}</strong>
+            </div>
+            <div class="stat">
+              <span>Web 版本</span>
+              <strong>{{ web_version }}</strong>
+            </div>
+            <div class="stat">
+              <span>Telegram 版本</span>
+              <strong>{{ telegram_version }}</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid-section">
+        <article class="panel">
+          <h2>玩法路径</h2>
+          <p>从修炼、狩猎、秘境到宗门与抽卡，所有流程统一由核心服务调度。</p>
+          <ul>
+            <li>修炼状态与收益实时记录</li>
+            <li>秘境与狩猎保持北京时间日切</li>
+            <li>抽卡与经济系统一致性校验</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2>运维提示</h2>
+          <p>公共入口不会暴露管理接口，仅提供运行状态与基础信息。</p>
+          <ul>
+            <li>需要公网访问时请用反向代理转发</li>
+            <li>核心服务默认仅监听本机</li>
+            <li>日志可在管理面板中查看</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h2>快速指引</h2>
+          <p>推荐使用 Telegram 机器人或直接调用核心 API 进行游玩。</p>
+          <ul>
+            <li>Telegram 入口可由管理员配置启用</li>
+            <li>API 调用需携带内部令牌</li>
+            <li>公共入口页面可自定义扩展</li>
+          </ul>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <span>© {{ year }} XiuXianBot</span>
+        <span>公共入口页面</span>
+      </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

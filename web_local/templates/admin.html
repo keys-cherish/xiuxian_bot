@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-container">
+  <div class="admin-section">
+    <div class="dropdown-container">
+      <div class="dropdown-header" id="player-specifics-header">
+        <h3>{{ trans.get('admin_player_specifics', '设置玩家属性') }}</h3>
+        <i class="bi bi-chevron-down"></i>
+      </div>
+      <div class="dropdown-content" id="player-specifics-content">
+        <form id="player-specifics-form" class="admin-form">
+          <div class="form-group">
+            <label for="user-search">{{ trans.get('admin_user_search', '用户ID或用户名') }}</label>
+            <div class="search-container">
+              <input type="text" id="user-search" class="form-control" placeholder="{{ trans.get('admin_user_search_placeholder', '输入用户ID或用户名') }}">
+              <button type="button" id="search-user-btn" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="user-info" class="user-info-container" style="display: none;">
+            <div class="user-info-header">
+              <h4 id="user-display-name">玩家名称</h4>
+              <span id="user-id" class="user-id-display">用户编号：000000000</span>
+            </div>
+            <input type="hidden" id="selected-user-id" value="">
+            
+            <div class="form-group">
+              <label for="field-select">{{ trans.get('admin_field_select', '选择数据类型') }}</label>
+              <select id="field-select" class="form-select">
+                <option value="exp">{{ trans.get('admin_field_exp', '经验') }}</option>
+                <option value="copper">{{ trans.get('admin_field_copper', '铜币') }}</option>
+                <option value="gold">{{ trans.get('admin_field_gold', '元宝') }}</option>
+                <option value="rank">{{ trans.get('admin_field_rank', '修为等级') }}</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="action-select">{{ trans.get('admin_action_select', '操作') }}</label>
+              <select id="action-select" class="form-select">
+                <option value="set">{{ trans.get('admin_action_set', '设置') }}</option>
+                <option value="add">{{ trans.get('admin_action_add', '增加') }}</option>
+                <option value="minus">{{ trans.get('admin_action_minus', '减少') }}</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="value-input">{{ trans.get('admin_value_input', '数值') }}</label>
+              <input type="number" id="value-input" class="form-control" min="0">
+            </div>
+            
+            <button type="button" id="apply-changes-btn" class="btn btn-primary">
+              {{ trans.get('admin_apply_changes', '应用更改') }}
+            </button>
+          </div>
+          
+          <div id="search-results" class="search-results" style="display: none;">
+            <h4>{{ trans.get('admin_search_results', '搜索结果') }}</h4>
+            <div id="results-container" class="results-container">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="dropdown-container">
+      <div class="dropdown-header" id="inventory-header">
+        <h3>{{ trans.get('admin_inventory', '物品查看器') }}</h3>
+        <i class="bi bi-chevron-down"></i>
+      </div>
+      <div class="dropdown-content" id="inventory-content">
+        <form id="inventory-form" class="admin-form">
+          <div class="form-group">
+            <label for="inventory-user-search">{{ trans.get('admin_user_search', '用户ID或用户名') }}</label>
+            <div class="search-container">
+              <input type="text" id="inventory-user-search" class="form-control" placeholder="{{ trans.get('admin_user_search_placeholder', '输入用户ID或用户名') }}">
+              <button type="button" id="inventory-search-btn" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="inventory-display" class="inventory-display" style="display: none;">
+            <div class="inventory-header">
+              <h4 id="inventory-user-name">玩家名称</h4>
+              <div class="currency-display">
+                <span class="copper-display">
+                  <i class="bi bi-coin"></i> <span id="copper-amount">0</span>
+                </span>
+                <span class="gold-display">
+                  <i class="bi bi-gem"></i> <span id="gold-amount">0</span>
+                </span>
+              </div>
+            </div>
+            
+            <div class="inventory-items">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>{{ trans.get('admin_item_name', '物品名称') }}</th>
+                    <th>{{ trans.get('admin_item_quantity', '数量') }}</th>
+                    <th>{{ trans.get('admin_item_level', '等级') }}</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-items-container">
+                </tbody>
+              </table>
+              
+              <div class="pagination-controls">
+                <button type="button" id="prev-page-btn" class="btn btn-secondary" disabled>
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span id="page-indicator">{{ trans.get('admin_page_indicator', '第 {0} 页，共 {1} 页') }}</span>
+                <button type="button" id="next-page-btn" class="btn btn-secondary" disabled>
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const psContent = document.getElementById('player-specifics-content');
+    const dropdownHeaders = document.querySelectorAll('.dropdown-header');
+    dropdownHeaders.forEach(header => {
+      header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const icon = this.querySelector('i');
+
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.classList.remove('bi-chevron-up');
+          icon.classList.add('bi-chevron-down');
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+          icon.classList.remove('bi-chevron-down');
+          icon.classList.add('bi-chevron-up');
+        }
+      });
+    });
+    
+    const searchUserBtn = document.getElementById('search-user-btn');
+    const inventoryContent = document.getElementById('inventory-content');
+    let currentInventoryUserId = null;
+    if (searchUserBtn) {
+      searchUserBtn.addEventListener('click', function() {
+        const userId = document.getElementById('user-search').value.trim();
+        if (!userId) return;
+        
+        fetch(`/admin/search_user?query=${encodeURIComponent(userId)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.users && data.users.length > 0) {
+              displaySearchResults(data.users);
+            } else {
+              displayUserInfo(data.user);
+            }
+          })
+          .catch(error => {
+            console.error('搜索用户失败：', error);
+            showPopup('搜索用户失败，请重试。');
+          });
+      });
+    }
+    
+    const applyChangesBtn = document.getElementById('apply-changes-btn');
+    if (applyChangesBtn) {
+      applyChangesBtn.addEventListener('click', function() {
+        const userId = (document.getElementById('selected-user-id') || {}).value || '';
+        const field = document.getElementById('field-select').value;
+        const action = document.getElementById('action-select').value;
+        const rawValue = document.getElementById('value-input').value;
+        
+        if (!userId || !field || !action || rawValue === '') {
+          showPopup('请填写所有字段');
+          return;
+        }
+
+        const parsedValue = parseInt(rawValue, 10);
+        if (Number.isNaN(parsedValue)) {
+          showPopup('请输入有效数字');
+          return;
+        }
+        
+        fetch('/admin/modify_user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            field: field,
+            action: action,
+            value: parsedValue
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            showPopup(data.message);
+          } else {
+            showPopup('错误：' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('修改用户失败：', error);
+          showPopup('修改用户失败，请重试。');
+        });
+      });
+    }
+    
+    const inventorySearchBtn = document.getElementById('inventory-search-btn');
+    if (inventorySearchBtn) {
+      inventorySearchBtn.addEventListener('click', function() {
+        const query = document.getElementById('inventory-user-search').value.trim();
+        if (!query) return;
+
+        resolveUserId(query)
+          .then(userId => {
+            if (!userId) return;
+            currentInventoryUserId = userId;
+            return fetch(`/admin/get_inventory/${encodeURIComponent(userId)}`);
+          })
+          .then(response => response ? response.json() : null)
+          .then(data => {
+            if (!data) return;
+            if (data.status === 'ok') {
+              displayInventory(data);
+            } else {
+              showPopup('错误：' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('获取物品失败：', error);
+            showPopup('获取物品失败，请重试。');
+          });
+      });
+    }
+    
+    const prevPageBtn = document.getElementById('prev-page-btn');
+    const nextPageBtn = document.getElementById('next-page-btn');
+    const pageIndicator = document.getElementById('page-indicator');
+    const pageTemplate = pageIndicator ? pageIndicator.textContent : '第 {0} 页，共 {1} 页';
+    
+    if (prevPageBtn) {
+      prevPageBtn.addEventListener('click', function() {
+        const currentPage = parseInt(document.getElementById('page-indicator').getAttribute('data-current-page'));
+        if (currentPage > 1) {
+          loadInventoryPage(currentPage - 1);
+        }
+      });
+    }
+    
+    if (nextPageBtn) {
+      nextPageBtn.addEventListener('click', function() {
+        const currentPage = parseInt(document.getElementById('page-indicator').getAttribute('data-current-page'));
+        const totalPages = parseInt(document.getElementById('page-indicator').getAttribute('data-total-pages'));
+        if (currentPage < totalPages) {
+          loadInventoryPage(currentPage + 1);
+        }
+      });
+    }
+    
+    function displaySearchResults(users) {
+      const resultsContainer = document.getElementById('results-container');
+      resultsContainer.innerHTML = '';
+      
+      users.forEach(user => {
+        const userElement = document.createElement('div');
+        userElement.className = 'user-result';
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'user-result-info';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'user-result-name';
+        nameSpan.textContent = String(user.in_game_username || '');
+
+        const idSpan = document.createElement('span');
+        idSpan.className = 'user-result-id';
+        idSpan.textContent = `用户编号：${String(user.user_id || '')}`;
+
+        const selectButton = document.createElement('button');
+        selectButton.type = 'button';
+        selectButton.className = 'btn btn-sm btn-primary select-user-btn';
+        selectButton.textContent = '选择';
+
+        infoDiv.appendChild(nameSpan);
+        infoDiv.appendChild(idSpan);
+        userElement.appendChild(infoDiv);
+        userElement.appendChild(selectButton);
+
+        selectButton.addEventListener('click', function() {
+          displayUserInfo(user);
+        });
+        
+        resultsContainer.appendChild(userElement);
+      });
+      
+      document.getElementById('search-results').style.display = 'block';
+      document.getElementById('user-info').style.display = 'none';
+      psContent.style.maxHeight = psContent.scrollHeight + 'px';
+    }
+    
+    function displayUserInfo(user) {
+      if (!user) {
+        showPopup('未找到用户');
+        return;
+      }
+      
+      document.getElementById('user-display-name').textContent = user.in_game_username;
+      document.getElementById('user-id').textContent = '用户编号：' + user.user_id;
+      document.getElementById('selected-user-id').value = String(user.user_id || '');
+      
+      document.getElementById('search-results').style.display = 'none';
+      document.getElementById('user-info').style.display = 'block';
+      psContent.style.maxHeight = psContent.scrollHeight + 'px';
+    }
+    
+    function displayInventory(data) {
+      const user = data.user;
+      const items = data.items;
+      const currentPage = data.page || 1;
+      const totalPages = data.total_pages || 1;
+      
+      document.getElementById('inventory-user-name').textContent = user.in_game_username;
+      document.getElementById('copper-amount').textContent = user.copper;
+      document.getElementById('gold-amount').textContent = user.gold;
+      
+      const itemsContainer = document.getElementById('inventory-items-container');
+      itemsContainer.innerHTML = '';
+      
+      if (items.length === 0) {
+        const emptyRow = document.createElement('tr');
+        const emptyCell = document.createElement('td');
+        emptyCell.colSpan = 3;
+        emptyCell.className = 'text-center';
+        emptyCell.textContent = '暂无物品';
+        emptyRow.appendChild(emptyCell);
+        itemsContainer.appendChild(emptyRow);
+      } else {
+        items.forEach(item => {
+          const row = document.createElement('tr');
+          const nameCell = document.createElement('td');
+          nameCell.textContent = String(item.item_name || item.name || '');
+
+          const quantityCell = document.createElement('td');
+          quantityCell.textContent = String(item.quantity || 1);
+
+          const levelCell = document.createElement('td');
+          levelCell.textContent = String(item.level || '-');
+
+          row.appendChild(nameCell);
+          row.appendChild(quantityCell);
+          row.appendChild(levelCell);
+          itemsContainer.appendChild(row);
+        });
+      }
+      
+      if (pageIndicator) {
+        pageIndicator.textContent = pageTemplate.replace('{0}', currentPage).replace('{1}', totalPages);
+        pageIndicator.setAttribute('data-current-page', currentPage);
+        pageIndicator.setAttribute('data-total-pages', totalPages);
+      }
+      
+      document.getElementById('prev-page-btn').disabled = currentPage <= 1;
+      document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
+      
+      document.getElementById('inventory-display').style.display = 'block';
+      if (inventoryContent && inventoryContent.style.maxHeight) {
+        inventoryContent.style.maxHeight = inventoryContent.scrollHeight + "px";
+      }
+    }
+    
+    function loadInventoryPage(page) {
+      const userId = currentInventoryUserId || document.getElementById('inventory-user-search').value.trim();
+      
+      fetch(`/admin/get_inventory/${encodeURIComponent(userId)}?page=${page}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            displayInventory(data);
+          } else {
+            showPopup('错误：' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('获取物品分页失败：', error);
+          showPopup('获取物品失败，请重试。');
+        });
+    }
+
+    function resolveUserId(query) {
+      return fetch(`/admin/search_user?query=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.user && data.user.user_id) {
+            return data.user.user_id;
+          }
+          if (data.users && data.users.length > 0) {
+            if (data.users.length > 1) {
+              showPopup('找到多个用户，已使用第一个结果。');
+            }
+            return data.users[0].user_id;
+          }
+          showPopup('未找到用户');
+          return null;
+        });
+    }
+  });
+</script>
+{% endblock %}

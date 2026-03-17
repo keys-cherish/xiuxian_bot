@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ trans.get('home_title') }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link
+    href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}"
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+  <link
+    href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}"
+    rel="stylesheet"
+  >
+  <!-- JSONEditor CSS -->
+  <link
+    href="{{ url_for('static', filename='vendor/jsoneditor/jsoneditor.min.css') }}"
+    rel="stylesheet"
+  >
+  <link
+    href="{{ url_for('static', filename='css/styles.css') }}"
+    rel="stylesheet"
+  >
+  <link
+    href="{{ url_for('static', filename='css/admin.css') }}"
+    rel="stylesheet"
+  >
+  <link
+    href="{{ url_for('static', filename='css/database.css') }}"
+    rel="stylesheet"
+  >
+</head>
+<body>
+<div class="app-container">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">XiuXianBot</h3>
+    </div>
+    
+    <div class="sidebar-menu">
+      <a href="{{ url_for('index') }}" class="sidebar-item {% if request.path=='/' %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/dashboard.svg') }}" alt="主页" class="icon-svg">
+        </div>
+        <span>{{ trans.get('home_title') }}</span>
+      </a>
+      
+      <a href="{{ url_for('config_get') }}" class="sidebar-item {% if '/config' in request.path %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/config.svg') }}" alt="配置" class="icon-svg">
+        </div>
+        <span>{{ trans.get('config_heading') }}</span>
+      </a>
+      
+      <a href="{{ url_for('servers') }}" class="sidebar-item {% if '/servers' in request.path %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/servers.svg') }}" alt="服务器" class="icon-svg">
+        </div>
+        <span>{{ trans.get('servers_title', '服务器控制') }}</span>
+      </a>
+      
+      <a href="{{ url_for('logs') }}" class="sidebar-item {% if '/logs' in request.path %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/logs.svg') }}" alt="日志" class="icon-svg">
+        </div>
+        <span>{{ trans.get('logs_title', '系统日志') }}</span>
+      </a>
+      
+      <a href="{{ url_for('admin') }}" class="sidebar-item {% if '/admin' in request.path %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/admin.svg') }}" alt="管理" class="icon-svg">
+        </div>
+        <span>{{ trans.get('admin_title', '管理控制') }}</span>
+      </a>
+      
+      <a href="{{ url_for('database') }}" class="sidebar-item {% if '/database' in request.path %}active{% endif %}">
+        <div class="sidebar-icon">
+          <img src="{{ url_for('static', filename='icons/database.svg') }}" alt="数据库" class="icon-svg">
+        </div>
+        <span>{{ trans.get('database_title', '数据库管理') }}</span>
+      </a>
+      
+      <!-- 预留侧边栏入口 -->
+    </div>
+    
+    <div class="sidebar-footer">
+      <div class="theme-switch-container text-center mt-3 mb-2">
+        <button id="theme-toggle-btn" class="theme-icon-btn" aria-label="切换主题">
+          <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" fill="181818">
+            <path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/>
+          </svg>
+          <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" fill="#E8E8E8">
+            <path d="M235.54,150.21a104.84,104.84,0,0,1-37,52.91A104,104,0,0,1,32,120,103.09,103.09,0,0,1,52.88,57.48a104.84,104.84,0,0,1,52.91-37,8,8,0,0,1,10,10,88.08,88.08,0,0,0,109.8,109.8,8,8,0,0,1,10,10Z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="version-info">
+        <p>版本：</p>
+        <small>核心-{{ core_version }}</small>
+        <br>
+        <small>面板-{{ web_version }}</small>
+        <br>
+        <small>电报-{{ telegram_version }}</small>
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <div class="content-header">
+      <h1 class="page-title">
+        {% if request.path=='/' %}
+          {{ trans.get('home_title') }}
+        {% elif '/config' in request.path %}
+          {{ trans.get('config_heading') }}
+        {% elif '/servers' in request.path %}
+          {{ trans.get('servers_title', '服务器控制') }}
+        {% elif '/logs' in request.path %}
+          {{ trans.get('logs_title', '系统日志') }}
+        {% elif '/admin' in request.path %}
+          {{ trans.get('admin_title', '管理控制') }}
+        {% elif '/database' in request.path %}
+          {{ trans.get('database_title', '数据库管理') }}
+        {% endif %}
+      </h1>
+    </div>
+    
+  <div class="content-body">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<div id="popup-overlay" class="popup-overlay" style="display:none;">
+  <div class="popup-box">
+    <button type="button" class="popup-close btn-close" aria-label="关闭"></button>
+    <div id="popup-message" class="popup-message"></div>
+    <div id="popup-actions" class="popup-actions mt-3"></div>
+  </div>
+</div>
+
+<button class="menu-toggle d-lg-none">
+  <i class="bi bi-list"></i>
+</button>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/jsoneditor/jsoneditor.min.js') }}"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (menuToggle && sidebar) {
+      menuToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('show');
+      });
+    }
+  });
+
+  function hidePopup() {
+    const overlay = document.getElementById('popup-overlay');
+    overlay.classList.add('fade-out');
+    setTimeout(function() {
+      overlay.style.display = 'none';
+      overlay.classList.remove('fade-out');
+    }, 200);
+  }
+
+  function showPopup(message, actions) {
+    document.getElementById('popup-message').textContent = String(message ?? '');
+    const actionsContainer = document.getElementById('popup-actions');
+    actionsContainer.innerHTML = '';
+    if (actions && Array.isArray(actions)) {
+      actions.forEach(act => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-primary me-2';
+        btn.textContent = act.label;
+        btn.addEventListener('click', function() {
+          hidePopup();
+          if (act.onClick) act.onClick();
+        });
+        actionsContainer.appendChild(btn);
+      });
+    }
+    const overlay = document.getElementById('popup-overlay');
+    overlay.classList.remove('fade-out');
+    overlay.style.display = 'flex';
+  }
+
+  document.querySelector('.popup-close').addEventListener('click', hidePopup);
+  document.getElementById('popup-overlay').addEventListener('click', function(e) {
+    if (e.target === this) hidePopup();
+  });
+
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+  }
+  themeBtn.addEventListener('click', function() {
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+  });
+
+  window.__CSRF_TOKEN__ = "{{ csrf_token }}";
+  const _nativeFetch = window.fetch.bind(window);
+  window.fetch = function(resource, init = {}) {
+    const method = String((init && init.method) || 'GET').toUpperCase();
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && window.__CSRF_TOKEN__) {
+      const headers = new Headers(init.headers || {});
+      headers.set('X-CSRF-Token', window.__CSRF_TOKEN__);
+      init = Object.assign({}, init, { headers });
+    }
+    return _nativeFetch(resource, init);
+  };
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

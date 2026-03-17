@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ trans.get('config_heading') }}</h1>
+<div id="jsoneditor"
+     style="height:60vh; border:1px solid #ccc;"></div>
+<script id="config-json" type="application/json">{{ config_data|tojson }}</script>
+
+<button id="save-btn" class="btn btn-success mt-3">
+  {{ trans.get('save_changes') }}
+</button>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
+<script>
+  const container = document.getElementById('jsoneditor');
+  const configSource = document.getElementById('config-json');
+  const initialConfig = JSON.parse(configSource.textContent || '{}');
+  if (window.JSONEditor && JSONEditor.defaults) {
+    JSONEditor.defaults.language = 'zh-CN';
+  }
+  const typeMap = {
+    object: '对象',
+    array: '数组',
+    string: '字符串',
+    number: '数值',
+    boolean: '布尔',
+    null: '空',
+    auto: '自动'
+  };
+  let fieldLabelMap = {};
+  const tokenMap = {
+    admin: '管理',
+    panel: '面板',
+    core: '核心',
+    server: '服务',
+    servers: '服务器',
+    db: '数据库',
+    database: '数据库',
+    api: 'API',
+    with: '带',
+    password: '密码',
+    token: '令牌',
+    tokens: '令牌',
+    adapter: '适配器',
+    adapters: '适配器',
+    balance: '平衡',
+    breakthrough: '突破',
+    enhance: '强化',
+    cooldown: '冷却',
+    cooldowns: '冷却',
+    quest: '任务',
+    reward: '奖励',
+    scale: '倍率',
+    shop: '商店',
+    sink: '消耗',
+    gold: '金币',
+    policy: '策略',
+    curve: '曲线',
+    hunt: '狩猎',
+    forge: '锻造',
+    exp: '经验',
+    loss: '损失',
+    seconds: '秒',
+    weak: '虚弱',
+    admin_panel: '管理面板',
+    core_server: '核心服务',
+    min: '最低',
+    max: '最大',
+    level: '等级',
+    levels: '等级',
+    tier: '阶',
+    pct: '比例',
+    ratio: '比例',
+    rand: '随机浮动',
+    fatigue: '疲劳',
+    free: '免',
+    step: '步长',
+    start: '起始',
+    mult: '倍率',
+    daily: '每日',
+    limit: '上限',
+    base: '基础',
+    cost: '消耗',
+    material: '材料',
+    item: '物品',
+    id: 'ID',
+    need: '需求',
+    name: '名称',
+    desc: '说明',
+    routes: '路线',
+    targets: '目标',
+    focused: '专精',
+    catalyst: '催化剂',
+    per: '每',
+    batch: '批',
+    success: '成功',
+    fail: '失败',
+    output: '产出',
+    requires: '需要',
+    copper: '铜币',
+    drop: '掉落',
+    drops: '掉落',
+    rank: '境界',
+    resource: '资源',
+    conversion: '转化',
+    pill: '丹药',
+    buffs: '增益',
+    duration: '持续',
+    sprint: '冲刺',
+    realm: '秘境',
+    protect: '保护',
+    bonus: '加成'
+  };
+  function replaceTypeText(text) {
+    if (!text) return text;
+    return text.replace(/^(object|array|string|number|boolean|null|auto)\b/i, (m) => {
+      const key = m.toLowerCase();
+      return typeMap[key] || m;
+    });
+  }
+  function translateKey(key) {
+    if (!key) return '';
+    if (fieldLabelMap[key]) return fieldLabelMap[key];
+    if (/^\d+$/.test(key)) return '';
+    const parts = key.split('_');
+    const translated = parts.map(p => tokenMap[p] || p).join('');
+    return translated === key ? '' : translated;
+  }
+  function localizeJsonEditor(root) {
+    if (!root) return;
+    root.querySelectorAll('.jsoneditor-value').forEach((el) => {
+      const original = el.textContent;
+      if (!original) return;
+      const replaced = replaceTypeText(original);
+      if (replaced !== original) {
+        el.textContent = replaced;
+      }
+    });
+    root.querySelectorAll('.jsoneditor-field').forEach((el) => {
+      const key = (el.textContent || '').trim();
+      if (!key) return;
+      const label = translateKey(key);
+      if (label) {
+        el.setAttribute('data-zh-label', label);
+      } else {
+        el.removeAttribute('data-zh-label');
+      }
+    });
+    root.querySelectorAll('.jsoneditor-treepath-element').forEach((el) => {
+      const t = (el.textContent || '').trim();
+      if (typeMap[t]) el.textContent = typeMap[t];
+      const label = translateKey(t);
+      if (label) el.textContent = label;
+    });
+  }
+  window.editor = new JSONEditor(container, {
+    mode: 'tree',
+    modes: ['tree'],
+    language: 'zh-CN',
+    onError: err => showPopup(err)
+  });
+  editor.set(initialConfig);
+  localizeJsonEditor(container);
+  let pendingLocalize = false;
+  const observer = new MutationObserver(() => {
+    if (pendingLocalize) return;
+    pendingLocalize = true;
+    requestAnimationFrame(() => {
+      pendingLocalize = false;
+      localizeJsonEditor(container);
+    });
+  });
+  observer.observe(container, { childList: true, subtree: true, characterData: true });
+  fetch('/static/i18n/config_fields_zh.json')
+    .then(r => r.ok ? r.json() : {})
+    .then(map => {
+      fieldLabelMap = map || {};
+      localizeJsonEditor(container);
+    })
+    .catch(() => {});
+</script>
+{% endblock %}

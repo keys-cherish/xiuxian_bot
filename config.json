@@ -1,0 +1,496 @@
+{
+  "adapters": {
+    "telegram": true
+  },
+  "admin_panel": {
+    "api_password": "change_me",
+    "api_switch": false,
+    "api_with_password": true,
+    "port": 11451
+  },
+  "public_web": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 11452
+  },
+  "balance": {
+    "breakthrough": {
+      "fail_exp_loss_pct": 0.1,
+      "weak_seconds": 3600
+    },
+    "enhance": {
+      "base_cost": 100,
+      "max_level": 10,
+      "per_level_cost": 100
+    },
+    "enhance_curve": {
+      "cost_base": 120,
+      "material_item_id": "iron_ore",
+      "material_per_level_base": 1,
+      "tier1_levels": [
+        1,
+        3
+      ],
+      "tier1_pct": 0.06,
+      "tier2_levels": [
+        4,
+        6
+      ],
+      "tier2_pct": 0.04,
+      "tier3_levels": [
+        7,
+        10
+      ],
+      "tier3_pct": 0.02
+    },
+    "forge": {
+      "base_cost_copper": 350,
+      "enabled": true,
+      "material_item_id": "iron_ore",
+      "material_need": 5,
+      "reward_pool": [
+        {
+          "item_id": "iron_ore",
+          "qty": 5,
+          "weight": 25
+        },
+        {
+          "item_id": "spirit_stone",
+          "qty": 3,
+          "weight": 25
+        },
+        {
+          "item_id": "small_exp_pill",
+          "qty": 2,
+          "weight": 20
+        },
+        {
+          "item_id": "breakthrough_pill",
+          "qty": 1,
+          "weight": 15
+        },
+        {
+          "item_id": "advanced_breakthrough_pill",
+          "qty": 1,
+          "weight": 10
+        },
+        {
+          "item_id": "medium_exp_pill",
+          "qty": 1,
+          "weight": 5
+        }
+      ],
+      "high_invest": {
+        "enabled": true,
+        "cost_mult": 2.5,
+        "material_mult": 2.0,
+        "stamina_cost": 2,
+        "reward_qty_mult": 1.7,
+        "rare_weight_bonus": 1.8,
+        "guaranteed_min_quality": "spirit",
+        "focus_item_ids": [
+          "advanced_breakthrough_pill",
+          "medium_exp_pill"
+        ]
+      }
+    },
+    "gold": {
+      "hunt_chance": 0.01,
+      "hunt_max": 2,
+      "hunt_min": 1
+    },
+    "gold_policy": {
+      "min_rank_for_gold_drops": 12,
+      "min_rank_for_gold_shop": 8
+    },
+    "hunt": {
+      "base_exp": 20,
+      "copper_rand": 0.2,
+      "copper_ratio": 0.6,
+      "daily_limit": 50,
+      "exp_fatigue_min_mult": 0.4,
+      "exp_fatigue_start": 20,
+      "exp_fatigue_step": 0.05,
+      "fatigue_free": 10,
+      "fatigue_min_mult": 0.3,
+      "fatigue_step": 0.1,
+      "growth": 1.25,
+      "rank_growth_segments": [
+        {
+          "max_rank": 10,
+          "growth": 1.25
+        },
+        {
+          "max_rank": 20,
+          "growth": 1.19
+        },
+        {
+          "max_rank": 30,
+          "growth": 1.13
+        },
+        {
+          "max_rank": 99,
+          "growth": 1.09
+        }
+      ]
+    },
+    "pill_buffs": {
+      "breakthrough_protect": {
+        "duration_seconds": 3600,
+        "exp_loss_mult": 0.5,
+        "success_bonus": 0.05,
+        "weak_seconds_mult": 0
+      },
+      "cultivation_sprint": {
+        "duration_seconds": 7200,
+        "exp_mult": 1.35
+      },
+      "realm_drop": {
+        "drop_mul": 1.35,
+        "duration_seconds": 3600
+      }
+    },
+    "quest_reward_scale": {
+      "copper": 0.85,
+      "exp": 0.85,
+      "gold": 1
+    },
+    "resource_conversion": {
+      "focused_catalyst": {
+        "demon_core": "spirit_stone",
+        "herb": "herb",
+        "iron_ore": "iron_ore",
+        "dragon_scale": "recipe_fragment",
+        "phoenix_feather": "recipe_fragment",
+        "recipe_fragment": "spirit_herb",
+        "spirit_herb": "herb",
+        "spirit_stone": "iron_ore"
+      },
+      "focused_catalyst_per_batch": 1,
+      "max_batch": 10,
+      "stamina_batch_size": 5,
+      "disabled_targets": [
+        "iron_ore",
+        "herb",
+        "spirit_stone"
+      ],
+      "routes": {
+        "focused": {
+          "cost_mult": 1.05,
+          "desc": "消耗额外材料换更高效率，适合定向培养。",
+          "fail_output_mult": 1,
+          "name": "专精转化",
+          "output_mult": 1.25,
+          "requires_catalyst": true,
+          "success_rate": 1
+        },
+        "risky": {
+          "cost_mult": 0.95,
+          "desc": "低成本高波动，可能爆发或大亏。",
+          "fail_output_mult": 0.4,
+          "name": "投机转化",
+          "output_mult": 1.6,
+          "requires_catalyst": false,
+          "success_rate": 0.45
+        },
+        "steady": {
+          "cost_mult": 1.1,
+          "desc": "高损耗但稳定，适合稳健囤资源。",
+          "fail_output_mult": 1,
+          "name": "稳妥转化",
+          "output_mult": 1,
+          "requires_catalyst": false,
+          "success_rate": 1
+        }
+      },
+      "targets": [
+        {
+          "base_copper": 12,
+          "item_id": "iron_ore",
+          "min_rank": 1
+        },
+        {
+          "base_copper": 24,
+          "item_id": "herb",
+          "min_rank": 1
+        },
+        {
+          "base_copper": 60,
+          "item_id": "spirit_stone",
+          "min_rank": 5
+        },
+        {
+          "base_copper": 120,
+          "item_id": "spirit_herb",
+          "min_rank": 8
+        },
+        {
+          "base_copper": 360,
+          "item_id": "demon_core",
+          "min_rank": 10
+        },
+        {
+          "base_copper": 216,
+          "item_id": "recipe_fragment",
+          "min_rank": 10
+        },
+        {
+          "base_copper": 600,
+          "item_id": "dragon_scale",
+          "min_rank": 20
+        },
+        {
+          "base_copper": 600,
+          "item_id": "phoenix_feather",
+          "min_rank": 20
+        }
+      ]
+    },
+    "shop_sink": {
+      "copper_to_vendors_pct": 0.15
+    },
+    "secret_realm_curve": {
+      "tier_ranges": {
+        "1": [
+          3.0,
+          4.5
+        ],
+        "2": [
+          3.5,
+          5.0
+        ],
+        "3": [
+          4.0,
+          5.5
+        ],
+        "4": [
+          4.5,
+          6.0
+        ],
+        "5": [
+          5.0,
+          7.0
+        ],
+        "6": [
+          6.0,
+          8.0
+        ]
+      },
+      "failure_mult": 0.25,
+      "exp_cap_mult": 15.0,
+      "copper_cap_ratio": 0.8
+    },
+    "drop_pity": {
+      "enabled": true,
+      "step": 0.015,
+      "cap": 0.3,
+      "streak_cap": 50
+    },
+    "alchemy_growth": {
+      "level_thresholds": [
+        0,
+        800,
+        2500,
+        6000,
+        12000,
+        22000
+      ],
+      "success_bonus_per_level": 0.015,
+      "max_success_bonus": 0.12,
+      "output_score_bonus_per_level": 0.06,
+      "rare_recipe_bonus": 0.02
+    }
+  },
+  "cooldowns": {
+    "enhance": 2,
+    "hunt": 30,
+    "quest_claim": 3,
+    "secret_realm": 20
+  },
+  "core_server": {
+    "api_token": "change_me_internal_token",
+    "port": 11450
+  },
+  "db": {
+    "sqlite_path": "data/xiu_xian.db",
+    "universal_uid_start": 1000000
+  },
+  "tokens": {
+    "telegram_token": "8768994748:AAGYTWpKT-1NDZldkjGlwYVr_bVR9_Uph_Q"
+  },
+  "battle": {
+    "kernel_shadow": {
+      "enabled": true,
+      "max_damage_diff_pct": 0.15
+    },
+    "secret_realm_multi_step": {
+      "enabled": true,
+      "default_nodes": 3
+    }
+  },
+  "events": {
+    "world_boss": {
+      "id": "world_boss_1",
+      "name": "赤炎妖王",
+      "max_hp": 100000,
+      "reward_copper": 1200,
+      "reward_exp": 1200,
+      "reward_gold": 2
+    },
+    "catalog": [
+      {
+        "id": "spring_festival",
+        "name": "春日庆典",
+        "desc": "每日领取春日礼盒，累计活动积分可兑换稀有奖励",
+        "start_ts": 1704067200,
+        "end_ts": 1893456000,
+        "daily_reward": {
+          "copper": 320,
+          "exp": 150,
+          "items": [
+            {
+              "item_id": "herb",
+              "quantity": 3
+            }
+          ]
+        },
+        "point_rules": {
+          "claim_daily": 20,
+          "world_boss_attack": 6,
+          "hunt_victory": 2,
+          "secret_victory": 4
+        },
+        "exchange_shop": [
+          {
+            "id": "sf_spirit_stone",
+            "name": "灵石补给",
+            "cost_points": 80,
+            "limit": 5,
+            "period": "week",
+            "rewards": {
+              "items": [
+                {
+                  "item_id": "spirit_stone",
+                  "quantity": 3
+                }
+              ]
+            }
+          },
+          {
+            "id": "sf_breakthrough",
+            "name": "突破礼包",
+            "cost_points": 180,
+            "limit": 2,
+            "period": "week",
+            "rewards": {
+              "gold": 1,
+              "items": [
+                {
+                  "item_id": "breakthrough_pill",
+                  "quantity": 1
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "moon_market",
+        "name": "月市巡游",
+        "desc": "每日领取月市补给，参与战斗可累积兑换点数",
+        "start_ts": 1704067200,
+        "end_ts": 1893456000,
+        "daily_reward": {
+          "copper": 450,
+          "exp": 200,
+          "gold": 1,
+          "items": [
+            {
+              "item_id": "spirit_stone",
+              "quantity": 2
+            }
+          ]
+        },
+        "point_rules": {
+          "claim_daily": 25,
+          "world_boss_attack": 8,
+          "hunt_victory": 3,
+          "secret_victory": 5
+        },
+        "exchange_shop": [
+          {
+            "id": "mm_recipe_fragment",
+            "name": "丹方残页包",
+            "cost_points": 120,
+            "limit": 3,
+            "period": "week",
+            "rewards": {
+              "items": [
+                {
+                  "item_id": "recipe_fragment",
+                  "quantity": 2
+                }
+              ]
+            }
+          },
+          {
+            "id": "mm_guard",
+            "name": "冲关保护",
+            "cost_points": 220,
+            "limit": 1,
+            "period": "week",
+            "rewards": {
+              "items": [
+                {
+                  "item_id": "breakthrough_guard_pill",
+                  "quantity": 1
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_arena",
+        "name": "试炼擂台",
+        "desc": "每日领取试炼奖励，活动积分可换高阶养成道具",
+        "start_ts": 1704067200,
+        "end_ts": 1893456000,
+        "daily_reward": {
+          "copper": 300,
+          "exp": 220,
+          "gold": 1,
+          "items": [
+            {
+              "item_id": "breakthrough_pill",
+              "quantity": 1
+            }
+          ]
+        },
+        "point_rules": {
+          "claim_daily": 18,
+          "world_boss_attack": 5,
+          "hunt_victory": 2,
+          "secret_victory": 4
+        },
+        "exchange_shop": [
+          {
+            "id": "ta_adv_break",
+            "name": "高级突破丹",
+            "cost_points": 260,
+            "limit": 1,
+            "period": "week",
+            "rewards": {
+              "items": [
+                {
+                  "item_id": "advanced_breakthrough_pill",
+                  "quantity": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

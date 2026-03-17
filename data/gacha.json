@@ -1,0 +1,47 @@
+{
+  "banners": [
+    {
+      "banner_id": 100001,
+      "title": "新手祈愿",
+      "description": "面向新修士的武器祈愿池",
+      "start_ts": 1704067200,
+      "end_ts": 1893456000,
+      "currency": "gold",
+      "price_single": 1,
+      "price_ten": 10,
+      "guaranteed_sr_every": 10,
+      "guaranteed_ssr_every": 90,
+      "pools": [
+        {
+          "rarity": "SSR",
+          "rate": 0.006,
+          "items": [
+            {"item_id": "divine_sword", "weight": 50},
+            {"item_id": "divine_armor", "weight": 50}
+          ]
+        },
+        {
+          "rarity": "SR",
+          "rate": 0.051,
+          "items": [
+            {"item_id": "immortal_sword", "weight": 25},
+            {"item_id": "immortal_armor", "weight": 25},
+            {"item_id": "immortal_ring", "weight": 25},
+            {"item_id": "spirit_stone", "weight": 25}
+          ]
+        },
+        {
+          "rarity": "R",
+          "rate": 0.943,
+          "items": [
+            {"item_id": "spirit_sword", "weight": 20},
+            {"item_id": "spirit_armor", "weight": 20},
+            {"item_id": "spirit_ring", "weight": 20},
+            {"item_id": "small_exp_pill", "weight": 20},
+            {"item_id": "iron_ore", "weight": 20}
+          ]
+        }
+      ]
+    }
+  ]
+}

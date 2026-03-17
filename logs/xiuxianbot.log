@@ -1,0 +1,602 @@
+2026-03-15 23:36:41,766 - XiuXianBot - INFO - Starting XiuXianBot
+2026-03-15 23:36:41,774 - XiuXianBot - INFO - Core server started with PID 18344
+2026-03-15 23:36:41,775 - XiuXianBot - INFO - Starting telegram adapter
+2026-03-15 23:36:41,781 - XiuXianBot - INFO - telegram adapter started with PID 20760
+2026-03-15 23:36:43,782 - XiuXianBot - INFO - Starting local admin dashboard on port 11451
+2026-03-15 23:36:44,114 - Database - INFO - Connected to SQLite database: D:\claude\Technical Document Architect\XiuXianBot\data/xiu_xian.db (thread: MainThread)
+2026-03-15 23:36:44,115 - Database - INFO - Ensured 37 indexes exist
+2026-03-15 23:36:44,115 - Database - INFO - Database tables created/verified
+2026-03-15 23:36:44,123 - XiuXianBot - INFO - Local admin dashboard started at http://127.0.0.1:11451
+2026-03-15 23:36:44,124 - XiuXianBot - INFO - XiuXianBot is running. Press Ctrl+C to stop.
+2026-03-15 23:36:44,140 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11451
+2026-03-15 23:36:44,140 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-16 11:58:24,501 - XiuXianBot - INFO - Starting XiuXianBot
+2026-03-16 11:58:24,513 - XiuXianBot - INFO - Core server started with PID 13992
+2026-03-16 11:58:24,514 - XiuXianBot - INFO - Starting telegram adapter
+2026-03-16 11:58:24,520 - XiuXianBot - INFO - telegram adapter started with PID 4264
+2026-03-16 11:58:26,522 - XiuXianBot - INFO - Starting local admin dashboard on port 11451
+2026-03-16 11:58:26,888 - Database - INFO - Connected to SQLite database: D:\claude\Technical Document Architect\XiuXianBot\data/xiu_xian.db (thread: MainThread)
+2026-03-16 11:58:26,889 - Database - INFO - Ensured 35 indexes exist
+2026-03-16 11:58:26,889 - Database - INFO - Database tables created/verified
+2026-03-16 11:58:26,898 - XiuXianBot - INFO - Local admin dashboard started at http://127.0.0.1:11451
+2026-03-16 11:58:26,898 - XiuXianBot - INFO - XiuXianBot is running. Press Ctrl+C to stop.
+2026-03-16 11:58:26,914 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11451
+2026-03-16 11:58:26,915 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-16 11:58:36,294 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:36] "GET /admin/login HTTP/1.1" 200 -
+2026-03-16 11:58:36,987 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:36] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-16 11:58:38,008 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-16 11:58:38,056 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "GET / HTTP/1.1" 200 -
+2026-03-16 11:58:38,512 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,517 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,522 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,527 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,533 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,538 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,544 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,558 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,568 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,574 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,575 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "GET /static/css/styles.css HTTP/1.1" 200 -
+2026-03-16 11:58:38,577 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,587 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:38,589 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:38] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,881 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "GET /config HTTP/1.1" 200 -
+2026-03-16 11:58:40,970 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,972 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,973 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,974 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,977 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:40,981 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:40] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,007 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,008 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,084 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,092 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,094 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,095 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,100 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,101 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,123 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:41,183 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "GET /static/i18n/config_fields_zh.json HTTP/1.1" 200 -
+2026-03-16 11:58:41,183 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:41] "[36mGET /static/vendor/jsoneditor/img/jsoneditor-icons.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,057 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "GET /servers HTTP/1.1" 200 -
+2026-03-16 11:58:50,159 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,173 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,174 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,181 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,181 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,184 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,200 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,202 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,269 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,273 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,278 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,291 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,292 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,295 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:50,378 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:50] "GET /servers/status HTTP/1.1" 200 -
+2026-03-16 11:58:52,024 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "GET /logs HTTP/1.1" 200 -
+2026-03-16 11:58:52,113 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,116 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,127 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,132 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,132 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,135 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,158 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,160 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,255 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,258 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,259 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,262 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,264 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,271 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,310 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "[36mGET /static/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2?1bb88866b4085542c8ed5fb61b9393dd HTTP/1.1[0m" 304 -
+2026-03-16 11:58:52,371 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:52] "GET /logs/data HTTP/1.1" 200 -
+2026-03-16 11:58:55,814 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "GET /admin HTTP/1.1" 200 -
+2026-03-16 11:58:55,888 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,891 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,895 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,898 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,903 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,906 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,911 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,912 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,984 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,994 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:55,995 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:55] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:56,001 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:56] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:56,002 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:56] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:56,003 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:56] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,729 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "GET /database HTTP/1.1" 200 -
+2026-03-16 11:58:59,806 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,808 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,811 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,817 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,818 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,825 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,831 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,838 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,938 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,947 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,948 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,949 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,958 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:58:59,960 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:58:59] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:00,051 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:00] "POST /database/query/users?page=1&items_per_page=20 HTTP/1.1" 200 -
+2026-03-16 11:59:02,496 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:02] "GET /database/user/1000005 HTTP/1.1" 200 -
+2026-03-16 11:59:04,800 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "GET /servers HTTP/1.1" 200 -
+2026-03-16 11:59:04,925 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,928 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,933 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,939 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,940 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,942 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,970 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:04,971 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:04] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,043 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,049 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,070 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,076 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,079 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,081 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:05,207 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:05] "GET /servers/status HTTP/1.1" 200 -
+2026-03-16 11:59:06,296 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "GET /admin HTTP/1.1" 200 -
+2026-03-16 11:59:06,428 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,433 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,434 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,450 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,451 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,452 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,481 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,484 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,548 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,555 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,560 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,564 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,565 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:06,568 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:06] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:10,964 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:10] "GET /database HTTP/1.1" 200 -
+2026-03-16 11:59:11,067 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,072 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,080 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,081 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,083 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,083 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,111 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,112 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,187 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,197 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,200 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,202 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,205 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,206 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:11,285 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:11] "POST /database/query/users?page=1&items_per_page=20 HTTP/1.1" 200 -
+2026-03-16 11:59:14,691 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "GET /servers HTTP/1.1" 200 -
+2026-03-16 11:59:14,804 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,807 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,813 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,815 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,819 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,820 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,842 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,843 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,897 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,912 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,915 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,916 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,919 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:14,922 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:14] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,009 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "GET /servers/status HTTP/1.1" 200 -
+2026-03-16 11:59:15,311 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "GET /admin HTTP/1.1" 200 -
+2026-03-16 11:59:15,400 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,416 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,417 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,418 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,425 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,431 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,446 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,447 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,512 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,530 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,536 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,538 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,544 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:15,546 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:15] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:18,067 - WebLocal - INFO - Search user request with query: 1000007
+2026-03-16 11:59:18,073 - WebLocal - INFO - Attempting to find user by ID: 1000007
+2026-03-16 11:59:18,078 - WebLocal - INFO - User found by ID: 1000007 / U999030
+2026-03-16 11:59:18,080 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:18] "GET /admin/search_user?query=1000007 HTTP/1.1" 200 -
+2026-03-16 11:59:21,744 - WebLocal - INFO - Search user request with query: 1000007
+2026-03-16 11:59:21,744 - WebLocal - INFO - Attempting to find user by ID: 1000007
+2026-03-16 11:59:21,752 - WebLocal - INFO - User found by ID: 1000007 / U999030
+2026-03-16 11:59:21,754 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:21] "GET /admin/search_user?query=1000007 HTTP/1.1" 200 -
+2026-03-16 11:59:21,793 - WebLocal - INFO - Using items table for user 1000007
+2026-03-16 11:59:21,795 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:21] "GET /admin/get_inventory/1000007 HTTP/1.1" 200 -
+2026-03-16 11:59:29,566 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "GET /database HTTP/1.1" 200 -
+2026-03-16 11:59:29,681 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,684 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,685 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,695 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,699 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,702 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,710 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,712 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,789 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,800 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,809 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,812 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,814 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,816 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:29,891 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:29] "POST /database/query/users?page=1&items_per_page=20 HTTP/1.1" 200 -
+2026-03-16 11:59:33,007 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "GET /admin HTTP/1.1" 200 -
+2026-03-16 11:59:33,122 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,124 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,125 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,134 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,147 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,149 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,163 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,169 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,246 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,258 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,262 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,268 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,269 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 11:59:33,274 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:33] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 11:59:35,782 - WebLocal - INFO - Search user request with query: 1000001
+2026-03-16 11:59:35,782 - WebLocal - INFO - Attempting to find user by ID: 1000001
+2026-03-16 11:59:35,787 - WebLocal - INFO - User found by ID: 1000001 / 风霜
+2026-03-16 11:59:35,787 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:35] "GET /admin/search_user?query=1000001 HTTP/1.1" 200 -
+2026-03-16 11:59:35,805 - WebLocal - INFO - Using items table for user 1000001
+2026-03-16 11:59:35,807 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 11:59:35] "GET /admin/get_inventory/1000001 HTTP/1.1" 200 -
+2026-03-16 12:01:08,702 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "GET /database HTTP/1.1" 200 -
+2026-03-16 12:01:08,790 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,792 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,794 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,799 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,810 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,812 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,823 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,825 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,930 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,936 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,957 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,959 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,960 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:08,969 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:08] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:09,040 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:09] "POST /database/query/users?page=1&items_per_page=20 HTTP/1.1" 200 -
+2026-03-16 12:01:10,709 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "GET /admin HTTP/1.1" 200 -
+2026-03-16 12:01:10,803 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,808 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,814 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,818 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,821 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,821 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,837 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,837 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,925 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,929 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,931 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,932 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,933 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:10,939 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:10] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,579 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "GET /logs HTTP/1.1" 200 -
+2026-03-16 12:01:11,744 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,747 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,750 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,757 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,759 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,760 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,780 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,794 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,851 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,864 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,866 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,866 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,868 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:11,870 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:11] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:12,117 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:12] "GET /logs/data HTTP/1.1" 200 -
+2026-03-16 12:01:13,058 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "GET /servers HTTP/1.1" 200 -
+2026-03-16 12:01:13,204 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,211 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,213 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,215 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,217 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,221 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,239 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,241 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,325 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,342 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,345 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,348 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,351 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,353 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:13,426 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:13] "GET /servers/status HTTP/1.1" 200 -
+2026-03-16 12:01:18,380 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "GET /config HTTP/1.1" 200 -
+2026-03-16 12:01:18,486 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,490 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,496 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,501 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,502 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,506 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,526 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,527 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,597 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,609 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,613 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,614 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,616 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,618 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,624 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:18,656 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:18] "[36mGET /static/i18n/config_fields_zh.json HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,147 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "GET / HTTP/1.1" 200 -
+2026-03-16 12:01:19,300 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,306 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,307 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,312 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,326 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,328 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,335 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,337 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,408 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,410 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,420 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,421 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,423 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:19,427 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:19] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,336 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "GET /config HTTP/1.1" 200 -
+2026-03-16 12:01:20,436 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,440 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,441 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,446 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,455 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,456 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,470 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,473 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,555 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,564 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,567 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,568 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,568 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,571 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,601 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:01:20,644 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:01:20] "[36mGET /static/i18n/config_fields_zh.json HTTP/1.1[0m" 304 -
+2026-03-16 12:05:55,769 - XiuXianBot - INFO - Starting XiuXianBot
+2026-03-16 12:05:55,779 - XiuXianBot - INFO - Core server started with PID 17360
+2026-03-16 12:05:55,779 - XiuXianBot - INFO - Starting telegram adapter
+2026-03-16 12:05:55,788 - XiuXianBot - INFO - telegram adapter started with PID 21736
+2026-03-16 12:05:57,788 - XiuXianBot - INFO - Starting local admin dashboard on port 11451
+2026-03-16 12:05:58,351 - Database - INFO - Connected to SQLite database: D:\claude\Technical Document Architect\XiuXianBot\data/xiu_xian.db (thread: MainThread)
+2026-03-16 12:05:58,353 - Database - INFO - Ensured 35 indexes exist
+2026-03-16 12:05:58,353 - Database - INFO - Database tables created/verified
+2026-03-16 12:05:58,371 - XiuXianBot - INFO - Local admin dashboard started at http://127.0.0.1:11451
+2026-03-16 12:05:58,371 - XiuXianBot - INFO - XiuXianBot is running. Press Ctrl+C to stop.
+2026-03-16 12:05:58,396 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11451
+2026-03-16 12:05:58,396 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-16 12:06:02,589 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:02] "[32mGET /config HTTP/1.1[0m" 302 -
+2026-03-16 12:06:02,660 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:02] "GET /admin/login HTTP/1.1" 200 -
+2026-03-16 12:06:03,965 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:03] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-16 12:06:05,313 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "GET / HTTP/1.1" 200 -
+2026-03-16 12:06:05,807 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,809 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,815 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,816 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,818 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,819 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,824 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,827 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,833 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,834 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,838 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,842 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,849 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:05,857 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:05] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,541 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "GET /config HTTP/1.1" 200 -
+2026-03-16 12:06:10,645 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,660 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,661 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,665 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,667 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,672 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,706 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,707 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,758 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,766 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,777 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,778 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,781 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,785 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,786 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,892 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/i18n/config_fields_zh.json HTTP/1.1[0m" 304 -
+2026-03-16 12:06:10,895 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:10] "[36mGET /static/vendor/jsoneditor/img/jsoneditor-icons.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,537 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "GET / HTTP/1.1" 200 -
+2026-03-16 12:06:16,634 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,638 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,640 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,647 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,654 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,661 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,678 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,679 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,752 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,761 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,763 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,764 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,767 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:16,770 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:16] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,309 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "GET /config HTTP/1.1" 200 -
+2026-03-16 12:06:22,404 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,407 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,410 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,419 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,420 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,421 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,434 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,436 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,505 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,514 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,515 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,517 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,520 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,522 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,542 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,593 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/i18n/config_fields_zh.json HTTP/1.1[0m" 304 -
+2026-03-16 12:06:22,627 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:22] "[36mGET /static/vendor/jsoneditor/img/jsoneditor-icons.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:36,952 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:36] "GET /servers HTTP/1.1" 200 -
+2026-03-16 12:06:37,051 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,055 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,064 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,067 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,070 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,073 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,087 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,091 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,182 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,183 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,201 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,204 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,206 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,208 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:37,303 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:37] "GET /servers/status HTTP/1.1" 200 -
+2026-03-16 12:06:38,004 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "GET /logs HTTP/1.1" 200 -
+2026-03-16 12:06:38,097 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,099 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,100 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,104 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,114 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,118 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,123 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,126 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,216 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,228 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,229 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,230 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,232 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,234 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,292 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "[36mGET /static/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2?1bb88866b4085542c8ed5fb61b9393dd HTTP/1.1[0m" 304 -
+2026-03-16 12:06:38,361 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:38] "GET /logs/data HTTP/1.1" 200 -
+2026-03-16 12:06:39,254 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "GET /admin HTTP/1.1" 200 -
+2026-03-16 12:06:39,399 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,401 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,403 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,404 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,414 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,415 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,439 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,441 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,511 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,515 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,518 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,520 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,525 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:39,527 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:39] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:44,327 - WebLocal - INFO - Search user request with query: 1000001
+2026-03-16 12:06:44,332 - WebLocal - INFO - Attempting to find user by ID: 1000001
+2026-03-16 12:06:44,336 - WebLocal - INFO - User found by ID: 1000001 / 风霜
+2026-03-16 12:06:44,336 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:44] "GET /admin/search_user?query=1000001 HTTP/1.1" 200 -
+2026-03-16 12:06:46,134 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "GET /database HTTP/1.1" 200 -
+2026-03-16 12:06:46,243 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,246 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,248 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,258 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,262 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,264 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,281 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,282 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,359 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,371 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,375 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,378 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,381 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,385 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 12:06:46,460 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 12:06:46] "POST /database/query/users?page=1&items_per_page=20 HTTP/1.1" 200 -
+2026-03-16 22:06:18,707 - XiuXianBot - INFO - Starting XiuXianBot
+2026-03-16 22:06:18,714 - XiuXianBot - INFO - Core server started with PID 15228
+2026-03-16 22:06:18,715 - XiuXianBot - INFO - Starting telegram adapter
+2026-03-16 22:06:18,720 - XiuXianBot - INFO - telegram adapter started with PID 15960
+2026-03-16 22:06:20,726 - XiuXianBot - INFO - Starting local admin dashboard on port 11451
+2026-03-16 22:06:21,043 - Database - INFO - Connected to SQLite database: D:\claude\Technical Document Architect\XiuXianBot\data/xiu_xian.db (thread: MainThread)
+2026-03-16 22:06:21,045 - Database - INFO - Ensured 57 indexes exist
+2026-03-16 22:06:21,045 - Database - INFO - Database tables created/verified
+2026-03-16 22:06:21,053 - XiuXianBot - INFO - Local admin dashboard started at http://127.0.0.1:11451
+2026-03-16 22:06:21,053 - XiuXianBot - INFO - Starting public web on 127.0.0.1:11452
+2026-03-16 22:06:21,063 - XiuXianBot - INFO - Public web started at http://127.0.0.1:11452
+2026-03-16 22:06:21,063 - XiuXianBot - INFO - XiuXianBot is running. Press Ctrl+C to stop.
+2026-03-16 22:06:21,080 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11452
+2026-03-16 22:06:21,080 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11451
+2026-03-16 22:06:21,080 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-16 22:06:21,081 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-16 22:06:26,981 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:26] "GET / HTTP/1.1" 200 -
+2026-03-16 22:06:27,376 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,380 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,383 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,392 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,394 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,395 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,427 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,428 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,429 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,437 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,439 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,440 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,448 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,449 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:27,681 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:27] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-16 22:06:31,306 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:31] "[32mGET /config HTTP/1.1[0m" 302 -
+2026-03-16 22:06:31,320 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:31] "GET /admin/login HTTP/1.1" 200 -
+2026-03-16 22:06:32,707 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-16 22:06:32,723 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "GET / HTTP/1.1" 200 -
+2026-03-16 22:06:32,806 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,809 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,815 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,819 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,820 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,821 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,832 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,833 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,883 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,885 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,889 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,891 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,893 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:32,894 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:32] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,369 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "GET /config HTTP/1.1" 200 -
+2026-03-16 22:06:34,441 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/bootstrap/bootstrap.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,446 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/bootstrap-icons/bootstrap-icons.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,447 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,453 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,458 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,461 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/css/database.css HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,474 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/dashboard.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,475 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/config.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,550 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/servers.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,558 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/logs.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,559 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/admin.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,561 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/bootstrap/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,562 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/jsoneditor/jsoneditor.min.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,563 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/js/config.js HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,583 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/icons/database.svg HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,641 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/i18n/config_fields_zh.json HTTP/1.1[0m" 304 -
+2026-03-16 22:06:34,642 - werkzeug - INFO - 127.0.0.1 - - [16/Mar/2026 22:06:34] "[36mGET /static/vendor/jsoneditor/img/jsoneditor-icons.svg HTTP/1.1[0m" 304 -
+2026-03-17 12:56:48,053 - XiuXianBot - INFO - Starting XiuXianBot
+2026-03-17 12:56:48,059 - XiuXianBot - INFO - Core server started with PID 9608
+2026-03-17 12:56:48,060 - XiuXianBot - INFO - Starting telegram adapter
+2026-03-17 12:56:48,065 - XiuXianBot - INFO - telegram adapter started with PID 9900
+2026-03-17 12:56:50,066 - XiuXianBot - INFO - Starting local admin dashboard on port 11451
+2026-03-17 12:56:50,385 - Database - INFO - Connected to SQLite database: D:\claude\Technical Document Architect\XiuXianBot\data/xiu_xian.db (thread: MainThread)
+2026-03-17 12:56:50,386 - Database - INFO - Ensured 57 indexes exist
+2026-03-17 12:56:50,387 - Database - INFO - Database tables created/verified
+2026-03-17 12:56:50,395 - XiuXianBot - INFO - Local admin dashboard started at http://127.0.0.1:11451
+2026-03-17 12:56:50,395 - XiuXianBot - INFO - Starting public web on 127.0.0.1:11452
+2026-03-17 12:56:50,402 - XiuXianBot - INFO - Public web started at http://127.0.0.1:11452
+2026-03-17 12:56:50,402 - XiuXianBot - INFO - XiuXianBot is running. Press Ctrl+C to stop.
+2026-03-17 12:56:50,417 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11452
+2026-03-17 12:56:50,418 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:11451
+2026-03-17 12:56:50,418 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-17 12:56:50,418 - werkzeug - INFO - [33mPress CTRL+C to quit[0m

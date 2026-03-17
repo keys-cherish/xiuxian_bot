@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(test:*)",
+      "Bash(D:/temp_build/XiuXianBot/pyproject.toml:*)",
+      "Bash(where python:*)",
+      "Bash(for f in core/services/social_service.py core/services/events_service.py core/services/settlement_extra.py core/services/sect_service.py)",
+      "Bash(do echo \"=== $f ===\")",
+      "Read(//d/temp_build/XiuXianBot/**)",
+      "Bash(done)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(uv:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}
