@@ -30,6 +30,7 @@ from telegram import (
 from telegram.error import Conflict
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
 from telegram.constants import ParseMode
+from telegram.request import HTTPXRequest
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if ROOT_DIR not in sys.path:
@@ -200,8 +201,21 @@ DEFAULT_SERVER_PORT = 11450
 SERVER_URL = f"http://127.0.0.1:{DEFAULT_SERVER_PORT}"
 INTERNAL_API_TOKEN = (config.internal_api_token or "").strip()
 TELEGRAM_POLL_TIMEOUT = max(1, int(os.getenv("TELEGRAM_POLL_TIMEOUT", "3")))
+TELEGRAM_PROXY_URL = (os.getenv("TELEGRAM_PROXY_URL", "") or "").strip() or None
 _HTTP_SESSION: aiohttp.ClientSession | None = None
 _ACTOR_PATH_PATTERNS = compiled_actor_path_patterns()
+
+
+def _build_telegram_request(*, for_updates: bool) -> HTTPXRequest:
+    timeout = TELEGRAM_POLL_TIMEOUT + 5 if for_updates else 15
+    return HTTPXRequest(
+        connect_timeout=10.0,
+        read_timeout=float(timeout),
+        write_timeout=15.0,
+        pool_timeout=5.0,
+        proxy=TELEGRAM_PROXY_URL,
+        httpx_kwargs={"trust_env": False},
+    )
 
 
 # ==================== HTTP 工具 ====================
@@ -5344,9 +5358,15 @@ def main():
         logger.error("No telegram token configured (set XXBOT_TELEGRAM_TOKEN env var)")
         return
 
+    request = _build_telegram_request(for_updates=False)
+    get_updates_request = _build_telegram_request(for_updates=True)
+    logger.info("Telegram outbound proxy: %s", TELEGRAM_PROXY_URL or "disabled")
+
     app = (
         Application.builder()
         .token(token)
+        .request(request)
+        .get_updates_request(get_updates_request)
         .post_init(_on_app_init)
         .post_shutdown(_on_app_shutdown)
         .build()
