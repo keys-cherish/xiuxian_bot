@@ -185,10 +185,12 @@ def start_adapter(adapter_name):
         env["WEB_VERSION"] = WEB_VERSION
         env["TELEGRAM_VERSION"] = TELEGRAM_VERSION
 
+        log_path = os.path.join(LOG_DIR, f"{adapter_name}.log")
+        log_file = open(log_path, "a", encoding="utf-8")
         process = subprocess.Popen(
             [sys.executable, adapter_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=log_file,
+            stderr=log_file,
             text=True,
             env=env
         )
