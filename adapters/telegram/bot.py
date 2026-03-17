@@ -273,6 +273,26 @@ async def _reply_text(update_or_query, text: str, **kwargs):
 
 async def _on_app_init(_app: Application) -> None:
     await _get_http_session()
+    try:
+        await _app.bot.set_my_commands([
+            BotCommand("xian_start", "修仙世界入口"),
+            BotCommand("xian_register", "踏入修仙之路"),
+            BotCommand("xian_stat", "查看修仙状态"),
+            BotCommand("xian_cul", "打坐修炼"),
+            BotCommand("xian_hunt", "外出历练"),
+            BotCommand("xian_break", "尝试突破境界"),
+            BotCommand("xian_sign", "每日签到"),
+            BotCommand("xian_shop", "灵石商铺"),
+            BotCommand("xian_bag", "储物袋"),
+            BotCommand("xian_quest", "任务面板"),
+            BotCommand("xian_sect", "宗门系统"),
+            BotCommand("xian_gacha", "天机阁抽签"),
+            BotCommand("xian_pvp", "切磋挑战"),
+            BotCommand("xian_rank", "修仙排行榜"),
+            BotCommand("xian_guide", "修仙指南"),
+        ])
+    except Exception as e:
+        logger.warning("Failed to set bot commands: %s", e)
 
 
 async def _on_app_shutdown(_app: Application) -> None:
@@ -5208,65 +5228,84 @@ def main():
         .build()
     )
 
-    # 命令处理器
-    app.add_handler(CommandHandler("start", start_cmd))
-    app.add_handler(CommandHandler("register", register_cmd))
-    app.add_handler(CommandHandler(["stat", "status"], stat_cmd))
-    app.add_handler(CommandHandler(["cul", "cultivate"], cultivate_cmd))
-    app.add_handler(CommandHandler("hunt", hunt_cmd))
-    app.add_handler(CommandHandler(["break", "breakthrough"], breakthrough_cmd))
-    app.add_handler(CommandHandler(["sign", "signin"], signin_cmd))
-    app.add_handler(CommandHandler("shop", shop_cmd))
-    app.add_handler(CommandHandler(["bag", "inventory"], bag_cmd))
-    app.add_handler(CommandHandler(["quest", "quests", "task"], quest_cmd))
-    app.add_handler(CommandHandler(["skills", "skill"], skills_cmd))
-    app.add_handler(CommandHandler(["secret", "mystic"], secret_realms_cmd))
-    app.add_handler(CommandHandler(["rank", "leaderboard"], leaderboard_cmd))
-    app.add_handler(CommandHandler("pvp", pvp_cmd))
-    app.add_handler(CommandHandler(["chat", "dao"], chat_cmd))
-    app.add_handler(CommandHandler("sect", sect_cmd))
-    app.add_handler(CommandHandler("alchemy", alchemy_cmd))
-    app.add_handler(CommandHandler("convert", convert_cmd))
-    app.add_handler(CommandHandler("gacha", gacha_cmd))
-    app.add_handler(CommandHandler(["achievements", "ach"], achievements_cmd))
-    app.add_handler(CommandHandler("codex", codex_cmd))
-    app.add_handler(CommandHandler("events", events_cmd))
-    app.add_handler(CommandHandler(["worldboss", "boss"], worldboss_cmd))
-    app.add_handler(CommandHandler(["guide", "realms"], guide_cmd))
-    app.add_handler(CommandHandler("version", version_cmd))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_message_handler))
-    
+    # chat_id 过滤（只响应指定群组）
+    _allowed_chat_ids_raw = os.environ.get("ALLOWED_CHAT_IDS", "").strip()
+    _allowed_chat_ids = set()
+    if _allowed_chat_ids_raw:
+        for _cid in _allowed_chat_ids_raw.split(","):
+            _cid = _cid.strip()
+            if _cid:
+                try:
+                    _allowed_chat_ids.add(int(_cid))
+                except ValueError:
+                    pass
+
+    def _make_chat_filter():
+        if not _allowed_chat_ids:
+            return filters.ALL
+        return filters.Chat(chat_id=list(_allowed_chat_ids))
+
+    _chat_filter = _make_chat_filter()
+
+    # 命令处理器（/xian_ 前缀 + 兼容旧命令）
+    app.add_handler(CommandHandler(["xian_start", "start"], start_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_register", "register"], register_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_stat", "xian_status", "stat", "status"], stat_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_cul", "xian_cultivate", "cul", "cultivate"], cultivate_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_hunt", "hunt"], hunt_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_break", "xian_breakthrough", "break", "breakthrough"], breakthrough_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_sign", "xian_signin", "sign", "signin"], signin_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_shop", "shop"], shop_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_bag", "xian_inventory", "bag", "inventory"], bag_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_quest", "xian_quests", "xian_task", "quest", "quests", "task"], quest_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_skills", "xian_skill", "skills", "skill"], skills_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_secret", "xian_mystic", "secret", "mystic"], secret_realms_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_rank", "xian_leaderboard", "rank", "leaderboard"], leaderboard_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_pvp", "pvp"], pvp_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_chat", "xian_dao", "chat", "dao"], chat_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_sect", "sect"], sect_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_alchemy", "alchemy"], alchemy_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_convert", "convert"], convert_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_gacha", "gacha"], gacha_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_achievements", "xian_ach", "achievements", "ach"], achievements_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_codex", "codex"], codex_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_events", "events"], events_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_worldboss", "xian_boss", "worldboss", "boss"], worldboss_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_guide", "xian_realms", "guide", "realms"], guide_cmd, filters=_chat_filter))
+    app.add_handler(CommandHandler(["xian_version", "version"], version_cmd, filters=_chat_filter))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & _chat_filter, text_message_handler))
+
     # 回调处理器
     app.add_handler(CallbackQueryHandler(callback_handler))
     app.add_error_handler(global_error_handler)
 
-    # 设置命令菜单
+    # 设置命令菜单（/xian_ 前缀）
     commands = [
-        BotCommand("start", "开始游戏"),
-        BotCommand("register", "注册账号"),
-        BotCommand("stat", "查看状态"),
-        BotCommand("cul", "修炼"),
-        BotCommand("hunt", "狩猎"),
-        BotCommand("break", "突破境界"),
-        BotCommand("sign", "每日签到"),
-        BotCommand("shop", "商店"),
-        BotCommand("bag", "背包"),
-        BotCommand("quest", "每日任务"),
-        BotCommand("skills", "技能面板"),
-        BotCommand("secret", "秘境探索"),
-        BotCommand("rank", "排行榜"),
-        BotCommand("pvp", "PVP 对战"),
-        BotCommand("chat", "论道交流"),
-        BotCommand("sect", "宗门系统"),
-        BotCommand("alchemy", "炼丹系统"),
-        BotCommand("convert", "资源转化"),
-        BotCommand("gacha", "抽奖"),
-        BotCommand("achievements", "成就系统"),
-        BotCommand("codex", "图鉴"),
-        BotCommand("events", "活动"),
-        BotCommand("worldboss", "世界BOSS"),
-        BotCommand("guide", "玩法说明"),
-        BotCommand("version", "版本信息"),
+        BotCommand("xian_start", "开始游戏"),
+        BotCommand("xian_register", "注册账号"),
+        BotCommand("xian_stat", "查看状态"),
+        BotCommand("xian_cul", "修炼"),
+        BotCommand("xian_hunt", "狩猎"),
+        BotCommand("xian_break", "突破境界"),
+        BotCommand("xian_sign", "每日签到"),
+        BotCommand("xian_shop", "商店"),
+        BotCommand("xian_bag", "背包"),
+        BotCommand("xian_quest", "每日任务"),
+        BotCommand("xian_skills", "技能面板"),
+        BotCommand("xian_secret", "秘境探索"),
+        BotCommand("xian_rank", "排行榜"),
+        BotCommand("xian_pvp", "PVP 对战"),
+        BotCommand("xian_chat", "论道交流"),
+        BotCommand("xian_sect", "宗门系统"),
+        BotCommand("xian_alchemy", "炼丹系统"),
+        BotCommand("xian_convert", "资源转化"),
+        BotCommand("xian_gacha", "抽奖"),
+        BotCommand("xian_achievements", "成就系统"),
+        BotCommand("xian_codex", "图鉴"),
+        BotCommand("xian_events", "活动"),
+        BotCommand("xian_worldboss", "世界BOSS"),
+        BotCommand("xian_guide", "玩法说明"),
+        BotCommand("xian_version", "版本信息"),
     ]
 
     for cmd in commands:
