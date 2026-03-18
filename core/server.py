@@ -19,6 +19,7 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from flask import Flask, jsonify, request
+from werkzeug.exceptions import HTTPException
 from werkzeug.serving import make_server
 from core.config import config
 
@@ -65,6 +66,39 @@ def create_app() -> Flask:
                 "message": "Unauthorized request",
             }), 401
         return None
+
+    @app.errorhandler(HTTPException)
+    def _handle_http_exception(exc: HTTPException):
+        logger.warning(
+            "HTTP error path=%s method=%s status=%s description=%s",
+            request.path,
+            request.method,
+            exc.code,
+            exc.description,
+        )
+        return jsonify({
+            "success": False,
+            "code": str(getattr(exc, "name", "HTTP_ERROR")).upper().replace(" ", "_"),
+            "message": exc.description,
+            "status_code": int(exc.code or 500),
+            "path": request.path,
+        }), int(exc.code or 500)
+
+    @app.errorhandler(Exception)
+    def _handle_unexpected_exception(exc: Exception):
+        logger.exception(
+            "Unhandled core exception path=%s method=%s",
+            request.path,
+            request.method,
+            exc_info=exc,
+        )
+        return jsonify({
+            "success": False,
+            "code": "INTERNAL_SERVER_ERROR",
+            "message": "Internal server error",
+            "status_code": 500,
+            "path": request.path,
+        }), 500
 
     from core.routes import register_blueprints
     register_blueprints(app)

@@ -274,6 +274,14 @@ async def _request_json(method: str, url: str, **kwargs):
             try:
                 return json.loads(text)
             except Exception:
+                logger.error(
+                    "core_non_json_response method=%s url=%s status=%s content_type=%s body=%s",
+                    method,
+                    url,
+                    int(getattr(resp, "status", 0) or 0),
+                    getattr(resp, "headers", {}).get("Content-Type", ""),
+                    text[:500],
+                )
                 return {
                     "success": False,
                     "code": "NON_JSON_RESPONSE",
