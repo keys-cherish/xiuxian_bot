@@ -32,6 +32,62 @@ class DatabaseError(Exception):
     pass
 
 
+def _normalize_query_placeholders(query: str) -> str:
+    """
+    Backward compatibility for legacy SQLite-style placeholders.
+    Convert qmark placeholders (`?`) to psycopg2 style (`%s`) outside quoted strings.
+    """
+    if "?" not in query:
+        return query
+
+    result: list[str] = []
+    in_single = False
+    in_double = False
+    i = 0
+    size = len(query)
+
+    while i < size:
+        ch = query[i]
+        if ch == "'" and not in_double:
+            result.append(ch)
+            if in_single and i + 1 < size and query[i + 1] == "'":
+                # Escaped single quote inside string literal: ''.
+                result.append("'")
+                i += 2
+                continue
+            in_single = not in_single
+            i += 1
+            continue
+        if ch == '"' and not in_single:
+            in_double = not in_double
+            result.append(ch)
+            i += 1
+            continue
+        if ch == "?" and not in_single and not in_double:
+            result.append("%s")
+        else:
+            result.append(ch)
+        i += 1
+
+    return "".join(result)
+
+
+class _CompatCursor:
+    def __init__(self, cursor):
+        self._cursor = cursor
+
+    def execute(self, query: str, params: tuple | list | None = None):
+        if params is None:
+            params = ()
+        return self._cursor.execute(_normalize_query_placeholders(query), params)
+
+    def executemany(self, query: str, seq_of_params):
+        return self._cursor.executemany(_normalize_query_placeholders(query), seq_of_params)
+
+    def __getattr__(self, item):
+        return getattr(self._cursor, item)
+
+
 def connect_sqlite(path: str = None) -> object:
     """
     初始化 PostgreSQL 连接池（仅在启动时调用一次）。
@@ -102,7 +158,7 @@ def db_transaction(conn=None):
     """
     if conn is None:
         conn = get_sqlite()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur = _CompatCursor(conn.cursor(cursor_factory=psycopg2.extras.DictCursor))
     try:
         yield cur
         conn.commit()
@@ -141,7 +197,7 @@ def execute_in_transaction(queries: list) -> None:
 def fetch_one(query: str, params: tuple = ()) -> Optional[Dict[str, Any]]:
     conn = get_sqlite()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(query, params)
+        cur.execute(_normalize_query_placeholders(query), params)
         row = cur.fetchone()
     return dict(row) if row else None
 
@@ -149,7 +205,7 @@ def fetch_one(query: str, params: tuple = ()) -> Optional[Dict[str, Any]]:
 def fetch_all(query: str, params: tuple = ()) -> List[Dict[str, Any]]:
     conn = get_sqlite()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(query, params)
+        cur.execute(_normalize_query_placeholders(query), params)
         rows = cur.fetchall()
     return [dict(r) for r in rows]
 
@@ -158,7 +214,7 @@ def execute(query: str, params: tuple = ()) -> int:
     """执行单条 SQL 并立即 commit。如有 RETURNING 子句则返回首列值。"""
     conn = get_sqlite()
     with conn.cursor() as cur:
-        cur.execute(query, params)
+        cur.execute(_normalize_query_placeholders(query), params)
         row_id = 0
         if cur.description is not None:
             row = cur.fetchone()

@@ -25,7 +25,7 @@ def get_user_status(user_id):
     try:
         refresh_user_stamina(user_id)
         refresh_user_vitals(user_id)
-        user = fetch_one("SELECT * FROM users WHERE user_id = ?", (user_id,))
+        user = fetch_one("SELECT * FROM users WHERE user_id = %s", (user_id,))
         
         if not user:
             return None
@@ -71,8 +71,8 @@ def get_user_status(user_id):
             'sect_buffs': sect_buffs,
         }
         
-    except Exception as e:
-        logger.error(f"Error getting user status for {user_id}: {e}")
+    except Exception:
+        logger.exception("Error getting user status for %s", user_id)
         return None
 
 
@@ -148,8 +148,8 @@ def format_status_text(status_info, lang="CHS", platform=None, equipped_items=No
 def check_user_exists(user_id):
     """检查用户是否存在"""
     try:
-        user = fetch_one("SELECT 1 FROM users WHERE user_id = ?", (user_id,))
+        user = fetch_one("SELECT 1 FROM users WHERE user_id = %s", (user_id,))
         return user is not None
-    except Exception as e:
-        logger.error(f"Error checking user existence for {user_id}: {e}")
+    except Exception:
+        logger.exception("Error checking user existence for %s", user_id)
         return False
