@@ -43,3 +43,25 @@ def test_exchange_currency_applies_1000_to_1_rule(test_db):
     wallet2 = down_resp.get("wallet") or {}
     assert int(wallet2.get("spirit_low", 0)) == 4600
     assert int(wallet2.get("spirit_mid", 0)) == 3
+
+
+def test_immortal_currency_visibility_and_unlock_threshold(test_db):
+    _create_user("currency_u3", rank=29, copper=1000, gold=1)
+    resp29, status29 = get_currency_overview("currency_u3")
+    assert status29 == 200 and resp29.get("success")
+    tiers29 = resp29.get("tiers") or []
+    assert not any(str(t.get("group")) == "immortal" for t in tiers29)
+
+    execute("UPDATE users SET rank = %s WHERE user_id = %s", (30, "currency_u3"))
+    resp30, status30 = get_currency_overview("currency_u3")
+    assert status30 == 200 and resp30.get("success")
+    tiers30 = [t for t in (resp30.get("tiers") or []) if str(t.get("group")) == "immortal"]
+    assert tiers30
+    assert all(bool(t.get("unlocked")) is False for t in tiers30)
+
+    execute("UPDATE users SET rank = %s WHERE user_id = %s", (32, "currency_u3"))
+    resp32, status32 = get_currency_overview("currency_u3")
+    assert status32 == 200 and resp32.get("success")
+    tiers32 = [t for t in (resp32.get("tiers") or []) if str(t.get("group")) == "immortal"]
+    assert tiers32
+    assert all(bool(t.get("unlocked")) is True for t in tiers32)

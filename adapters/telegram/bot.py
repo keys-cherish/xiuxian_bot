@@ -686,20 +686,27 @@ async def start_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=get_main_menu_keyboard()
             )
         else:
-            # 未注册，显示注册引导
+            # 未注册，直接进入创建角色流程（先选五行，再输入角色名）
             keyboard = [
-                [InlineKeyboardButton("📝 注册账号", callback_data="register")],
+                [
+                    InlineKeyboardButton("金 ⚔️", callback_data="register_gold"),
+                    InlineKeyboardButton("木 🌿", callback_data="register_wood"),
+                ],
+                [
+                    InlineKeyboardButton("水 💧", callback_data="register_water"),
+                    InlineKeyboardButton("火 🔥", callback_data="register_fire"),
+                ],
+                [
+                    InlineKeyboardButton("土 🏔️", callback_data="register_earth"),
+                ],
             ]
             text = f"""
 👋 欢迎，*{user_name}*！
 
-🕯️ 这是一个修仙世界，你可以：
-• 🧘 修炼提升境界
-• ⚔️ 狩猎妖魔获得资源
-• 🔥 渡劫突破瓶颈
-• 👥 加入宗门，结交道友
+🧬 第一步：先选择你的五行属性。
+📝 第二步：直接发送角色名（无需回复某条消息）。
 
-点击下方按钮开始你的修仙之旅：
+角色名规则：2-16 位中文、字母或数字。
 """
             await _reply_with_owned_panel(
                 update,
@@ -758,7 +765,8 @@ async def register_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 🌟 *选择你的五行属性*
 
 游戏名规则：
-• 使用 `/register 游戏名`
+• 选完五行后直接发送角色名（无需回复某条消息）
+• 也可使用 `/register 游戏名`
 • 仅允许 2-16 位中文、字母或数字
 • 游戏名唯一，不能重复
 
@@ -3039,7 +3047,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if element:
             try:
                 prompt = await query.message.reply_text(
-                    "请输入游戏名（2-16 位中文/字母/数字）：",
+                    "请输入角色名（2-16 位中文/字母/数字）。\n直接发送即可，无需回复这条消息：",
                     reply_markup=ForceReply(selective=True),
                 )
                 _set_pending_action(context, action="register_name", prompt_message=prompt, user_id=user_id)

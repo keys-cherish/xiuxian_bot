@@ -175,7 +175,11 @@ def cultivate_end():
         )
 
     gain_result = calculate_cultivation_progress(timing)
-    gain = gain_result["exp"]
+    gain = int(gain_result["exp"] or 0)
+    if gain <= 0:
+        gain = 1
+        gain_result["exp"] = 1
+        gain_result["tip"] = "修炼时间过短，本次保底获得 1 点修为。"
     execute("DELETE FROM timings WHERE id = ?", (timing["id"],))
     execute(
         "UPDATE users SET state = 0, exp = exp + ? WHERE user_id = ?", (gain, user_id)
