@@ -86,7 +86,6 @@ _MENU_COMMANDS = [
     BotCommand("xian_cul", "Cultivate"),
     BotCommand("xian_hunt", "Hunt"),
     BotCommand("xian_break", "Breakthrough"),
-    BotCommand("xian_sign", "Daily sign-in"),
     BotCommand("xian_shop", "Shop"),
     BotCommand("xian_bag", "Inventory"),
     BotCommand("xian_quest", "Quests"),
@@ -99,7 +98,6 @@ _MENU_COMMANDS = [
     BotCommand("xian_alchemy", "Alchemy"),
     BotCommand("xian_currency", "Currency"),
     BotCommand("xian_convert", "Convert"),
-    BotCommand("xian_gacha", "Gacha"),
     BotCommand("xian_achievements", "Achievements"),
     BotCommand("xian_codex", "Codex"),
     BotCommand("xian_events", "Events"),
@@ -489,13 +487,11 @@ async def _on_app_init(_app: Application) -> None:
             BotCommand("xian_cul", "打坐修炼"),
             BotCommand("xian_hunt", "外出历练"),
             BotCommand("xian_break", "尝试突破境界"),
-            BotCommand("xian_sign", "每日签到"),
             BotCommand("xian_shop", "灵石商铺"),
             BotCommand("xian_bag", "储物袋"),
             BotCommand("xian_quest", "任务面板"),
             BotCommand("xian_sect", "宗门系统"),
             BotCommand("xian_currency", "统一货币"),
-            BotCommand("xian_gacha", "天机阁抽签"),
             BotCommand("xian_bounty", "全服悬赏会"),
             BotCommand("xian_pvp", "切磋挑战"),
             BotCommand("xian_rank", "修仙排行榜"),
@@ -689,7 +685,7 @@ def get_main_menu_keyboard():
             InlineKeyboardButton("🔥 突破", callback_data="breakthrough"),
         ],
         [
-            InlineKeyboardButton("📅 签到", callback_data="signin"),
+            InlineKeyboardButton("🏛️ 宗门", callback_data="sect_menu"),
             InlineKeyboardButton("🏪 商店", callback_data="shop_all"),
         ],
         [
@@ -710,7 +706,7 @@ def get_main_menu_keyboard():
             InlineKeyboardButton("🧪 炼丹", callback_data="alchemy_menu"),
         ],
         [
-            InlineKeyboardButton("🎲 抽卡", callback_data="gacha_menu"),
+            InlineKeyboardButton("🗺️ 大地图", callback_data="world_map"),
             InlineKeyboardButton("🏅 成就", callback_data="achievements_menu"),
         ],
         [
@@ -889,27 +885,12 @@ async def do_register(update, context: ContextTypes.DEFAULT_TYPE, user_id: str, 
     try:
         data = await http_post(f"{SERVER_URL}/api/register", json=payload, timeout=15)
         if data.get("success"):
-            story_intro = data.get("story_intro") or {}
-            intro_title = str(story_intro.get("title") or "")
-            intro_text = str(story_intro.get("narrative") or story_intro.get("summary") or "")
-            text = f"""
-✅ *注册成功！*
-
-👤 账号: {username}
-🆔 UID: `{data['user_id']}`
-🌟 五行: {element or '未选择'}
-
-开始你的修仙之旅吧！
-"""
-            if intro_title or intro_text:
-                text += f"\n📜 *{intro_title or '序章'}*\n{intro_text}\n"
-            await _reply_with_owned_panel(
-                update,
-                context,
-                text,
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=get_main_menu_keyboard()
-            )
+            # 注册成功后强制播放序章剧情
+            context.user_data["prologue_page"] = 0
+            context.user_data["registered_uid"] = data["user_id"]
+            context.user_data["registered_name"] = username
+            context.user_data["registered_element"] = element or "未选择"
+            await _send_prologue_page(update, context, 0)
         else:
             await _reply_text(
                 update,
@@ -921,6 +902,128 @@ async def do_register(update, context: ContextTypes.DEFAULT_TYPE, user_id: str, 
     except Exception as exc:
         logger.error(f"register error: {exc}")
         await _reply_text(update, "❌ 服务器错误")
+
+
+# ============================================================
+# 序章剧情引擎
+# ============================================================
+
+def _load_prologue_scenes():
+    """从 texts/story/prologue.yaml 加载序章场景列表"""
+    import yaml
+    from pathlib import Path
+    yaml_path = Path(__file__).resolve().parent.parent.parent / "texts" / "story" / "prologue.yaml"
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return (data.get("prologue") or {}).get("scenes") or []
+    except Exception as e:
+        logger.error(f"Failed to load prologue: {e}")
+        return []
+
+# 缓存序章场景（启动时加载一次）
+_PROLOGUE_SCENES = None
+
+def _get_prologue_scenes():
+    global _PROLOGUE_SCENES
+    if _PROLOGUE_SCENES is None:
+        _PROLOGUE_SCENES = _load_prologue_scenes()
+    return _PROLOGUE_SCENES
+
+
+def _render_scene(scene: dict) -> str:
+    """将一个场景 dict 渲染为 TG 消息文本。
+
+    对话格式：名字：话
+    旁白直接写。
+    """
+    scene_type = scene.get("type", "narration")
+
+    if scene_type == "narration":
+        return scene.get("text", "").strip()
+
+    if scene_type == "dialogue":
+        lines_data = scene.get("lines", [])
+        parts = []
+        for line in lines_data:
+            speaker = line.get("speaker")
+            text = (line.get("text") or "").strip()
+            if speaker:
+                # 对话行：名字：话
+                parts.append(f"*{speaker}*：{text}")
+            else:
+                # 旁白行：直接写
+                parts.append(text)
+        return "\n\n".join(parts)
+
+    if scene_type == "choice":
+        # 选择型场景在序章中不做实际分支，只展示文本
+        choices = scene.get("choices", [])
+        parts = ["请选择："]
+        for i, c in enumerate(choices, 1):
+            parts.append(f"  {i}. {c.get('label', '...')}")
+        return "\n".join(parts)
+
+    return scene.get("text", "").strip()
+
+
+async def _send_prologue_page(update, context, page_index: int):
+    """发送序章剧情的第 page_index 页"""
+    scenes = _get_prologue_scenes()
+    if page_index >= len(scenes):
+        # 序章播放完毕，显示注册成功信息和主菜单
+        username = context.user_data.get("registered_name", "修士")
+        uid = context.user_data.get("registered_uid", "???")
+        element = context.user_data.get("registered_element", "未选择")
+        text = f"""
+✅ *注册成功！*
+
+👤 角色: {username}
+🆔 UID: `{uid}`
+🌟 五行灵根: {element}
+
+序章完毕，你的修仙之路正式开始！
+"""
+        # 清理序章状态
+        context.user_data.pop("prologue_page", None)
+        context.user_data.pop("registered_uid", None)
+        context.user_data.pop("registered_name", None)
+        context.user_data.pop("registered_element", None)
+
+        await _reply_with_owned_panel(
+            update,
+            context,
+            text,
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=get_main_menu_keyboard()
+        )
+        return
+
+    scene = scenes[page_index]
+    text = _render_scene(scene)
+
+    # 添加页码信息
+    total = len(scenes)
+    text = f"📜 序章 ({page_index + 1}/{total})\n{'─' * 25}\n\n{text}"
+
+    # 下一页按钮
+    if page_index < total - 1:
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("▶️ 继续", callback_data=f"prologue_next_{page_index + 1}")],
+        ])
+    else:
+        # 最后一页：进入游戏
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🎮 进入修仙世界", callback_data=f"prologue_next_{page_index + 1}")],
+        ])
+
+    await _reply_with_owned_panel(
+        update,
+        context,
+        text,
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=keyboard,
+    )
 
 
 @require_account
@@ -6290,7 +6393,6 @@ def main():
     app.add_handler(CommandHandler(["xian_cul", "xian_cultivate", "cul", "cultivate"], cultivate_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_hunt", "hunt"], hunt_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_break", "xian_breakthrough", "break", "breakthrough"], breakthrough_cmd, filters=_chat_filter))
-    app.add_handler(CommandHandler(["xian_sign", "xian_signin", "sign", "signin"], signin_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_shop", "shop"], shop_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_bag", "xian_inventory", "bag", "inventory"], bag_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_quest", "xian_quests", "xian_task", "quest", "quests", "task"], quest_cmd, filters=_chat_filter))
@@ -6303,7 +6405,6 @@ def main():
     app.add_handler(CommandHandler(["xian_alchemy", "alchemy"], alchemy_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_currency", "currency"], currency_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_convert", "convert"], convert_cmd, filters=_chat_filter))
-    app.add_handler(CommandHandler(["xian_gacha", "gacha"], gacha_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_achievements", "xian_ach", "achievements", "ach"], achievements_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_codex", "codex"], codex_cmd, filters=_chat_filter))
     app.add_handler(CommandHandler(["xian_events", "events"], events_cmd, filters=_chat_filter))
@@ -6325,7 +6426,6 @@ def main():
         BotCommand("xian_cul", "修炼"),
         BotCommand("xian_hunt", "狩猎"),
         BotCommand("xian_break", "突破境界"),
-        BotCommand("xian_sign", "每日签到"),
         BotCommand("xian_shop", "商店"),
         BotCommand("xian_bag", "背包"),
         BotCommand("xian_quest", "每日任务"),
@@ -6338,7 +6438,6 @@ def main():
         BotCommand("xian_alchemy", "炼丹系统"),
         BotCommand("xian_currency", "统一货币"),
         BotCommand("xian_convert", "资源转化"),
-        BotCommand("xian_gacha", "抽奖"),
         BotCommand("xian_achievements", "成就系统"),
         BotCommand("xian_codex", "图鉴"),
         BotCommand("xian_events", "活动"),

@@ -16,7 +16,6 @@ def register_blueprints(app: Flask) -> None:
     from core.routes.pvp import pvp_bp
     from core.routes.sect import sect_bp
     from core.routes.alchemy import alchemy_bp
-    from core.routes.gacha import gacha_bp
     from core.routes.achievements import achievements_bp
     from core.routes.events import events_bp
     from core.routes.resource_conversion import convert_bp
@@ -28,6 +27,6 @@ def register_blueprints(app: Flask) -> None:
 
     for bp in (health_bp, user_bp, cultivation_bp, combat_bp,
                equipment_bp, skills_bp, shop_bp, quests_bp, misc_bp,
-               pvp_bp, sect_bp, alchemy_bp, gacha_bp, achievements_bp, events_bp, convert_bp, social_bp, story_bp,
+               pvp_bp, sect_bp, alchemy_bp, achievements_bp, events_bp, convert_bp, social_bp, story_bp,
                currency_bp, bounty_bp, audit_bp):
         app.register_blueprint(bp)

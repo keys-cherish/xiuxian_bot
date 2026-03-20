@@ -1,0 +1,413 @@
+# 宗门面试剧情文案
+# 玩家加入宗门时触发对应面试场景
+# 对话格式：名字：话  旁白直接写
+
+# ==================== 正道五宗 ====================
+
+interview_taiqing:
+  title: "太清宗·入门试"
+  scenes:
+    - type: narration
+      text: |
+        太清宗山门前，白玉石阶延绵千级，
+        两侧古松如卫士般肃立，灵气如丝如缕飘荡其间。
+
+        你随着一众考核弟子拾级而上，
+        每一步都能感受到脚下阵法在无声地检测着你的修为与根骨。
+    - type: dialogue
+      lines:
+        - speaker: 太清宗执事
+          text: "你便是此次来应试的散修？报上姓名、境界、修炼功法。"
+        - speaker: null
+          text: 你如实作答。执事翻看了你的资料，微微点头。
+        - speaker: 太清宗执事
+          text: "太清宗收徒，不看天赋高低，只看道心是否坚定。你且回答我三个问题。"
+        - speaker: 太清宗执事
+          text: "第一：修行路上，你遇到一个比你弱的修士挡路，你会如何？"
+    - type: choice
+      choices:
+        - label: "绕道而行，不必多事"
+          result: "执事微微颔首。"
+          effect: {mentality: 2}
+        - label: "看情况，若对方无礼便教训"
+          result: "执事面无表情地记下了什么。"
+          effect: {}
+        - label: "直接碾过去"
+          result: "执事皱了皱眉。"
+          effect: {mentality: -3}
+    - type: dialogue
+      lines:
+        - speaker: 太清宗执事
+          text: "第二：你修炼至今，最大的感悟是什么？"
+    - type: choice
+      choices:
+        - label: "水滴石穿，积少成多"
+          result: |
+            执事终于露出了一丝笑意。
+            太清宗执事：这便是恒道的真谛。你很适合我太清宗。
+          effect: {dao_heng: 3}
+        - label: "天道不公，我要逆流而上"
+          result: "执事沉默片刻，似乎在斟酌什么。"
+          effect: {dao_ni: 2}
+        - label: "万物皆有规律，我想看清这个世界"
+          result: "执事意味深长地看了你一眼。"
+          effect: {dao_yan: 2}
+    - type: narration
+      text: |
+        面试结束。
+
+        你被领入太清宗外门，分配了一间简朴的洞府。
+        从今日起，你便是太清宗外门弟子。
+
+        一位笑容和善的中年修士走过来，拍了拍你的肩。
+    - type: dialogue
+      lines:
+        - speaker: 陈长老
+          text: "新来的？不错，根骨虽平，但胜在踏实。好好修炼，有不懂的来找老夫。"
+        - speaker: null
+          text: 这就是太清宗的陈长老，日后你会发现，他是你修行路上最重要的引路人之一。
+
+interview_tianjian:
+  title: "天剑门·剑道试炼"
+  scenes:
+    - type: narration
+      text: |
+        万剑峰。
+
+        三百六十把古剑悬浮于峰顶，日夜嗡鸣不止。
+        踏入天剑门的那一刻，你感到一股凌厉的剑意扑面而来，
+        仿佛有无数把剑对准了你。
+    - type: dialogue
+      lines:
+        - speaker: 天剑门掌门
+          text: "天剑门只收剑修。拿起这把剑。"
+        - speaker: null
+          text: |
+            一把没有剑柄的铁剑凭空飞到你面前。
+            没有剑柄意味着你必须以灵力握剑，否则便会被割伤。
+    - type: choice
+      choices:
+        - label: "毫不犹豫，伸手握住"
+          result: |
+            铁剑在你掌中嗡鸣，掌心被割出一道口子，鲜血顺着剑身流下。
+            但剑身微微一震，似乎认可了你的果决。
+            天剑门掌门：不怕痛，好。剑修第一课，便是用血喂剑。
+          effect: {dao_ni: 2, mentality: 3}
+        - label: "先凝聚灵力护手，再握住"
+          result: |
+            灵力护住了掌心，铁剑被你稳稳握住。
+            天剑门掌门：谨慎，不算错。但剑修若连自己的血都舍不得，如何斩敌？
+          effect: {mentality: 1}
+        - label: "犹豫片刻"
+          result: |
+            天剑门掌门收回了铁剑，摇了摇头。
+            天剑门掌门：剑修不可犹豫。去吧，你不适合天剑门。
+          effect: {rejected: true}
+    - type: narration
+      text: |
+        试炼通过。
+
+        你被编入天剑门外门剑阁，分配到一把入门灵剑。
+        从今日起，你的修行便是——剑。
+
+interview_danding:
+  title: "丹鼎阁·识药试"
+  scenes:
+    - type: narration
+      text: |
+        丹鼎阁内，药香弥漫，数十座丹炉一字排开，
+        炉火跳动间，丹香四溢。
+
+        一位白发苍苍的老者端坐在最大的丹炉前，
+        没有看你，只是自顾自地翻动着炉中的灵药。
+    - type: dialogue
+      lines:
+        - speaker: 丹鼎阁阁主
+          text: "桌上三株灵草，告诉我哪株有毒。"
+        - speaker: null
+          text: |
+            你低头看去，三株灵草外形极为相似，
+            都是翠绿的叶片，散发着清淡的草木香气。
+    - type: choice
+      choices:
+        - label: "仔细观察叶脉纹路后选择左边那株"
+          result: |
+            丹鼎阁阁主终于抬起头来，看了你一眼。
+            丹鼎阁阁主：观察入微，这份眼力不错。左边那株的确是断肠草伪装的。
+          effect: {exp: 30}
+        - label: "用灵识感知后选择中间那株"
+          result: |
+            丹鼎阁阁主：灵识探药，方法对了，但答案错了。中间那株是无毒的灵芝变种。
+            丹鼎阁阁主：不过没关系，方法对了就行。丹道修行，方法比答案重要。
+          effect: {exp: 15}
+        - label: "闻气味后选择右边那株"
+          result: |
+            丹鼎阁阁主：嗅觉灵敏，但右边那株是苦味灵草，苦不等于毒。
+            丹鼎阁阁主：不过你能用嗅觉辨药，这份天赋倒是难得。勉强通过。
+          effect: {exp: 10}
+    - type: narration
+      text: |
+        你被收入丹鼎阁，成为一名学徒。
+        阁主交给你一本《识药图谱》和一只小丹炉。
+
+        丹道的修行，从认识第一味药材开始。
+
+interview_wanfa:
+  title: "万法宗·悟性考"
+  scenes:
+    - type: narration
+      text: |
+        万法宗藏经阁前，一位年轻的宗主盘膝而坐。
+        他面前摆着一盘围棋，棋局走到中盘，黑白胶着。
+    - type: dialogue
+      lines:
+        - speaker: 万法宗宗主
+          text: "随便坐。先下一盘棋，不拘胜负，我只看你怎么想。"
+        - speaker: null
+          text: 你坐下来，仔细打量棋局。黑棋被围，看似绝境。
+    - type: choice
+      choices:
+        - label: "弃子脱先，另开战场"
+          result: |
+            万法宗宗主：有意思，你不恋战。万法宗修的便是灵活变通。
+            万法宗宗主：放下执念，方见万法。你通过了。
+          effect: {mentality: 3, dao_yan: 1}
+        - label: "深入计算，寻找翻盘手段"
+          result: |
+            万法宗宗主：算力不错，但万法宗不需要只会死算的人。
+            万法宗宗主：不过这份认真劲，也算难得。勉强通过。
+          effect: {exp: 20}
+        - label: "掀了棋盘"
+          result: |
+            万法宗宗主愣了一下，然后大笑。
+            万法宗宗主：胆子不小！你这种人，要么大成，要么大败。
+            万法宗宗主：有趣，收了。
+          effect: {dao_ni: 3}
+    - type: narration
+      text: |
+        你成为了万法宗外门弟子。
+        宗主递给你一枚令牌，凭此可进入藏经阁一层。
+
+        万法宗藏经阁据说有九层，每一层都藏着不同品级的功法。
+        而你现在，只有进入第一层的资格。
+
+interview_lingshou:
+  title: "灵兽谷·契约试炼"
+  scenes:
+    - type: narration
+      text: |
+        灵兽谷深处，万兽低鸣。
+
+        数十种灵兽被关在石笼中，有的温顺，有的暴躁，
+        有的用好奇的眼神打量着你，有的发出威胁的嘶鸣。
+    - type: dialogue
+      lines:
+        - speaker: 灵兽谷谷主
+          text: "选一头灵兽，与它缔结契约。成功了，你便是灵兽谷的人。失败了……"
+        - speaker: 灵兽谷谷主
+          text: "失败了，你就是它的午饭。开个玩笑。失败了最多被咬几口。"
+        - speaker: null
+          text: 你环视笼中灵兽，目光在几头之间来回。
+    - type: choice
+      choices:
+        - label: "选那头安静望着你的白猿"
+          result: |
+            白猿与你四目相对，它的眼睛清澈见底，就像一面镜子。
+            你伸出手，白猿犹豫了一瞬，然后轻轻碰了碰你的指尖。
+            契约成立。一道柔和的光芒将你们连接在一起。
+            灵兽谷谷主：白灵猿，灵性极高。你运气不错。
+          effect: {affinity_beast: 10, dao_yan: 2}
+        - label: "选那头在笼中暴躁撞壁的火狼"
+          result: |
+            火狼朝你龇牙，但你没有退缩。
+            一人一兽对峙良久，火狼终于低下了头。
+            契约勉强成立，但这头灵兽的心，还没有完全交给你。
+            灵兽谷谷主：烈焰狼，性烈如火。驾驭它需要时间。
+          effect: {affinity_beast: 5, dao_ni: 2}
+        - label: "选那头最不起眼的小灰鼠"
+          result: |
+            谁也没想到你会选一只灰鼠。
+            小灰鼠跳到你肩上，蹭了蹭你的脖子。
+            灵兽谷谷主：……灰鼠？你确定？
+            灵兽谷谷主仔细看了看，表情忽然变了。
+            灵兽谷谷主：这只灰鼠……有点东西。
+          effect: {affinity_beast: 8, hint: true}
+    - type: narration
+      text: |
+        你正式成为灵兽谷弟子。
+        从今日起，你将与你的灵兽伙伴共同修行。
+
+# ==================== 邪道面试（简略，重氛围）====================
+
+interview_nitian:
+  title: "逆天殿·生死路"
+  scenes:
+    - type: narration
+      text: |
+        逆天殿没有山门，只有一条通往地底的石阶。
+        石阶两侧是森然白骨——那是未能通过考验的人留下的。
+    - type: dialogue
+      lines:
+        - speaker: 逆天殿守门人
+          text: "走到底就算过了。中途退出永远不可再来。走吧。"
+        - speaker: null
+          text: |
+            你踏入石阶。
+            黑暗中，各种幻象接连出现——你最恐惧的事物，你最绝望的记忆。
+            每走一步，都像是在跟自己的心魔搏斗。
+    - type: choice
+      choices:
+        - label: "咬牙往前走，哪怕双腿发抖"
+          result: |
+            你走完了全程。
+            出口处，一道阳光照在你脸上，温暖到让你想哭。
+            逆天殿守门人：能走出来的，都不是凡人。欢迎加入逆天殿。
+          effect: {mentality: 5, dao_ni: 5}
+        - label: "全力奔跑，不给心魔反应时间"
+          result: |
+            你以最快的速度冲了出去，虽然不够优雅，但结果是好的。
+            逆天殿守门人：速度倒是快。不过……以后别跑那么快，你的心魔可追不上你。
+          effect: {dao_ni: 3}
+
+interview_xuesha:
+  title: "血煞宗·血路"
+  scenes:
+    - type: narration
+      text: |
+        血煞宗的入门方式简单粗暴——
+        一条百丈长的石路，两侧布满了散发着血腥气的尸傀儡。
+        走过去，活着走过去，就算通过。
+    - type: dialogue
+      lines:
+        - speaker: null
+          text: |
+            尸傀儡的攻击凶狠而密集，你一路战斗，一路流血。
+            终于踏出血路的最后一步，你浑身上下已没有一处完好。
+        - speaker: 血煞宗长老
+          text: "还能站着，不错。去领你的血丹，伤会好的。"
+
+interview_wangui:
+  title: "万鬼门·缚鬼试"
+  scenes:
+    - type: narration
+      text: |
+        万鬼门的面试在子夜进行。
+        阴山之巅，冷风呼啸，你面前出现了一个透明的身影——
+        那是一头怨灵，生前不知受了多大的苦，满脸扭曲。
+    - type: dialogue
+      lines:
+        - speaker: 万鬼门门主
+          text: "安抚它，或者镇压它。你选一个。"
+    - type: choice
+      choices:
+        - label: "尝试安抚"
+          result: |
+            你低声说着什么，怨灵的扭曲逐渐平息。
+            它看了你很久，然后化作一缕青烟钻入你的袖口，安静了。
+            万鬼门门主：……我还是第一次见有人能安抚它。有意思。
+          effect: {mentality: 3, dao_yan: 2}
+        - label: "以灵力强行镇压"
+          result: |
+            怨灵在你灵力的压制下挣扎嘶吼，最终不得不屈服。
+            万鬼门门主：暴力但有效。在万鬼门，这就够了。
+          effect: {dao_ni: 3}
+
+interview_tianmo:
+  title: "天魔教·心魔试炼"
+  scenes:
+    - type: narration
+      text: |
+        天魔教的试炼不在外界，而在你的内心。
+
+        你被引入一间空旷的石室，石室正中有一面铜镜。
+        铜镜中倒映的不是你的外貌，而是你最深处的欲望。
+    - type: dialogue
+      lines:
+        - speaker: 天魔教教主
+          text: "看到了什么？不用说出来，直视它就行。"
+        - speaker: null
+          text: |
+            镜中的画面不断变化——权力、财富、复仇、被认可的渴望……
+            每一个画面都在拉扯着你的心神。
+    - type: choice
+      choices:
+        - label: "坦然直视，不逃避"
+          result: |
+            铜镜裂开一道缝，一股紫黑色的力量涌出，钻入你的丹田。
+            天魔教教主：能直视自己的欲望，你有成为天魔的资质。
+          effect: {dao_ni: 5, mentality: -5}
+        - label: "闭上眼睛"
+          result: |
+            天魔教教主：闭眼？你在害怕。
+            天魔教教主：不过害怕也是一种欲望。勉强过关。
+          effect: {dao_ni: 2}
+
+# ==================== 中立面试 ====================
+
+interview_xingchen:
+  title: "星辰阁·星力共鸣"
+  scenes:
+    - type: narration
+      text: |
+        星辰阁百年未开的大门缓缓启开。
+        门内星光流转，仿佛将整片夜空铺在了地面上。
+    - type: dialogue
+      lines:
+        - speaker: 星辰阁阁主
+          text: "你身上有星力的气息。伸出手。"
+        - speaker: null
+          text: |
+            你伸出手，掌心中的星辰碎片微微震动——
+            与星辰阁内的某种力量产生了共鸣。
+            地面上的星图亮了起来，一颗星辰浮到你面前。
+        - speaker: 星辰阁阁主
+          text: "这颗星……它在等你。百年了。"
+        - speaker: null
+          text: |
+            星辰阁的面试不是考验，而是确认。
+            它只收与星辰有缘的人，而你，显然就是其中之一。
+
+interview_luanxing:
+  title: "乱星海散修联盟·入盟"
+  scenes:
+    - type: dialogue
+      lines:
+        - speaker: 联盟管事
+          text: "交十块灵石，按个手印，就算入盟了。有事互相帮忙，没事各修各的。"
+        - speaker: 联盟管事
+          text: "唯一的规矩——不许对盟友出手。违者，除名。"
+        - speaker: null
+          text: 简单、直接、没有废话。这就是散修的风格。
+
+interview_manhuang:
+  title: "蛮荒妖族联盟·认主"
+  scenes:
+    - type: narration
+      text: |
+        蛮荒深处，一头巨大的白虎横卧在石台上。
+        它的目光如电，扫过你的全身。
+    - type: dialogue
+      lines:
+        - speaker: null
+          text: |
+            白虎站起身来，慢慢走向你。
+            热气喷在你脸上，那双金色的眸子距你不过一尺。
+            片刻后，白虎转身离去，尾巴轻轻扫过你的肩膀。
+        - speaker: 妖族长老
+          text: "虎祖没有杀你。你可以留下了。"
+
+interview_wanbao:
+  title: "万宝楼·掌柜面试"
+  scenes:
+    - type: dialogue
+      lines:
+        - speaker: 万宝楼总管
+          text: "你有什么本事？会炼丹？会锻器？会阵法？什么都不会？"
+        - speaker: 万宝楼总管
+          text: "那你会做生意吗？——会？好，这就够了。"
+        - speaker: 万宝楼总管
+          text: "万宝楼不问你会什么修仙功法，只问你能不能赚到灵石。来，先从这间铺子练起。"
+        - speaker: null
+          text: |
+            你被分配到一间小铺面，从今天起，你是万宝楼最低等级的掌柜。
+            修炼？那是下班之后的事。

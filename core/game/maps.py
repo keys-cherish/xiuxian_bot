@@ -774,3 +774,99 @@ def get_all_regions() -> List[Dict[str, str]]:
             })
     regions.sort(key=lambda r: r["world_tier"])
     return regions
+
+
+def format_world_map(current_map_id: str, realm_id: int,
+                     dao_heng: float = 0, dao_ni: float = 0,
+                     dao_yan: float = 0) -> str:
+    """生成大地图文本，只显示玩家当前所在世界层级的地图。
+
+    Args:
+        current_map_id: 玩家当前所在地图ID
+        realm_id: 玩家境界ID
+        dao_heng/dao_ni/dao_yan: 三道亲和值
+
+    Returns:
+        格式化的大地图文本
+    """
+    current = MAPS.get(current_map_id)
+    if not current:
+        return "❌ 当前位置未知"
+
+    current_tier = current["world_tier"]
+    tier_info = _TIER_BY_ID.get(current_tier)
+    tier_name = tier_info["name"] if tier_info else "未知"
+    tier_desc = tier_info["desc"] if tier_info else ""
+
+    # 获取当前世界层级的所有地图
+    tier_maps = _MAPS_BY_TIER.get(current_tier, [])
+
+    # 按区域分组
+    regions: Dict[str, List[Dict[str, Any]]] = {}
+    for m in tier_maps:
+        regions.setdefault(m["region"], []).append(m)
+
+    lines = [
+        f"🗺️ 大地图 · {tier_name}",
+        f"「{tier_desc}」",
+        f"📍 当前位置：{current['name']}（{current.get('region_name', '')}）",
+        "",
+    ]
+
+    for region_key, maps_in_region in regions.items():
+        region_name = maps_in_region[0].get("region_name", region_key)
+        lines.append(f"═══ {region_name} ═══")
+
+        for m in maps_in_region:
+            # 判断是否可进入
+            accessible = realm_id >= m["min_realm"]
+            cond = m.get("unlock_condition")
+            if cond:
+                if realm_id < cond.get("min_realm", 0):
+                    accessible = False
+                if dao_ni < cond.get("dao_ni_pct", 0):
+                    accessible = False
+                if dao_yan < cond.get("dao_yan_pct", 0):
+                    accessible = False
+                if dao_heng < cond.get("dao_heng_pct", 0):
+                    accessible = False
+
+            is_here = (m["id"] == current_map_id)
+            if is_here:
+                marker = "📍"
+            elif accessible:
+                marker = "✅"
+            else:
+                marker = "🔒"
+
+            name = m["name"]
+            density = m.get("spirit_density", 1.0)
+            density_str = f"灵气×{density:.1f}" if density != 1.0 else ""
+
+            if is_here:
+                lines.append(f"  {marker} *{name}* ← 你在这里  {density_str}")
+            elif accessible:
+                adj = get_adjacent_maps(current_map_id)
+                adj_ids = [a["id"] for a in adj]
+                can_go = m["id"] in adj_ids
+                go_str = "（可前往）" if can_go else ""
+                lines.append(f"  {marker} {name}  {density_str} {go_str}")
+            else:
+                from core.game.realms import format_realm_display
+                lines.append(f"  {marker} {name}  需{format_realm_display(m['min_realm'])}")
+
+        lines.append("")
+
+    # 显示相邻可前往的地图
+    adj = get_adjacent_maps(current_map_id)
+    if adj:
+        lines.append("─── 可前往 ───")
+        for a in adj:
+            accessible = realm_id >= a["min_realm"]
+            if accessible:
+                lines.append(f"  → {a['name']}（{a.get('desc', '')[:20]}）")
+            else:
+                from core.game.realms import format_realm_display
+                lines.append(f"  🔒 {a['name']}（需{format_realm_display(a['min_realm'])}）")
+
+    return "\n".join(lines)
