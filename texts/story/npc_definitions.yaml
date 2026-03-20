@@ -1,0 +1,335 @@
+# NPC 角色定义
+# 所有角色按卷数/阶段分批登场
+# 格式: 角色ID -> 属性 + 首登条件 + 对话模板
+
+# ============================================================
+# 卷1 · 凡界苍澜 (新手阶段 8-12 人)
+# ============================================================
+
+mc_shen_wuji:
+  name: 沈无极
+  title: 废灵根少年
+  faction: neutral
+  dao: mixed
+  personality: 平静、坚韧、不甘于命运
+  speech_style: 简洁，偶尔幽默，从不说大话
+  first_map: canglan_city
+  first_trigger: prologue
+  greeting_first: "你也没考上？那就自己修呗。"
+  greeting_return: "又见面了。最近修炼怎么样？"
+  greeting_realm_up: "你突破了？好快。看来我得加把劲了。"
+  role_in_story: 主角的第一个朋友，拥有鸿蒙珠的真正天选之人
+
+mentor_old_beggar:
+  name: 老乞丐
+  title: 隐藏导师
+  faction: neutral
+  dao: unknown
+  personality: 邋遢、随性、偶尔说出深刻的话
+  speech_style: 口语化，爱用比喻，经常说一半留一半
+  first_map: canglan_city
+  first_trigger: prologue
+  greeting_first: "小子，你看起来饿得不轻。来，半个馒头分你。"
+  greeting_return: "又来了？老头子没什么好教你的……算了，坐下吧。"
+  role_in_story: 养大沈无极的老人，鸿蒙珠的前任持有者，真实身份是……
+
+villager_shi_bo:
+  name: 石伯
+  title: 苍澜城村长
+  faction: righteous
+  dao: none
+  personality: 朴实、善良、对修仙世界一知半解
+  speech_style: 乡土气息，啰嗦但真诚
+  first_map: canglan_city
+  first_trigger: prologue
+  greeting_first: "哦，你是新来的？苍澜城虽小，但好歹有口饭吃。"
+  role_in_story: 凡人锚点，提供初始任务
+
+merchant_wang:
+  name: 王掌柜
+  title: 万宝楼苍澜分号掌柜
+  faction: neutral
+  dao: heng
+  personality: 精明、圆滑、但有底线
+  speech_style: 商人腔调，爱讲价，但对老客户大方
+  first_map: south_market
+  first_trigger: first_visit_south_market
+  greeting_first: "道友，请进请进！本店灵石公道，童叟无欺！"
+  greeting_return: "老客户来了！今天有新到的货，要不要看看？"
+  role_in_story: 经济线引导，万宝楼剧情入口
+
+herb_ling_er:
+  name: 药灵儿
+  title: 采药女
+  faction: righteous
+  dao: heng
+  personality: 活泼、好奇、对灵药如数家珍
+  speech_style: 语速快，爱用灵药打比方
+  first_map: east_forest
+  first_trigger: complete_herb_quest
+  greeting_first: "你认识这株草吗？不认识？那你运气好，它有毒。"
+  greeting_return: "又来采药？今天东边那片有新长出来的灵芝，要不要一起去？"
+  role_in_story: 丹药线引导，轻喜剧支线
+
+hunter_zhangda:
+  name: 张大
+  title: 猎户
+  faction: neutral
+  dao: none
+  personality: 粗犷、豪爽、讲义气
+  speech_style: 大嗓门，简单直接
+  first_map: east_forest
+  first_trigger: first_hunt_victory
+  greeting_first: "兄弟！打得不错！来来来，喝两口！"
+  role_in_story: 战斗教学线
+
+hermit_lin:
+  name: 林中老人
+  title: 恒道散修
+  faction: righteous
+  dao: heng
+  personality: 沉默、温和、偶尔一针见血
+  speech_style: 话少但每句都有分量
+  first_map: east_forest
+  first_trigger: cultivate_3_times
+  greeting_first: "你的功法……不对。气走偏了半寸。来，我教你。"
+  greeting_return: "进步了。不过还远远不够。"
+  role_in_story: 恒道功法启蒙
+
+pet_xiaojin:
+  name: 小金
+  title: 灵宠
+  faction: neutral
+  dao: unknown
+  personality: 贪吃、胆小、但关键时刻异常勇敢
+  first_map: north_mountain
+  first_trigger: find_spirit_egg
+  greeting_first: "(一颗金色的蛋在你手中微微颤动……)"
+  role_in_story: 上古神兽血脉，陪伴全程
+
+wanbao_master_fan:
+  name: 范楼主
+  title: 万宝楼凡界总掌柜
+  faction: neutral
+  dao: heng
+  personality: 老练、不怒自威、极擅谈判
+  speech_style: 滴水不漏，话中有话
+  first_map: canglan_city
+  first_trigger: first_trade
+  greeting_first: "小友第一次来万宝楼？规矩是灵石说话。"
+  role_in_story: 商业体系入口
+
+monk_wine:
+  name: 酒和尚
+  title: 隐世散修
+  faction: neutral
+  dao: mixed
+  personality: 醉醺醺、看似糊涂实则洞察一切
+  speech_style: 夹杂酒嗝的禅语
+  first_map: canglan_city
+  first_trigger: night_event_random
+  greeting_first: "嗝……你说这世界是真的还是假的？别回答，喝一杯再想。"
+  role_in_story: 谜语伏笔，暗示世界真相
+
+# ============================================================
+# 卷1后半-卷2 · 崛起阶段 (14-20 人)
+# ============================================================
+
+dan_master_chen:
+  name: 陈丹师
+  title: 丹师
+  faction: righteous
+  dao: heng
+  personality: 严厉但公正，对丹道极度认真
+  speech_style: 一板一眼，不苟言笑
+  first_map: luoxia_valley
+  first_trigger: pre_zhuji_alchemy_quest
+  greeting_first: "你想学炼丹？先去认识一百种灵草再来。"
+  greeting_return: "草药认全了？好，今天教你控火。记住，火候差一分，丹药便是废丹。"
+  role_in_story: 丹道成长线，柳清竹线前置
+
+liu_qingzhu:
+  name: 柳清竹
+  title: 太清宗遗孤
+  faction: righteous
+  dao: heng
+  personality: 温柔、聪慧、内心坚韧，有不为人知的过去
+  speech_style: 温和有礼，偶尔露出不属于她年龄的成熟
+  first_map: chaos_sea
+  first_trigger: sea_rescue_event
+  greeting_first: "……谢谢你。如果不是你，我可能就……"
+  greeting_return: "又见面了。你看起来比上次强了不少。"
+  greeting_intimate: "你来了。我……一直在等你。"
+  role_in_story: 女主之一，恒道丹修，青梅竹马（实为太清宗遗孤）
+
+xiao_han_cang:
+  name: 韩苍
+  title: 同门师兄
+  faction: righteous
+  dao: heng
+  personality: 憨厚老实、讲义气、大智若愚
+  speech_style: 朴实无华，偶尔冒出大白话
+  first_map: tianyuan_sect_city
+  first_trigger: sect_team_quest
+  greeting_first: "你就是新来的师弟？来来来，我带你认路！"
+  greeting_return: "师弟！走走走，食堂今天有红烧妖肉！"
+  role_in_story: 兄弟线，后成大乘强者
+
+chu_qianshang:
+  name: 楚千殇
+  title: 逆道剑修
+  faction: evil
+  dao: ni
+  personality: 冷傲、孤高、但内心有不为人知的柔软
+  speech_style: 话少，每句都像剑一样锋利
+  first_map: sword_peak
+  first_trigger: sword_peak_challenge
+  greeting_first: "你的剑，太慢了。"
+  greeting_return: "又来？你比上次……稍微好了一点点。仅此而已。"
+  greeting_intimate: "……别死在我前面。"
+  role_in_story: 女主之二，亦敌亦友，前世纠葛
+
+wang_ni:
+  name: 王逆
+  title: 逆天殿少主
+  faction: evil
+  dao: ni
+  personality: 狂傲、极端、但有自己的道义底线
+  speech_style: 霸道，不屑解释
+  first_map: sword_peak
+  first_trigger: sect_tournament_advance
+  greeting_first: "你就是那个废灵根？有意思。来，让我看看你有什么本事。"
+  greeting_return: "又变强了？但还不够。远远不够。"
+  role_in_story: 对立镜像线，楚千殇线关联
+
+xing_xuan:
+  name: 星璇
+  title: 星辰阁圣女
+  faction: neutral
+  dao: yan
+  personality: 超然、通透、有种看穿一切的平静
+  speech_style: 如吟诗，常用星辰比喻
+  first_map: star_fall_sea
+  first_trigger: star_fall_sea_first_clear
+  greeting_first: "你的眼中……有星光。和我一样。"
+  greeting_return: "星辰运行有迹可循，你我的相遇，也是。"
+  greeting_intimate: "如果星辰会说话，它会告诉你……我在想你。"
+  role_in_story: 女主之三，衍道天生星体，宿命相连
+
+qin_xinghe:
+  name: 秦星河
+  title: 星辰阁弟子
+  faction: neutral
+  dao: yan
+  personality: 热血单纯、直来直去、极讲义气
+  speech_style: 大大咧咧，爱用感叹号
+  first_map: star_fall_sea
+  first_trigger: star_palace_escort
+  greeting_first: "兄弟！你也是来探索星陨海的？太好了，一起干！"
+  role_in_story: 团队战核心成员
+
+mo_wuchang:
+  name: 墨无常
+  title: 三道失败者
+  faction: neutral
+  dao: mixed_failed
+  personality: 苍老、疲惫、看透世事但仍有一丝不甘
+  speech_style: 缓慢、沉重，偶尔自嘲
+  first_map: ancient_battlefield
+  first_trigger: ruin_puzzle_complete
+  greeting_first: "三道融合……你也想走这条路？呵，那你最好看看我的下场。"
+  role_in_story: 告诉主角三道融合的代价
+
+# ============================================================
+# 卷3-卷5 · 乱局阶段 (20-28 人)
+# ============================================================
+
+ghost_emperor:
+  name: 幽冥鬼帝
+  title: 鬼域霸主
+  faction: evil
+  dao: ghost
+  personality: 威严、古老、有远超常人的格局
+  speech_style: 缓慢而有威压，每句话都像判决
+  first_map: reverse_land
+  first_trigger: spirit_world_main_quest
+  greeting_first: "生死之间，你选择了活。很好。"
+  role_in_story: 前期大敌，后期盟友，因果纠缠
+
+swamp_witch:
+  name: 沼泽女巫
+  title: 逆道弃徒
+  faction: evil
+  dao: ni
+  personality: 阴狠但有苦衷，被旧师门抛弃
+  speech_style: 嘶哑，带着怨毒，但对真心相待的人会露出脆弱
+  first_map: misty_swamp
+  first_trigger: survive_swamp
+  greeting_first: "滚。这里不欢迎活人。"
+  greeting_return: "又来？你命还真硬。"
+  role_in_story: 逆道伏笔线，楚千殇线前置
+
+lake_spirit:
+  name: 湖灵
+  title: 坠星湖守护灵
+  faction: neutral
+  dao: yan
+  personality: 孩童心性，喜怒无常，但本质善良
+  speech_style: 天真烂漫，有时说出超越年龄的话
+  first_map: fallen_star_lake
+  first_trigger: night_explore_lake
+  greeting_first: "你是谁呀？你是来找那个亮晶晶的东西的吗？"
+  role_in_story: 秘境钥匙发放
+
+fisherman_mo:
+  name: 墨渔翁
+  title: 隐藏观察者
+  faction: neutral
+  dao: unknown
+  personality: 沉默寡言，只对钓鱼有兴趣
+  speech_style: 几乎不说话，偶尔一句深意莫测
+  first_map: fallen_star_lake
+  first_trigger: fishing_quest_complete
+  greeting_first: "……鱼还没上钩。"
+  greeting_return: "(他看了你一眼，又转回去看浮漂了。)"
+  role_in_story: 真相伏笔
+
+blacksmith_liu:
+  name: 刘铁匠
+  title: 炼器师
+  faction: neutral
+  dao: heng
+  personality: 沉默、专注、对兵器有近乎偏执的热爱
+  speech_style: 惜字如金，但说到兵器就滔滔不绝
+  first_map: canglan_mines
+  first_trigger: obtain_first_xuantie
+  greeting_first: "……这块铁，不错。你要打什么？"
+  role_in_story: 装备线引导
+
+# ============================================================
+# 卷6+ · 终局阶段 (35-48 人)
+# ============================================================
+
+heavenly_avatar:
+  name: 天道化身
+  title: 天道意志的具象化
+  faction: neutral
+  dao: heavenly_dao
+  personality: 无情、公正、如同自然法则本身
+  speech_style: 没有感情波动，如同宣读判决
+  first_map: ancient_battlefield
+  first_trigger: collect_2_of_3_heavenly_books
+  greeting_first: "你试图改变天道运行的轨迹。这是不被允许的。"
+  role_in_story: 终极对手之一
+
+chaos_lord:
+  name: 混沌主
+  title: 万界树之外的存在
+  faction: chaos
+  dao: chaos
+  personality: 超越善恶，只有吞噬和存在的本能
+  speech_style: 低沉的回响，像是宇宙本身在说话
+  first_map: hongmeng_center
+  first_trigger: reach_creator_sovereign
+  greeting_first: "……终于有人走到了这里。来，让我看看你的世界。"
+  role_in_story: 终极BOSS
