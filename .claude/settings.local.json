@@ -13,7 +13,11 @@
       "Bash(pip install:*)",
       "Bash(uv:*)",
       "Bash(rm:*)",
-      "Bash(PGPASSWORD=mycompany psql:*)"
+      "Bash(PGPASSWORD=mycompany psql:*)",
+      "Bash(cp:*)",
+      "Bash(D:/temp_build/XiuXianBot/.venv/Scripts/python.exe:*)",
+      "Bash(export:*)",
+      "Bash(mv:*)"
     ]
   }
 }
