@@ -585,10 +585,13 @@ def pvp_battle(
 
 
 def format_monster_list(user_rank: int) -> str:
+    from core.game.realms import format_realm_display
     monsters = get_available_monsters(user_rank)
     lines = ["👹 可挑战的怪物\n"]
     for m in monsters:
-        difficulty = "简单" if m["min_rank"] <= user_rank - 2 else "普通" if m["min_rank"] <= user_rank else "困难"
-        lines.append(f"▸ {m['name']} (HP:{m['hp']} ATK:{m['attack']})")
-        lines.append(f"  奖励: {m['exp_reward']}修为 {m['copper_reward'][0]}-{m['copper_reward'][1]}下品灵石 [{difficulty}]")
+        realm_label = format_realm_display(m["min_rank"])
+        element = m.get("element", "")
+        lines.append(f"▸ {m['name']}  ({element})  【{realm_label}】")
+        lines.append(f"  HP:{m['hp']} ATK:{m['attack']} DEF:{m['defense']}")
+        lines.append(f"  奖励: 依据境界动态结算（含疲劳衰减）")
     return "\n".join(lines)
