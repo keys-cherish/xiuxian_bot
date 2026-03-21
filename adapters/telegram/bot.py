@@ -763,6 +763,11 @@ def _is_message_not_modified_error(exc: Exception) -> bool:
     return "not modified" in str(exc or "").lower()
 
 
+def _is_retry_after_error(exc: Exception) -> bool:
+    text = str(exc or "").lower()
+    return "retry after" in text or "too many requests" in text or "flood control exceeded" in text
+
+
 def _is_private_panel_message(message) -> bool:
     if not message:
         return False
@@ -3278,10 +3283,24 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     sent = await query.message.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode)
                     if reply_markup is not None:
                         _bind_panel_owner(context, sent, user_id)
-                except Exception:
-                    sent = await query.message.reply_text(text, reply_markup=reply_markup)
-                    if reply_markup is not None:
-                        _bind_panel_owner(context, sent, user_id)
+                except Exception as send_exc:
+                    if _is_message_not_modified_error(send_exc):
+                        return
+                    if _is_retry_after_error(send_exc):
+                        logger.warning(f"callback edit fallback throttled: {send_exc}")
+                        return
+                    try:
+                        sent = await query.message.reply_text(text, reply_markup=reply_markup)
+                        if reply_markup is not None:
+                            _bind_panel_owner(context, sent, user_id)
+                    except Exception as plain_exc:
+                        if _is_message_not_modified_error(plain_exc):
+                            return
+                        if _is_retry_after_error(plain_exc):
+                            logger.warning(f"callback edit fallback throttled: {plain_exc}")
+                            return
+                        logger.warning(f"callback edit fallback failed: {plain_exc}")
+                        return
 
     async def _stop_if_cultivating(uid: str, action_text: str) -> bool:
         try:

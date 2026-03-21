@@ -171,3 +171,31 @@ def test_panel_owner_binding_persists_to_disk():
         user_data={},
     )
     assert telegram_bot._get_panel_owner(fresh_context, message) == "90001"
+
+
+def test_callback_safe_edit_swallow_retry_after_on_reply_fallback():
+    class _RetryMessage(_PanelMessage):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.reply_attempts = 0
+
+        async def reply_text(self, text, **kwargs):
+            self.reply_attempts += 1
+            raise RuntimeError("Too Many Requests: retry after 3")
+
+    class _EditFailQuery(_DummyQuery):
+        async def edit_message_text(self, text, **kwargs):
+            raise RuntimeError("message can't be edited")
+
+    message = _RetryMessage(chat_id=50005, chat_type="private", message_id=501)
+    query = _EditFailQuery(clicker_id=50005, message=message, data="__noop__")
+    update = SimpleNamespace(callback_query=query)
+    context = SimpleNamespace(
+        application=SimpleNamespace(bot_data={}),
+        user_data={},
+    )
+
+    asyncio.run(telegram_bot.callback_handler(update, context))
+
+    assert query.answered
+    assert message.reply_attempts == 1
