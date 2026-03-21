@@ -26,6 +26,8 @@ interface PlayerState {
   loaded: boolean
   loading: boolean
   raw: Record<string, any>
+  /** Number of new/unread story chapters */
+  newChapterCount: number
 }
 
 export const usePlayerStore = defineStore('player', {
@@ -49,6 +51,7 @@ export const usePlayerStore = defineStore('player', {
     loaded: false,
     loading: false,
     raw: {},
+    newChapterCount: 0,
   }),
 
   getters: {
@@ -74,6 +77,9 @@ export const usePlayerStore = defineStore('player', {
       try {
         const data: InitData = await fetchInit(this.userId)
         this.applyUserData(data.user)
+        this.newChapterCount = (data.story?.available_chapters || []).filter(
+          (ch: any) => ch.is_new || (ch.current_line === 0 && ch.total_lines > 0),
+        ).length
         this.loaded = true
         this.persistCache()
       } finally {

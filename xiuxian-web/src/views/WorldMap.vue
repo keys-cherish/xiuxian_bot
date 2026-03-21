@@ -39,6 +39,8 @@ const errorText = ref('')
 const world = ref<{ tier: number; name: string; desc: string } | null>(null)
 const nodes = ref<MapNode[]>([])
 const selectedNodeId = ref('')
+const arrivalText = ref('')
+const arrivalName = ref('')
 
 const graphRoot = ref<HTMLDivElement | null>(null)
 let cy: Core | null = null
@@ -293,9 +295,8 @@ async function travelTo(node: MapNode) {
       { user_id: player.userId, to_map: node.id },
     )
     if (r.first_visit_text) {
-      alert(r.first_visit_text)
-    } else if (r.to_name) {
-      alert(`已到达：${r.to_name}`)
+      arrivalName.value = r.to_name || node.name
+      arrivalText.value = r.first_visit_text
     }
     await player.init(true)
     await loadMap()
@@ -408,6 +409,19 @@ function handleAction(action: string) {
         <span><span class="dot dot--locked"></span>未解锁</span>
       </div>
     </template>
+
+    <!-- 首次到达剧情浮层 -->
+    <Transition name="page">
+      <div v-if="arrivalText" class="arrival-overlay" @click="arrivalText = ''">
+        <div class="arrival-card card card--decorated" @click.stop>
+          <div class="arrival-card__header">📍 {{ arrivalName }}</div>
+          <hr class="divider">
+          <div class="arrival-card__body">{{ arrivalText }}</div>
+          <hr class="divider">
+          <button class="btn btn-primary btn-block" @click="arrivalText = ''">继续探索</button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -451,6 +465,21 @@ function handleAction(action: string) {
 .dot--current { background: var(--cinnabar); }
 .dot--adjacent { background: var(--jade); }
 .dot--locked { background: #d9cebf; }
+
+/* 首次到达剧情浮层 */
+.arrival-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(26, 26, 26, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-lg);
+}
+.arrival-card { max-width: 360px; width: 100%; }
+.arrival-card__header { font-size: 1rem; font-weight: 700; color: var(--ink-dark); text-align: center; }
+.arrival-card__body {
+  font-size: 0.85rem; color: var(--ink-mid); line-height: 1.8;
+  white-space: pre-line; text-align: center;
+  max-height: 40vh; overflow-y: auto;
+}
 
 @media (max-width: 720px) {
   .map-graph { height: 46vh; min-height: 320px; }

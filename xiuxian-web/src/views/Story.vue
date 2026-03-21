@@ -179,7 +179,7 @@ function onLineDone() {
 
 .story-page__header h2 {
   font-size: 1.1rem;
-  color: var(--color-text-bright);
+  color: var(--ink-dark);
 }
 
 .story-page__loading,
@@ -190,12 +190,12 @@ function onLineDone() {
   justify-content: center;
   flex: 1;
   gap: var(--space-sm);
-  color: var(--color-text-dim);
+  color: var(--ink-light);
 }
 
 .text-dim {
   font-size: 0.8rem;
-  color: var(--color-text-dim);
+  color: var(--ink-light);
 }
 
 /* ── Chapter list ── */
@@ -220,7 +220,7 @@ function onLineDone() {
 }
 
 .chapter-item:active {
-  background: var(--color-bg-card-hover);
+  background: var(--paper-dark);
 }
 
 .chapter-item__left {
@@ -237,18 +237,18 @@ function onLineDone() {
 
 .chapter-item__volume {
   font-size: 0.65rem;
-  color: var(--color-text-dim);
+  color: var(--ink-light);
 }
 
 .chapter-item__title {
   font-size: 0.85rem;
-  color: var(--color-text-bright);
+  color: var(--ink-dark);
   font-weight: 500;
 }
 
 .chapter-item__progress {
   font-size: 0.7rem;
-  color: var(--color-text-dim);
+  color: var(--ink-light);
   white-space: nowrap;
 }
 
@@ -265,8 +265,8 @@ function onLineDone() {
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--paper-deeper);
+  background: var(--paper);
   flex-shrink: 0;
 }
 
@@ -277,18 +277,18 @@ function onLineDone() {
 
 .reader__volume {
   font-size: 0.6rem;
-  color: var(--color-text-dim);
+  color: var(--ink-light);
 }
 
 .reader__chapter {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text-bright);
+  color: var(--ink-dark);
 }
 
 .reader__progress {
   font-size: 0.7rem;
-  color: var(--color-text-dim);
+  color: var(--ink-light);
   font-family: var(--font-mono);
 }
 
@@ -307,15 +307,15 @@ function onLineDone() {
 
 .reader__footer {
   padding: var(--space-md) var(--space-lg);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-bg-card);
+  border-top: 1px solid var(--paper-deeper);
+  background: var(--paper);
   flex-shrink: 0;
   padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
 }
 
 .reader__finished {
   text-align: center;
-  color: var(--color-accent);
+  color: var(--gold);
   font-size: 0.85rem;
   margin-bottom: var(--space-sm);
 }

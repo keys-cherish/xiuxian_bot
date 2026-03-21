@@ -60,8 +60,22 @@ const player = usePlayerStore()
         </router-link>
         <router-link to="/story" class="quick__btn">
           <span class="quick__icon">📜</span><span>仙卷剧情</span>
+          <span v-if="player.newChapterCount > 0" class="quick__badge">{{ player.newChapterCount }}</span>
+        </router-link>
+        <router-link to="/hunt" class="quick__btn">
+          <span class="quick__icon">⚔️</span><span>狩猎</span>
         </router-link>
       </div>
+
+      <!-- 新章节提示 -->
+      <router-link v-if="player.newChapterCount > 0" to="/story" class="new-story-banner card fade-in">
+        <span class="new-story-banner__icon">📖</span>
+        <div class="new-story-banner__text">
+          <div class="new-story-banner__title">有 {{ player.newChapterCount }} 篇新剧情可阅读</div>
+          <div class="new-story-banner__hint">点击进入仙卷</div>
+        </div>
+        <span class="new-story-banner__arrow">→</span>
+      </router-link>
     </template>
 
     <div v-else class="home__empty">气机紊乱，请刷新重试</div>
@@ -109,7 +123,7 @@ const player = usePlayerStore()
 }
 
 /* 快捷入口 */
-.quick { display:flex;gap:var(--space-sm);margin-top:var(--space-lg); }
+.quick { display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);margin-top:var(--space-lg); }
 .quick__btn {
   flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-sm);
   padding:var(--space-md);border-radius:var(--radius-md);
@@ -117,7 +131,30 @@ const player = usePlayerStore()
   color:var(--ink-dark);font-weight:600;font-size:0.85rem;
   transition: all var(--duration-fast);
   text-decoration:none;
+  position:relative;
 }
 .quick__btn:active { transform:scale(0.97);background:var(--paper-deeper); }
 .quick__icon { font-size:1.2rem; }
+.quick__badge {
+  position:absolute;top:-4px;right:-4px;
+  min-width:16px;height:16px;padding:0 4px;
+  background:var(--cinnabar);color:#fff;font-size:0.6rem;font-weight:700;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  line-height:1;
+}
+
+/* 新剧情提示 */
+.new-story-banner {
+  display:flex;align-items:center;gap:var(--space-md);
+  margin-top:var(--space-md);padding:var(--space-md);
+  cursor:pointer;text-decoration:none;color:inherit;
+  border:1px solid var(--gold);border-left:3px solid var(--gold);
+  transition:background var(--duration-fast);
+}
+.new-story-banner:active { background:var(--paper-dark); }
+.new-story-banner__icon { font-size:1.4rem; }
+.new-story-banner__title { font-size:0.85rem;font-weight:600;color:var(--ink-dark); }
+.new-story-banner__hint { font-size:0.7rem;color:var(--ink-light);margin-top:2px; }
+.new-story-banner__text { flex:1; }
+.new-story-banner__arrow { color:var(--gold);font-size:1.1rem;font-weight:700; }
 </style>

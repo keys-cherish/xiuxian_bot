@@ -62,42 +62,42 @@ const emit = defineEmits<{
 .story-line__speaker {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--cinnabar);
   margin-bottom: 2px;
   padding-left: var(--space-sm);
 }
 
 .story-line__bubble {
-  background: rgba(167, 139, 250, 0.08);
-  border-left: 3px solid var(--color-accent);
+  background: rgba(192, 48, 48, 0.05);
+  border-left: 3px solid var(--cinnabar);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: var(--space-sm) var(--space-md);
-  color: var(--color-text-bright);
+  color: var(--ink-dark);
   line-height: 1.7;
 }
 
 .story-line__narration {
-  color: var(--color-text);
+  color: var(--ink-mid);
   line-height: 1.8;
   padding: 0 var(--space-xs);
 }
 
 .story-line__narration--inner {
-  color: var(--color-text-dim);
+  color: var(--ink-light);
   font-style: italic;
 }
 
 .story-line__choice {
-  background: var(--color-bg-card-hover);
-  border: 1px solid var(--color-border);
+  background: var(--paper-dark);
+  border: 1px solid var(--paper-deeper);
   border-radius: var(--radius-sm);
   padding: var(--space-sm) var(--space-md);
-  color: var(--color-gold);
+  color: var(--gold);
   cursor: pointer;
   transition: border-color var(--duration-fast);
 }
 
 .story-line__choice:active {
-  border-color: var(--color-gold);
+  border-color: var(--gold);
 }
 </style>

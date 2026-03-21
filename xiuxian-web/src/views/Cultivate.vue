@@ -3,6 +3,7 @@ import { usePlayerStore } from '@/stores/player'
 import { get, post } from '@/api/client'
 
 const player = usePlayerStore()
+const router = useRouter()
 
 // ── State ──
 const state = ref<'idle' | 'cultivating' | 'settling'>('idle')
@@ -25,6 +26,8 @@ const btState = ref<'idle' | 'previewing' | 'executing' | 'done'>('idle')
 const btPreview = ref<Record<string, any> | null>(null)
 const btResult = ref<Record<string, any> | null>(null)
 const btStrategy = ref('normal')
+
+const storyUnlocked = ref(false)
 
 let tickTimer: ReturnType<typeof setInterval> | null = null
 
@@ -119,8 +122,12 @@ async function endCultivate() {
     const r = await post('/api/cultivate/end', { user_id: player.userId })
     result.value = r
     canBreakthrough.value = !!r.can_breakthrough
-    // Refresh player data
+    // Refresh player data and check for new story chapters
+    const prevChapterCount = player.newChapterCount
     await player.init(true)
+    if (player.newChapterCount > prevChapterCount) {
+      storyUnlocked.value = true
+    }
   } catch (e: any) {
     result.value = { success: false, message: e.body?.message || '结算失败' }
   }
@@ -133,6 +140,7 @@ function reset() {
   btState.value = 'idle'
   btPreview.value = null
   btResult.value = null
+  storyUnlocked.value = false
   elapsed.value = 0
   currentGain.value = 0
   anchorTime.value = 0
@@ -184,7 +192,11 @@ async function doBreakthrough() {
     })
     btResult.value = r
     btState.value = 'done'
+    const prevChapterCount = player.newChapterCount
     await player.init(true)
+    if (player.newChapterCount > prevChapterCount) {
+      storyUnlocked.value = true
+    }
   } catch (e: any) {
     btResult.value = { success: false, message: e.body?.message || '突破失败' }
     btState.value = 'done'
@@ -377,6 +389,13 @@ function fmtTime(s: number) {
             </div>
           </template>
 
+          <!-- 新剧情解锁提示 -->
+          <div v-if="storyUnlocked" class="story-unlock fade-in" @click="router.push('/story')">
+            <span class="story-unlock__icon">📖</span>
+            <span class="story-unlock__text">新剧情已解锁，点击查看</span>
+            <span class="story-unlock__arrow">→</span>
+          </div>
+
           <button class="btn btn-primary btn-block" style="margin-top:var(--space-lg)" @click="reset">返回</button>
         </div>
       </div>
@@ -525,4 +544,17 @@ function fmtTime(s: number) {
 .bt-result--fail .bt-result__title { color: var(--ink-light); }
 .bt-result__realm { font-size: 1.3rem; font-weight: 700; color: var(--cinnabar); margin: var(--space-xs) 0; }
 .bt-result__msg { font-size: 0.8rem; color: var(--ink-light); margin: var(--space-sm) 0; }
+
+/* 新剧情解锁 */
+.story-unlock {
+  display: flex; align-items: center; gap: var(--space-sm);
+  margin-top: var(--space-md); padding: var(--space-sm) var(--space-md);
+  background: rgba(184, 134, 11, 0.08); border: 1px solid var(--gold);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.story-unlock:active { background: rgba(184, 134, 11, 0.15); }
+.story-unlock__icon { font-size: 1.1rem; }
+.story-unlock__text { flex: 1; font-size: 0.82rem; font-weight: 600; color: var(--gold); }
+.story-unlock__arrow { color: var(--gold); font-weight: 700; }
 </style>
