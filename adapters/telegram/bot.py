@@ -26,6 +26,8 @@ from telegram import (
     InlineKeyboardMarkup,
     ForceReply,
     MenuButtonCommands,
+    MenuButtonWebApp,
+    WebAppInfo,
 )
 from telegram.error import Conflict
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
@@ -208,6 +210,7 @@ for _handler in logging.getLogger().handlers:
 DEFAULT_SERVER_PORT = 11450
 SERVER_URL = str(getattr(config, "core_server_url", "") or f"http://127.0.0.1:{DEFAULT_SERVER_PORT}").rstrip("/")
 INTERNAL_API_TOKEN = (config.internal_api_token or "").strip()
+MINIAPP_URL = str(getattr(config, "miniapp_url", "") or "").strip()
 TELEGRAM_POLL_TIMEOUT = max(1, int(os.getenv("TELEGRAM_POLL_TIMEOUT", "3")))
 TELEGRAM_PROXY_URL = (os.getenv("TELEGRAM_PROXY_URL", "") or "").strip() or None
 _HTTP_SESSION: aiohttp.ClientSession | None = None
@@ -1134,7 +1137,18 @@ def require_account(handler):
 
 def get_main_menu_keyboard():
     """获取主菜单键盘"""
-    keyboard = [
+    keyboard = []
+
+    # MiniApp 入口（最顶部，最醒目）
+    if MINIAPP_URL:
+        keyboard.append([
+            InlineKeyboardButton(
+                "🏯 进入修仙世界",
+                web_app=WebAppInfo(url=MINIAPP_URL),
+            ),
+        ])
+
+    keyboard.extend([
         [
             InlineKeyboardButton("📊 状态", callback_data="status"),
             InlineKeyboardButton("🧘 修炼", callback_data="cultivate"),
@@ -1178,7 +1192,7 @@ def get_main_menu_keyboard():
             InlineKeyboardButton("🐲 世界BOSS", callback_data="worldboss_menu"),
             InlineKeyboardButton("📜 悬赏会", callback_data="bounty_menu"),
         ],
-    ]
+    ])
     return InlineKeyboardMarkup(keyboard)
 
 

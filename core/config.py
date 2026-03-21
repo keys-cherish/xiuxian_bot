@@ -157,6 +157,12 @@ class _AppConfig:
         return f"http://{self.core_server_host}:{self.core_server_port}"
 
     @property
+    def miniapp_url(self) -> str:
+        raw = os.environ.get("XXBOT_MINIAPP_URL") or \
+              self.get_nested("miniapp", "url", default="")
+        return str(raw or "").strip()
+
+    @property
     def admin_panel_port(self) -> int:
         return int(self.get_nested("admin_panel", "port", default=11451))
 
