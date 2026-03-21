@@ -170,3 +170,121 @@ export function storyRead(userId: string, chapterId: string, count = 5) {
 export function storyReread(userId: string, chapterId: string) {
   return post('/api/story/reread', { user_id: userId, chapter_id: chapterId })
 }
+
+// ── Hunt / Combat ───────────────────────────────
+
+export function hunt(userId: string) {
+  return post('/api/hunt', { user_id: userId })
+}
+
+export function getHuntStatus(userId: string) {
+  return get(`/api/hunt/status/${userId}`)
+}
+
+export function getMonsters() {
+  return get('/api/monsters')
+}
+
+export function turnStart(userId: string, monsterId?: string) {
+  return post('/api/hunt/turn/start', { user_id: userId, monster_id: monsterId })
+}
+
+export function turnAction(userId: string, action: string) {
+  return post('/api/hunt/turn/action', { user_id: userId, action })
+}
+
+// ── Skills ──────────────────────────────────────
+
+export function getSkills(userId: string) {
+  return get(`/api/skills/${userId}`)
+}
+
+export function learnSkill(userId: string, skillId: string) {
+  return post('/api/skills/learn', { user_id: userId, skill_id: skillId })
+}
+
+export function equipSkill(userId: string, skillId: string, slot: number) {
+  return post('/api/skills/equip', { user_id: userId, skill_id: skillId, slot })
+}
+
+export function unequipSkill(userId: string, slot: number) {
+  return post('/api/skills/unequip', { user_id: userId, slot })
+}
+
+export function upgradeSkill(userId: string, skillId: string) {
+  return post('/api/skills/upgrade', { user_id: userId, skill_id: skillId })
+}
+
+// ── Shop ────────────────────────────────────────
+
+export function getShop() {
+  return get('/api/shop')
+}
+
+export function buyItem(userId: string, itemId: string, quantity = 1) {
+  return post('/api/shop/buy', { user_id: userId, item_id: itemId, quantity })
+}
+
+export function useItem(userId: string, itemInstanceId: string) {
+  return post('/api/item/use', { user_id: userId, item_instance_id: itemInstanceId })
+}
+
+// ── Bag ─────────────────────────────────────────
+
+export function getItems(userId: string) {
+  return get(`/api/items/${userId}`)
+}
+
+export function equipItem(userId: string, itemInstanceId: string, slot: string) {
+  return post('/api/equip', { user_id: userId, item_instance_id: itemInstanceId, slot })
+}
+
+// ── PVP ─────────────────────────────────────────
+
+export function getPvpOpponents(userId: string) {
+  return get(`/api/pvp/opponents/${userId}`)
+}
+
+export function pvpChallenge(userId: string, targetId: string) {
+  return post('/api/pvp/challenge', { user_id: userId, target_id: targetId })
+}
+
+// ── Alchemy ─────────────────────────────────────
+
+export function getAlchemyRecipes() {
+  return get('/api/alchemy/recipes')
+}
+
+export function brew(userId: string, recipeId: string) {
+  return post('/api/alchemy/brew', { user_id: userId, recipe_id: recipeId })
+}
+
+// ── Gacha ───────────────────────────────────────
+
+export function getGachaBanners() {
+  return get('/api/gacha/banners')
+}
+
+export function gachaPull(userId: string, bannerId: string, count = 1) {
+  return post('/api/gacha/pull', { user_id: userId, banner_id: bannerId, count })
+}
+
+// ── Signin ──────────────────────────────────────
+
+export function signin(userId: string) {
+  return post('/api/signin', { user_id: userId })
+}
+
+export function getSigninStatus(userId: string) {
+  return get(`/api/signin/${userId}`)
+}
+
+// ── Breakthrough ────────────────────────────────
+
+export function getBreakthroughPreview(userId: string, strategy = 'normal') {
+  return get(`/api/breakthrough/preview/${userId}?strategy=${strategy}`)
+}
+
+export function breakthrough(userId: string, strategy: string, usePill = false) {
+  return post('/api/breakthrough', { user_id: userId, strategy, use_pill: usePill })
+}
