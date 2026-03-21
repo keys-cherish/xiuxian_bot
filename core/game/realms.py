@@ -216,6 +216,9 @@ def attempt_breakthrough(user_data: Dict[str, Any], use_pill: bool = False, extr
     """
     尝试突破
     返回: (是否成功, 消息)
+
+    金丹期及以上需要特定突破材料（全局限量物品）。
+    材料检查由调用方在调用前完成，本函数通过 user_data["has_break_material"] 判断。
     """
     from core.services.breakthrough_pity import bonus as pity_bonus, is_hard_pity
 
@@ -227,7 +230,18 @@ def attempt_breakthrough(user_data: Dict[str, Any], use_pill: bool = False, extr
         return False, "你已达到最高境界！"
 
     if user_data["exp"] < next_realm["exp_required"]:
-        return False, f"修为不足，需要 {next_realm['exp_required']} 点修为才能突破"
+        return False, f"修为不足，需要 {next_realm['exp_required']:,} 点修为才能突破"
+
+    # 金丹期及以上：检查突破材料
+    next_stage = next_realm.get("stage", "")
+    mat_req = BREAKTHROUGH_MATERIALS.get(next_stage)
+    if mat_req:
+        if not user_data.get("has_break_material"):
+            hint = mat_req["hint_text"]
+            return False, (
+                f"突破至【{next_realm['name']}】需要特殊材料：{mat_req['item_name']} x{mat_req['count']}\n\n"
+                f"💡 线索：{hint}"
+            )
 
     # 检查硬保底
     current_pity = int(user_data.get("breakthrough_pity", 0) or 0)
@@ -251,7 +265,6 @@ def attempt_breakthrough(user_data: Dict[str, Any], use_pill: bool = False, extr
     element = user_data.get("element")
     if element and element in ELEMENT_BONUSES:
         fire_bonus = float(config.get_nested("balance", "breakthrough", "fire_bonus", default=0.03) or 0.03)
-        # 火属性突破成功率加成（可在配置中调整）
         if element == "火":
             success_rate = min(1.0, success_rate + fire_bonus)
 
@@ -261,7 +274,6 @@ def attempt_breakthrough(user_data: Dict[str, Any], use_pill: bool = False, extr
     if success:
         return True, f"恭喜！突破成功，进入【{next_realm['name']}】境界！"
     else:
-        # 失败惩罚由结算层按配置和策略动态计算，避免文案与实际数值漂移。
         return False, "突破失败。"
 
 
@@ -449,3 +461,138 @@ def calc_dao_bonus(dao_heng: float, dao_ni: float, dao_yan: float,
     bonus_yan = y * (0.01 + 0.09 * stage_factor)
 
     return round(bonus_heng + bonus_ni + bonus_yan, 6)
+
+
+# ─── 游戏时间系统 ────────────────────────────────────────────
+# 现实 1 小时 = 游戏 1 天, 现实 24 小时 = 游戏 1 个月(24天)
+# 服务器启动时刻作为 epoch, 对应 "凡界元年正月初一"
+
+import time as _time
+
+# epoch: 2025-01-01 00:00:00 UTC 作为游戏时间起点
+_GAME_EPOCH = 1735689600
+_REAL_TO_GAME_RATIO = 24  # 1现实小时 = 24游戏小时 = 1游戏日
+
+_WORLD_TIER_NAMES = {1: "凡界", 2: "灵界", 3: "真界", 4: "仙界",
+                     5: "神界", 6: "造化", 7: "鸿蒙"}
+
+
+def get_game_time(world_tier: int = 1) -> Dict[str, Any]:
+    """返回当前游戏时间。
+
+    Returns:
+        {"year": 3, "month": 7, "day": 15, "season": "夏",
+         "time_of_day": "正午", "display": "凡界3年·夏·七月十五·正午"}
+    """
+    now = _time.time()
+    game_seconds = (now - _GAME_EPOCH) * _REAL_TO_GAME_RATIO
+    if game_seconds < 0:
+        game_seconds = 0
+
+    game_days = int(game_seconds // 86400)
+    game_hour = int((game_seconds % 86400) // 3600)
+
+    year = game_days // 360 + 1       # 360天/年
+    month = (game_days % 360) // 30 + 1  # 30天/月
+    day = (game_days % 30) + 1
+
+    # 季节
+    if month in (1, 2, 3):
+        season = "春"
+    elif month in (4, 5, 6):
+        season = "夏"
+    elif month in (7, 8, 9):
+        season = "秋"
+    else:
+        season = "冬"
+
+    # 时辰
+    if 5 <= game_hour < 8:
+        tod = "清晨"
+    elif 8 <= game_hour < 12:
+        tod = "上午"
+    elif 12 <= game_hour < 14:
+        tod = "正午"
+    elif 14 <= game_hour < 18:
+        tod = "午后"
+    elif 18 <= game_hour < 20:
+        tod = "黄昏"
+    elif 20 <= game_hour < 23:
+        tod = "夜晚"
+    else:
+        tod = "深夜"
+
+    tier_name = _WORLD_TIER_NAMES.get(world_tier, "凡界")
+    display = f"{tier_name}{year}年·{season}·{_cn_month(month)}月{_cn_day(day)}·{tod}"
+
+    return {
+        "year": year, "month": month, "day": day,
+        "season": season, "time_of_day": tod,
+        "world_tier": world_tier, "display": display,
+    }
+
+
+def _cn_month(m: int) -> str:
+    cn = {1:"正",2:"二",3:"三",4:"四",5:"五",6:"六",
+          7:"七",8:"八",9:"九",10:"十",11:"冬",12:"腊"}
+    return cn.get(m, str(m))
+
+
+def _cn_day(d: int) -> str:
+    if d <= 10:
+        cn = {1:"初一",2:"初二",3:"初三",4:"初四",5:"初五",
+              6:"初六",7:"初七",8:"初八",9:"初九",10:"初十"}
+        return cn.get(d, str(d))
+    if d == 20:
+        return "二十"
+    if d == 30:
+        return "三十"
+    if d < 20:
+        return f"十{_cn_day(d - 10).replace('初','')}"
+    if d < 30:
+        return f"廿{_cn_day(d - 20).replace('初','')}"
+    return str(d)
+
+
+# ─── 突破材料需求 ────────────────────────────────────────────
+# 金丹期及以上需要天才地宝才能突破
+# 材料线索从NPC/剧情中获得, 材料本身是全局限量物品
+
+BREAKTHROUGH_MATERIALS: Dict[str, Dict[str, Any]] = {
+    # stage -> {item_id, item_name, hint_npc, hint_text}
+    "jiedan": {
+        "item_id": "break_jiedan_pill",
+        "item_name": "凝丹露",
+        "count": 1,
+        "hint_npc": "陈丹师",
+        "hint_text": "金丹突破需要凝丹露，丹鼎阁每年只炼制有限数量。可向陈丹师打听。",
+    },
+    "yuanying": {
+        "item_id": "break_yuanying_core",
+        "item_name": "元婴结晶",
+        "count": 1,
+        "hint_npc": "墨无常",
+        "hint_text": "元婴突破需要元婴结晶，传闻星陨秘境深处有产出。",
+    },
+    "huashen": {
+        "item_id": "break_huashen_lotus",
+        "item_name": "化神莲台",
+        "count": 1,
+        "hint_npc": "星璇",
+        "hint_text": "化神突破需要化神莲台，需集齐三瓣莲花，仙人遗府中或有线索。",
+    },
+    "lianxu": {
+        "item_id": "break_lianxu_void",
+        "item_name": "炼虚虚晶",
+        "count": 1,
+        "hint_npc": "幽冥鬼帝",
+        "hint_text": "炼虚突破需要虚空法则之结晶，灵界深处的时空裂隙中偶有出现。",
+    },
+    "heti": {
+        "item_id": "break_heti_stone",
+        "item_name": "合体道石",
+        "count": 1,
+        "hint_npc": "天道化身",
+        "hint_text": "合体突破需要蕴含天地大道之力的道石，传说只有古战场秘境最深处才有。",
+    },
+}

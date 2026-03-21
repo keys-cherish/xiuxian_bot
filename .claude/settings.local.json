@@ -17,7 +17,8 @@
       "Bash(cp:*)",
       "Bash(D:/temp_build/XiuXianBot/.venv/Scripts/python.exe:*)",
       "Bash(export:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(git:*)"
     ]
   }
 }

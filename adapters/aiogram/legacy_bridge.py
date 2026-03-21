@@ -393,11 +393,6 @@ _COMMAND_DISPATCH: dict[str, Any] = {
     "xian_realms": legacy_bot.guide_cmd,
     "version": legacy_bot.version_cmd,
     "xian_version": legacy_bot.version_cmd,
-    "signin": legacy_bot.signin_cmd,
-    "sign": legacy_bot.signin_cmd,
-    "xian_signin": legacy_bot.signin_cmd,
-    "gacha": legacy_bot.gacha_cmd,
-    "xian_gacha": legacy_bot.gacha_cmd,
 }
 
 

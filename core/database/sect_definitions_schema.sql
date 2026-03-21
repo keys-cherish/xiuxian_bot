@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS sect_definitions (
     special_skill    TEXT,                  -- 宗门专属可学秘籍ID
     recruitment_open BOOLEAN DEFAULT FALSE, -- 当前是否开放招聘
     next_recruitment TIMESTAMP,             -- 下次招聘时间
+    recruitment_interval_hours INTEGER DEFAULT 72, -- 招聘间隔(小时)，小宗门短，大宗门长
+    recruitment_slots INTEGER DEFAULT 5,    -- 每次招聘名额
     lore             TEXT,                  -- 宗门故事背景
     interview_scene  TEXT                   -- 面试剧情场景ID
 );
@@ -182,5 +184,22 @@ INSERT INTO sect_definitions VALUES
 -- 万宝楼的数据在 maps.py 和 items.py 中定义为商店NPC
 
 ON CONFLICT (sect_id) DO NOTHING;
+
+-- 招聘频率设定：小宗门/中立频率高，大宗门/顶级低
+-- 单位：小时（现实时间）
+UPDATE sect_definitions SET recruitment_interval_hours = 168, recruitment_slots = 3  WHERE sect_id = 'taiqing';   -- 太清宗：7天一次，每次3人
+UPDATE sect_definitions SET recruitment_interval_hours = 120, recruitment_slots = 3  WHERE sect_id = 'tianjian';  -- 天剑门：5天一次
+UPDATE sect_definitions SET recruitment_interval_hours = 96,  recruitment_slots = 4  WHERE sect_id = 'danding';   -- 丹鼎阁：4天一次
+UPDATE sect_definitions SET recruitment_interval_hours = 48,  recruitment_slots = 5  WHERE sect_id = 'wanfa';     -- 万法宗：2天一次（开放门风）
+UPDATE sect_definitions SET recruitment_interval_hours = 72,  recruitment_slots = 4  WHERE sect_id = 'lingshou';  -- 灵兽谷：3天一次
+
+UPDATE sect_definitions SET recruitment_interval_hours = 120, recruitment_slots = 2  WHERE sect_id = 'nitian';    -- 逆天殿：5天一次，名额少
+UPDATE sect_definitions SET recruitment_interval_hours = 72,  recruitment_slots = 3  WHERE sect_id = 'xuesha';    -- 血煞宗：3天一次
+UPDATE sect_definitions SET recruitment_interval_hours = 96,  recruitment_slots = 3  WHERE sect_id = 'wangui';    -- 万鬼门：4天一次
+UPDATE sect_definitions SET recruitment_interval_hours = 240, recruitment_slots = 1  WHERE sect_id = 'tianmo';    -- 天魔教：10天一次，每次仅1人
+
+UPDATE sect_definitions SET recruitment_interval_hours = 720, recruitment_slots = 2  WHERE sect_id = 'xingchen';  -- 星辰阁：30天一次（百年开门设定）
+UPDATE sect_definitions SET recruitment_interval_hours = 24,  recruitment_slots = 10 WHERE sect_id = 'luanxing';  -- 散修联盟：每天都招（门槛低）
+UPDATE sect_definitions SET recruitment_interval_hours = 48,  recruitment_slots = 5  WHERE sect_id = 'manhuang';  -- 妖族联盟：2天一次
 
 COMMIT;

@@ -771,7 +771,7 @@ def get_main_menu_keyboard():
         ],
         [
             InlineKeyboardButton("🏛️ 宗门", callback_data="sect_menu"),
-            InlineKeyboardButton("🏪 商店", callback_data="shop_all"),
+            InlineKeyboardButton("🏪 万宝楼", callback_data="shop_all"),
         ],
         [
             InlineKeyboardButton("🎒 背包", callback_data="bag"),
@@ -783,7 +783,7 @@ def get_main_menu_keyboard():
         ],
         [
             InlineKeyboardButton("👥 社交", callback_data="social_menu"),
-            InlineKeyboardButton("🏛️ 宗门", callback_data="sect_menu"),
+            InlineKeyboardButton("🗺️ 大地图", callback_data="world_map"),
         ],
         [
             InlineKeyboardButton("💱 货币", callback_data="currency_menu"),
@@ -791,7 +791,6 @@ def get_main_menu_keyboard():
             InlineKeyboardButton("🧪 炼丹", callback_data="alchemy_menu"),
         ],
         [
-            InlineKeyboardButton("🗺️ 大地图", callback_data="world_map"),
             InlineKeyboardButton("🏅 成就", callback_data="achievements_menu"),
         ],
         [
