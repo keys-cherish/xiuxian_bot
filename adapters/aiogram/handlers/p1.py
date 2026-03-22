@@ -20,7 +20,7 @@ if ROOT_DIR not in sys.path:
 
 from adapters.aiogram import ui
 from adapters.aiogram.services.api_client import api_get, api_post, new_request_id, resolve_uid
-from adapters.aiogram.states.p1 import BreakthroughFSM, HuntFSM, SecretRealmFSM
+from adapters.aiogram.states.p1 import BreakthroughFSM, HuntFSM, SecretRealmFSM, ShopFSM
 
 logger = logging.getLogger("adapters.aiogram.p1")
 router = Router(name="aiogram_p1")
@@ -175,6 +175,17 @@ async def _require_uid_from_query(query: CallbackQuery, state: FSMContext) -> st
     return None
 
 
+async def _fetch_quests(uid: str) -> list:
+    """获取用户每日任务进度，供状态面板展示"""
+    try:
+        resp = await api_get(f"/api/quests/{uid}")
+        if resp.get("success"):
+            return resp.get("quests") or []
+    except Exception:
+        pass
+    return []
+
+
 async def _show_main_menu_message(message: Message, state: FSMContext) -> None:
     uid = await _uid_from_message(message, state)
     if not uid:
@@ -185,10 +196,11 @@ async def _show_main_menu_message(message: Message, state: FSMContext) -> None:
         return
     stat = await api_get(f"/api/stat/{uid}")
     if stat.get("success"):
-        text = ui.format_status_card(stat.get("status") or {})
+        quests = await _fetch_quests(uid)
+        text = ui.format_status_card(stat.get("status") or {}, quests=quests)
     else:
         text = f"欢迎回来，修士。\n{_error_text(stat, '状态获取失败')}"
-    await message.answer(text, reply_markup=ui.main_menu_keyboard(registered=True))
+    await message.answer(text, reply_markup=ui.main_menu_keyboard(registered=True), parse_mode=ParseMode.MARKDOWN)
 
 
 async def _show_main_menu_query(query: CallbackQuery, state: FSMContext) -> None:
@@ -202,13 +214,15 @@ async def _show_main_menu_query(query: CallbackQuery, state: FSMContext) -> None
         return
     stat = await api_get(f"/api/stat/{uid}")
     if stat.get("success"):
-        text = ui.format_status_card(stat.get("status") or {})
+        quests = await _fetch_quests(uid)
+        text = ui.format_status_card(stat.get("status") or {}, quests=quests)
     else:
         text = f"欢迎回来，修士。\n{_error_text(stat, '状态获取失败')}"
     await _respond_query(
         query,
         text,
         reply_markup=ui.main_menu_keyboard(registered=True),
+        parse_mode=ParseMode.MARKDOWN,
     )
 
 
@@ -375,11 +389,16 @@ async def cmd_register(message: Message, state: FSMContext) -> None:
         uid = str(result.get("user_id") or "").strip()
         if uid:
             await state.update_data(uid=uid)
-        await message.answer(
-            f"✅ 注册成功，欢迎 {result.get('username', username)}。",
-            reply_markup=ui.main_menu_keyboard(registered=True),
-        )
-        await _show_status_message(message, state)
+        # 一条消息同时展示注册结果 + 角色状态
+        stat = await api_get(f"/api/stat/{uid}") if uid else {}
+        if uid and stat.get("success"):
+            text = (
+                f"✅ 注册成功，欢迎 {result.get('username', username)}。\n\n"
+                + ui.format_status_card(stat.get("status") or {})
+            )
+        else:
+            text = f"✅ 注册成功，欢迎 {result.get('username', username)}。"
+        await message.answer(text, reply_markup=ui.main_menu_keyboard(registered=True))
         return
 
     if str(result.get("code", "")).upper() == "ALREADY_EXISTS":
@@ -1091,6 +1110,430 @@ async def cb_secret_action_skill(query: CallbackQuery, state: FSMContext) -> Non
 async def cb_secret_exit(query: CallbackQuery, state: FSMContext) -> None:
     await state.clear()
     await _show_main_menu_query(query, state)
+
+
+# ---------------------------------------------------------------------------
+# Shop (万宝阁) — inline keyboard flow
+# ---------------------------------------------------------------------------
+
+_SHOP_PAGE_SIZE = 8
+
+
+async def _show_shop_currency_message(message: Message, state: FSMContext) -> None:
+    await state.set_state(ShopFSM.selecting_currency)
+    await message.answer(
+        "🏪 万宝阁\n请选择使用哪种货币浏览商品：",
+        reply_markup=ui.shop_currency_keyboard(),
+    )
+
+
+async def _show_shop_currency_query(query: CallbackQuery, state: FSMContext) -> None:
+    await state.set_state(ShopFSM.selecting_currency)
+    await _respond_query(
+        query,
+        "🏪 万宝阁\n请选择使用哪种货币浏览商品：",
+        reply_markup=ui.shop_currency_keyboard(),
+    )
+
+
+async def _show_shop_items_query(
+    query: CallbackQuery,
+    state: FSMContext,
+    uid: str,
+    currency: str,
+    page: int,
+) -> None:
+    shop_data = await api_get(
+        "/api/shop",
+        params={
+            "currency": currency,
+            "user_id": uid,
+            "page": str(page),
+            "page_size": str(_SHOP_PAGE_SIZE),
+        },
+    )
+    if not shop_data.get("success"):
+        await _respond_query(
+            query,
+            f"❌ {_error_text(shop_data, '获取商店列表失败')}",
+            reply_markup=ui.shop_currency_keyboard(),
+            alert_text="获取商品失败",
+        )
+        return
+
+    items = shop_data.get("items") or []
+    total_pages = max(1, int(shop_data.get("total_pages", 1) or 1))
+    page = max(1, min(int(shop_data.get("page", page) or page), total_pages))
+
+    # Fetch player balance for the selected currency
+    currency_role = ""
+    stat = await api_get(f"/api/stat/{uid}")
+    if stat.get("success"):
+        status = stat.get("status") or {}
+        currency_key_map = {"copper": "copper", "gold": "gold", "spirit_high": "spirit_high"}
+        currency_role = str(status.get(currency_key_map.get(currency, currency), ""))
+
+    await state.set_state(ShopFSM.browsing)
+    await state.update_data(uid=uid, shop_currency=currency, shop_page=page)
+    await _respond_query(
+        query,
+        ui.format_shop_panel(items, currency, page, total_pages, currency_role=currency_role),
+        reply_markup=ui.shop_items_keyboard(items, page, total_pages, currency),
+    )
+
+
+@router.message(Command("shop", "xian_shop"))
+async def cmd_shop(message: Message, state: FSMContext) -> None:
+    uid = await _require_uid_from_message(message, state)
+    if not uid:
+        return
+    await state.update_data(uid=uid)
+    await _show_shop_currency_message(message, state)
+
+
+@router.callback_query(F.data == "menu:shop")
+async def cb_menu_shop(query: CallbackQuery, state: FSMContext) -> None:
+    uid = await _require_uid_from_query(query, state)
+    if not uid:
+        return
+    await state.update_data(uid=uid)
+    await _show_shop_currency_query(query, state)
+
+
+@router.callback_query(F.data.startswith("shop:currency:"))
+async def cb_shop_currency(query: CallbackQuery, state: FSMContext) -> None:
+    uid = await _require_uid_from_query(query, state)
+    if not uid:
+        return
+    currency = _extract_callback_tail(query, "shop:currency:").strip().lower()
+    if currency not in ("copper", "gold", "spirit_high"):
+        await _safe_answer_callback(query, text="货币类型错误", show_alert=True)
+        return
+    await _show_shop_items_query(query, state, uid, currency, page=1)
+
+
+@router.callback_query(F.data.startswith("shop:page:"))
+async def cb_shop_page(query: CallbackQuery, state: FSMContext) -> None:
+    uid = await _require_uid_from_query(query, state)
+    if not uid:
+        return
+    tail = _extract_callback_tail(query, "shop:page:").strip()
+    parts = tail.rsplit(":", 1)
+    if len(parts) != 2:
+        await _safe_answer_callback(query, text="翻页参数错误", show_alert=True)
+        return
+    currency = parts[0].lower()
+    try:
+        page = max(1, int(parts[1]))
+    except (TypeError, ValueError):
+        page = 1
+    if currency not in ("copper", "gold", "spirit_high"):
+        await _safe_answer_callback(query, text="货币类型错误", show_alert=True)
+        return
+    await _show_shop_items_query(query, state, uid, currency, page=page)
+
+
+@router.callback_query(F.data.startswith("shop:buy:"))
+async def cb_shop_buy(query: CallbackQuery, state: FSMContext) -> None:
+    uid = await _require_uid_from_query(query, state)
+    if not uid:
+        return
+    tail = _extract_callback_tail(query, "shop:buy:").strip()
+    parts = tail.rsplit(":", 1)
+    if len(parts) != 2:
+        await _safe_answer_callback(query, text="购买参数错误", show_alert=True)
+        return
+    item_id = parts[0]
+    currency = parts[1].lower()
+    if not item_id or currency not in ("copper", "gold", "spirit_high"):
+        await _safe_answer_callback(query, text="参数错误", show_alert=True)
+        return
+
+    result = await api_post(
+        "/api/shop/buy",
+        payload={
+            "user_id": uid,
+            "item_id": item_id,
+            "quantity": 1,
+            "currency": currency,
+            "request_id": new_request_id(),
+        },
+    )
+    if result.get("success"):
+        item_name = str(result.get("item_name") or item_id)
+        await _safe_answer_callback(query, text=f"购买成功: {item_name} x1", show_alert=True)
+        # Refresh the current page
+        data = await state.get_data()
+        page = max(1, int(data.get("shop_page", 1) or 1))
+        await _show_shop_items_query(query, state, uid, currency, page=page)
+    else:
+        err = _error_text(result, "购买失败")
+        await _safe_answer_callback(query, text=f"购买失败: {err}", show_alert=True)
+
+
+@router.callback_query(F.data == "shop:back")
+async def cb_shop_back(query: CallbackQuery, state: FSMContext) -> None:
+    uid = await _require_uid_from_query(query, state)
+    if not uid:
+        return
+    await _show_shop_currency_query(query, state)
+
+
+@router.callback_query(F.data == "shop:noop")
+async def cb_shop_noop(query: CallbackQuery) -> None:
+    await _safe_answer_callback(query)
+
+
+# ---------------------------------------------------------------------------
+# 文本命令处理器 —— 支持 @机器人 或私聊中直接发送中文关键词触发功能
+# ---------------------------------------------------------------------------
+
+_TEXT_CMD_PATTERNS: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"购买(.+)"), "buy"),
+    (re.compile(r"使用(.+)"), "use"),
+    (re.compile(r"(状态|我的状态)"), "status"),
+    (re.compile(r"突破"), "breakthrough"),
+    (re.compile(r"(狩猎|打怪)"), "hunt"),
+    (re.compile(r"秘境"), "secret"),
+    (re.compile(r"(商店|万宝阁)"), "shop"),
+    (re.compile(r"(菜单|主菜单)"), "menu"),
+]
+
+
+def _parse_text_command(text: str) -> tuple[str, str]:
+    """Return (command_key, argument) from user text.  argument is only
+    non-empty for buy / use commands."""
+    text = text.strip()
+    for pat, key in _TEXT_CMD_PATTERNS:
+        m = pat.search(text)
+        if m:
+            arg = m.group(1).strip() if m.lastindex and m.lastindex >= 1 and key in ("buy", "use") else ""
+            return key, arg
+    return "", ""
+
+
+@router.message(F.text)
+async def handle_text_command(message: Message, state: FSMContext) -> None:
+    """Handle plain-text commands (no slash prefix).
+
+    In group chats only respond when the bot is @-mentioned or the message
+    is a reply to one of the bot's own messages.  In private chats always
+    respond.
+    """
+    if not message.text or not message.from_user:
+        return
+
+    raw_text = message.text
+
+    # --- group-chat gate: only respond when mentioned or replied-to ---
+    if message.chat.type != "private":
+        bot_info = await message.bot.me()
+        bot_username = bot_info.username or ""
+        is_mentioned = f"@{bot_username}" in raw_text
+        is_reply_to_bot = (
+            message.reply_to_message is not None
+            and message.reply_to_message.from_user is not None
+            and message.reply_to_message.from_user.id == bot_info.id
+        )
+        if not is_mentioned and not is_reply_to_bot:
+            return
+        # Strip the @mention so it doesn't interfere with keyword matching
+        raw_text = raw_text.replace(f"@{bot_username}", "").strip()
+
+    cmd, arg = _parse_text_command(raw_text)
+    if not cmd:
+        return  # not a recognised keyword — do nothing
+
+    # --- dispatch ---
+
+    if cmd == "menu":
+        await state.clear()
+        await _show_main_menu_message(message, state)
+        return
+
+    if cmd == "status":
+        await _show_status_message(message, state)
+        return
+
+    if cmd == "breakthrough":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        strategy = "normal"
+        call_for_help = True
+        preview_resp = await api_get(
+            f"/api/breakthrough/preview/{uid}",
+            params={
+                "strategy": strategy,
+                "use_pill": "false",
+                "call_for_help": "true",
+            },
+        )
+        if not preview_resp.get("success"):
+            text = f"❌ {_error_text(preview_resp, '突破预览失败')}"
+            if str(preview_resp.get("code", "")).upper() == "REALM_TRIAL":
+                hint = _breakthrough_trial_hint(preview_resp)
+                if hint:
+                    text += f"\n\n需完成试炼：\n{hint}"
+            await message.answer(text, reply_markup=ui.main_menu_keyboard(registered=True))
+            return
+        preview = preview_resp.get("preview") or {}
+        await state.set_state(BreakthroughFSM.selecting_strategy)
+        await state.update_data(
+            uid=uid,
+            breakthrough_strategy=strategy,
+            breakthrough_call_for_help=call_for_help,
+        )
+        await message.answer(
+            ui.format_breakthrough_preview(preview),
+            reply_markup=ui.breakthrough_keyboard(strategy, call_for_help),
+        )
+        return
+
+    if cmd == "hunt":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        await _show_hunt_panel_message(message, state, uid)
+        return
+
+    if cmd == "secret":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        await _show_secret_panel_message(message, state, uid)
+        return
+
+    if cmd == "shop":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        shop_data = await api_get("/api/shop", params={"currency": "copper", "user_id": uid})
+        if not shop_data.get("success"):
+            await message.answer(
+                f"❌ {_error_text(shop_data, '获取商店列表失败')}",
+                reply_markup=ui.main_menu_keyboard(registered=True),
+            )
+            return
+        items = shop_data.get("items") or []
+        if not items:
+            await message.answer("商店暂无商品。", reply_markup=ui.main_menu_keyboard(registered=True))
+            return
+        lines = ["🏪 *万宝阁*（铜币商店）\n"]
+        for it in items:
+            name = it.get("name") or it.get("item_id") or "???"
+            price = it.get("price", "?")
+            remaining = it.get("remaining_limit")
+            suffix = f"（剩余 {remaining}）" if remaining is not None else ""
+            lines.append(f"• {name}  —  💰{price}{suffix}")
+        lines.append('\n输入「购买XXX」可直接购买。')
+        await message.answer("\n".join(lines), reply_markup=ui.main_menu_keyboard(registered=True))
+        return
+
+    if cmd == "buy":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        if not arg:
+            await message.answer("请输入要购买的物品名称，例如：购买小修为丹")
+            return
+        await _handle_text_buy(message, uid, arg)
+        return
+
+    if cmd == "use":
+        uid = await _require_uid_from_message(message, state)
+        if not uid:
+            return
+        if not arg:
+            await message.answer("请输入要使用的物品名称，例如：使用回血丹")
+            return
+        await _handle_text_use(message, uid, arg)
+        return
+
+
+async def _handle_text_buy(message: Message, uid: str, item_name: str) -> None:
+    """Fuzzy-match *item_name* against the copper shop and buy if unique."""
+    shop_data = await api_get("/api/shop", params={"currency": "copper", "user_id": uid})
+    if not shop_data.get("success"):
+        await message.answer(f"❌ {_error_text(shop_data, '获取商店列表失败')}")
+        return
+
+    items = shop_data.get("items") or []
+    # Try exact match first, then substring match
+    matches = [it for it in items if (it.get("name") or "") == item_name]
+    if not matches:
+        matches = [it for it in items if item_name in (it.get("name") or "")]
+    if not matches:
+        await message.answer(f'未找到名称包含「{item_name}」的商品。\n输入「商店」查看可购买列表。')
+        return
+    if len(matches) > 1:
+        lines = [f"找到多个匹配商品，请精确输入名称："]
+        for it in matches:
+            lines.append(f"• {it.get('name', '???')}  —  💰{it.get('price', '?')}")
+        await message.answer("\n".join(lines))
+        return
+
+    target = matches[0]
+    result = await api_post("/api/shop/buy", payload={
+        "user_id": uid,
+        "item_id": target.get("item_id"),
+        "quantity": 1,
+        "currency": "copper",
+        "request_id": new_request_id(),
+    })
+    if result.get("success"):
+        await message.answer(
+            f"✅ 成功购买 {target.get('name', '???')} ×1",
+            reply_markup=ui.main_menu_keyboard(registered=True),
+        )
+    else:
+        await message.answer(
+            f"❌ 购买失败：{_error_text(result, '购买失败')}",
+            reply_markup=ui.main_menu_keyboard(registered=True),
+        )
+
+
+async def _handle_text_use(message: Message, uid: str, item_name: str) -> None:
+    """Fuzzy-match *item_name* against the user's inventory and use if unique."""
+    inv_data = await api_get(f"/api/items/{uid}")
+    if not inv_data.get("success"):
+        await message.answer(f"❌ {_error_text(inv_data, '获取背包失败')}")
+        return
+
+    items = inv_data.get("items") or []
+    # Try exact match first, then substring match
+    matches = [it for it in items if (it.get("name") or "") == item_name]
+    if not matches:
+        matches = [it for it in items if item_name in (it.get("name") or "")]
+    if not matches:
+        await message.answer(f"背包中未找到名称包含「{item_name}」的物品。")
+        return
+    if len(matches) > 1:
+        lines = ["找到多个匹配物品，请精确输入名称："]
+        for it in matches:
+            qty = it.get("quantity", 1)
+            lines.append(f"• {it.get('name', '???')} ×{qty}")
+        await message.answer("\n".join(lines))
+        return
+
+    target = matches[0]
+    # The use-item API expects item_id — use the db id if present, otherwise item_id
+    use_id = target.get("id") or target.get("item_id")
+    result = await api_post("/api/item/use", payload={
+        "user_id": uid,
+        "item_id": use_id,
+    })
+    if result.get("success"):
+        effect_msg = str(result.get("message") or "").strip()
+        text = f"✅ 成功使用 {target.get('name', '???')}"
+        if effect_msg:
+            text += f"\n{effect_msg}"
+        await message.answer(text, reply_markup=ui.main_menu_keyboard(registered=True))
+    else:
+        await message.answer(
+            f"❌ 使用失败：{_error_text(result, '使用失败')}",
+            reply_markup=ui.main_menu_keyboard(registered=True),
+        )
 
 
 @router.callback_query()

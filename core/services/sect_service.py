@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 import psycopg2.errors
+import random
 import time
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
 from core.config import config
-from core.database.connection import fetch_one, fetch_all, db_transaction, get_user_by_id
+from core.database.connection import (
+    fetch_one, fetch_all, db_transaction, get_user_by_id, get_user_skills,
+)
 from core.game.leaderboards import calculate_power
+from core.game.realms import get_realm_by_id, REALMS
 from core.services.metrics_service import log_event, log_economy_ledger
 from core.utils.timeutil import today_local, midnight_timestamp
 
@@ -67,6 +71,255 @@ def _load_quest_defs() -> Dict[str, Dict[str, Any]]:
 
 
 SECT_QUEST_DEFS: Dict[str, Dict[str, Any]] = _load_quest_defs()
+
+
+# ─── 预定义宗门（含加入条件与增益） ──────────────────────────────
+PREDEFINED_SECTS: List[Dict[str, Any]] = [
+    {
+        "id": "qingyun", "name": "青云门",
+        "desc": "正道大派，注重根基稳固",
+        "tier": 1,  # 1普通 2精英 3顶级
+        "requirements": {
+            "min_rank": 2,       # 最低境界：练气初期
+        },
+        "buffs": {"cultivation_pct": 5, "exp_bonus_pct": 3},
+    },
+    {
+        "id": "tianjian", "name": "天剑门",
+        "desc": "剑修圣地，攻击至上",
+        "tier": 2,
+        "requirements": {
+            "min_rank": 6,       # 筑基初期
+            "element": ["金", "火"],  # 限金/火灵根
+        },
+        "buffs": {"cultivation_pct": 10, "attack_bonus_pct": 8},
+    },
+    {
+        "id": "wandu", "name": "万毒谷",
+        "desc": "毒修秘地，以毒攻毒",
+        "tier": 2,
+        "requirements": {
+            "min_rank": 6,
+            "element": ["木", "水"],
+        },
+        "buffs": {"cultivation_pct": 8, "hp_bonus_pct": 10},
+    },
+    {
+        "id": "taixu", "name": "太虚宫",
+        "desc": "天下第一宗，入门极难",
+        "tier": 3,
+        "requirements": {
+            "min_rank": 10,      # 金丹初期
+            "min_skills": 3,     # 至少学会3个技能
+        },
+        "buffs": {"cultivation_pct": 15, "exp_bonus_pct": 10, "attack_bonus_pct": 5},
+    },
+    {
+        "id": "huntian", "name": "混天宗",
+        "desc": "逆天大派，强者为尊",
+        "tier": 3,
+        "requirements": {
+            "min_rank": 14,      # 元婴初期
+        },
+        "buffs": {"cultivation_pct": 20, "attack_bonus_pct": 12, "defense_bonus_pct": 8},
+    },
+]
+
+# 按 id 建索引方便快速查找
+_PREDEFINED_SECT_INDEX: Dict[str, Dict[str, Any]] = {s["id"]: s for s in PREDEFINED_SECTS}
+
+
+def get_predefined_sect(sect_id: str) -> Optional[Dict[str, Any]]:
+    """获取预定义宗门信息，不存在返回 None。"""
+    return _PREDEFINED_SECT_INDEX.get(sect_id)
+
+
+def check_sect_join_requirements(
+    user_id: str, sect_id: str,
+) -> Tuple[bool, str, Dict[str, Any]]:
+    """检查用户是否满足预定义宗门加入条件。
+
+    Returns:
+        (can_join, reason, requirements_detail)
+        can_join   - 是否满足所有条件
+        reason     - 失败时的中文说明；成功时为空串
+        requirements_detail - 各项条件的通过明细
+    """
+    sect_def = get_predefined_sect(sect_id)
+    if not sect_def:
+        return False, "未知的预定义宗门", {}
+
+    user = get_user_by_id(user_id)
+    if not user:
+        return False, "玩家不存在", {}
+
+    reqs = sect_def.get("requirements") or {}
+    detail: Dict[str, Any] = {}
+    reasons: List[str] = []
+
+    # ── min_rank ──
+    min_rank = reqs.get("min_rank")
+    if min_rank is not None:
+        user_rank = int(user.get("rank", 1) or 1)
+        realm_info = get_realm_by_id(min_rank)
+        req_name = realm_info["name"] if realm_info else f"rank {min_rank}"
+        passed = user_rank >= min_rank
+        detail["min_rank"] = {
+            "required": min_rank,
+            "required_name": req_name,
+            "current": user_rank,
+            "passed": passed,
+        }
+        if not passed:
+            reasons.append(f"境界不足，需至少达到【{req_name}】")
+
+    # ── element ──
+    allowed_elements = reqs.get("element")
+    if allowed_elements:
+        user_element = user.get("element") or ""
+        passed = user_element in allowed_elements
+        detail["element"] = {
+            "required": allowed_elements,
+            "current": user_element,
+            "passed": passed,
+        }
+        if not passed:
+            elem_str = "/".join(allowed_elements)
+            reasons.append(f"灵根不符，需{elem_str}灵根")
+
+    # ── min_skills ──
+    min_skills = reqs.get("min_skills")
+    if min_skills is not None:
+        skills = get_user_skills(user_id)
+        skill_count = len(skills)
+        passed = skill_count >= min_skills
+        detail["min_skills"] = {
+            "required": min_skills,
+            "current": skill_count,
+            "passed": passed,
+        }
+        if not passed:
+            reasons.append(f"技能不足，需至少学会 {min_skills} 个技能（当前 {skill_count}）")
+
+    can_join = len(reasons) == 0
+    reason = "；".join(reasons) if reasons else ""
+    return can_join, reason, detail
+
+
+def _build_sect_guardian(user_rank: int, tier: int) -> Dict[str, Any]:
+    """根据用户境界和宗门 tier 构建入宗守卫数据。
+
+    tier 2: 守卫等级 = user_rank, 基础属性 * 0.8
+    tier 3: 守卫等级 = user_rank + 2, 基础属性 * 1.0
+    """
+    if tier <= 1:
+        # tier 1 不需要入宗测试
+        return {}
+
+    if tier == 2:
+        guard_rank = user_rank
+        stat_mult = 0.8
+        guard_name = "宗门弟子"
+    else:
+        guard_rank = min(user_rank + 2, len(REALMS))
+        stat_mult = 1.0
+        guard_name = "宗门护法"
+
+    realm = get_realm_by_id(guard_rank) or REALMS[0]
+    return {
+        "name": guard_name,
+        "hp": int(realm["hp"] * stat_mult),
+        "max_hp": int(realm["hp"] * stat_mult),
+        "mp": int(realm["mp"] * stat_mult),
+        "max_mp": int(realm["mp"] * stat_mult),
+        "attack": int(realm["attack"] * stat_mult),
+        "defense": int(realm["defense"] * stat_mult),
+        "rank": guard_rank,
+    }
+
+
+def attempt_sect_trial(
+    user_id: str, sect_id: str,
+) -> Tuple[bool, Dict[str, Any]]:
+    """执行入宗测试（战斗）。
+
+    对 tier >= 2 的宗门，玩家必须击败宗门守卫方可加入。
+    tier 1 的宗门直接通过。
+
+    Returns:
+        (passed, result)
+        passed - 是否通过
+        result - 战斗结果详情（或 tier 1 时返回 skip 标识）
+    """
+    from core.game.combat import Combat
+
+    sect_def = get_predefined_sect(sect_id)
+    if not sect_def:
+        return False, {"error": "未知的预定义宗门"}
+
+    tier = sect_def.get("tier", 1)
+    if tier < 2:
+        return True, {"skipped": True, "reason": "该宗门无需入宗测试"}
+
+    user = get_user_by_id(user_id)
+    if not user:
+        return False, {"error": "玩家不存在"}
+
+    user_rank = int(user.get("rank", 1) or 1)
+    user_realm = get_realm_by_id(user_rank) or REALMS[0]
+
+    # 构建玩家战斗体
+    player = {
+        "name": user.get("in_game_username") or "玩家",
+        "hp": int(user.get("hp") or user_realm["hp"]),
+        "max_hp": int(user.get("max_hp") or user_realm["hp"]),
+        "mp": int(user.get("mp") or user_realm["mp"]),
+        "max_mp": int(user.get("max_mp") or user_realm["mp"]),
+        "attack": int(user.get("attack") or user_realm["attack"]),
+        "defense": int(user.get("defense") or user_realm["defense"]),
+        "crit_rate": float(user.get("crit_rate", 0.05) or 0.05),
+    }
+
+    # 构建守卫
+    guardian = _build_sect_guardian(user_rank, tier)
+
+    combat = Combat(player, guardian)
+    battle_result = combat.fight(max_rounds=30)
+
+    passed = battle_result.get("winner") == "attacker"
+    return passed, {
+        "passed": passed,
+        "guardian_name": guardian.get("name"),
+        "guardian_rank": guardian.get("rank"),
+        "winner": battle_result.get("winner"),
+        "rounds": battle_result.get("rounds"),
+        "player_remaining_hp": battle_result.get("attacker_remaining_hp", 0),
+        "guardian_remaining_hp": battle_result.get("defender_remaining_hp", 0),
+        "log": battle_result.get("log", []),
+    }
+
+
+def list_available_predefined_sects(
+    user_id: str,
+) -> List[Dict[str, Any]]:
+    """返回所有预定义宗门列表，附带用户是否满足条件。"""
+    result: List[Dict[str, Any]] = []
+    for sect_def in PREDEFINED_SECTS:
+        can_join, reason, detail = check_sect_join_requirements(user_id, sect_def["id"])
+        entry = {
+            "id": sect_def["id"],
+            "name": sect_def["name"],
+            "desc": sect_def["desc"],
+            "tier": sect_def["tier"],
+            "requirements": sect_def.get("requirements", {}),
+            "buffs": sect_def.get("buffs", {}),
+            "can_join": can_join,
+            "reason": reason,
+            "requirements_detail": detail,
+            "needs_trial": sect_def.get("tier", 1) >= 2,
+        }
+        result.append(entry)
+    return result
 
 
 def _gen_sect_id() -> str:
@@ -485,12 +738,36 @@ def create_sect(user_id: str, name: str, description: str = "") -> Tuple[Dict[st
     return {"success": False, "code": "CONFLICT", "message": "宗门创建冲突，请重试"}, 409
 
 
-def join_sect(user_id: str, sect_id: str) -> Tuple[Dict[str, Any], int]:
+def join_sect(user_id: str, sect_id: str, *, skip_trial: bool = False) -> Tuple[Dict[str, Any], int]:
     user = get_user_by_id(user_id)
     if not user:
         return {"success": False, "code": "NOT_FOUND", "message": "玩家不存在"}, 404
     if get_user_sect(user_id):
         return {"success": False, "code": "ALREADY", "message": "你已加入宗门"}, 400
+
+    # ── 预定义宗门条件检查 ──
+    predefined = get_predefined_sect(sect_id)
+    if predefined:
+        can_join, reason, detail = check_sect_join_requirements(user_id, sect_id)
+        if not can_join:
+            return {
+                "success": False,
+                "code": "REQUIREMENTS_NOT_MET",
+                "message": reason,
+                "requirements_detail": detail,
+            }, 400
+
+        # ── 入宗测试（tier >= 2） ──
+        if not skip_trial and predefined.get("tier", 1) >= 2:
+            passed, trial_result = attempt_sect_trial(user_id, sect_id)
+            if not passed:
+                return {
+                    "success": False,
+                    "code": "TRIAL_FAILED",
+                    "message": "入宗测试未通过，击败守卫方可入门",
+                    "trial_result": trial_result,
+                }, 400
+
     sect = fetch_one("SELECT * FROM sects WHERE sect_id = %s", (sect_id,))
     if not sect:
         return {"success": False, "code": "NOT_FOUND", "message": "宗门不存在"}, 404

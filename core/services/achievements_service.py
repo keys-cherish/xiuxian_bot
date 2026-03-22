@@ -7,7 +7,7 @@ import time
 from typing import Any, Dict, List, Tuple
 
 from core.database.connection import fetch_one, fetch_all, db_transaction, get_user_by_id, get_sqlite
-from core.game.achievements import list_achievements, get_achievement
+from core.game.achievements import list_achievements, get_achievement, list_achievements_by_stage, get_current_stage_achievements
 from core.services.metrics_service import log_event, log_economy_ledger
 
 _ACH_TABLES_READY = False
@@ -67,6 +67,15 @@ def _progress(user: Dict[str, Any], ach: Dict[str, Any]) -> int:
         return min(int(row.get("c", 0) or 0), goal) if row else 0
     if t == "breakthrough_success":
         row = fetch_one("SELECT COUNT(1) AS c FROM breakthrough_logs WHERE user_id = %s AND success = 1", (user.get("user_id"),))
+        return min(int(row.get("c", 0) or 0), goal) if row else 0
+    if t == "secret_realm_count":
+        row = fetch_one("SELECT secret_realm_count AS c FROM user_story_counters WHERE user_id = %s", (user.get("user_id"),))
+        return min(int(row.get("c", 0) or 0), goal) if row else 0
+    if t == "cultivate_count":
+        row = fetch_one("SELECT cultivate_count AS c FROM user_story_counters WHERE user_id = %s", (user.get("user_id"),))
+        return min(int(row.get("c", 0) or 0), goal) if row else 0
+    if t == "forge_count":
+        row = fetch_one("SELECT COUNT(1) AS c FROM alchemy_logs WHERE user_id = %s", (user.get("user_id"),))
         return min(int(row.get("c", 0) or 0), goal) if row else 0
     return 0
 
@@ -177,3 +186,60 @@ def claim_achievement(user_id: str, achievement_id: str) -> Tuple[Dict[str, Any]
         meta={"achievement_id": achievement_id},
     )
     return {"success": True, "message": "领取成功", "rewards": rewards}, 200
+
+
+def get_achievements_by_stage(user_id: str, stage: str) -> Tuple[Dict[str, Any], int]:
+    """Return achievements for a specific cultivation stage, with player progress."""
+    _ensure_achievement_tables_once()
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "code": "NOT_FOUND", "message": "玩家不存在"}, 404
+    claimed_rows = fetch_all(
+        "SELECT achievement_id FROM user_achievements WHERE user_id = %s AND claimed = 1",
+        (user_id,),
+    )
+    claimed_set = {str(row.get("achievement_id") or "") for row in (claimed_rows or [])}
+    achievements = []
+    for ach in list_achievements_by_stage(stage):
+        prog = _progress(user, ach)
+        goal = int(ach.get("goal", 0) or 0)
+        achievements.append({
+            **ach,
+            "progress": prog,
+            "completed": prog >= goal,
+            "claimed": str(ach.get("id") or "") in claimed_set,
+        })
+    return {"success": True, "stage": stage, "achievements": achievements}, 200
+
+
+def get_achievements_current_stage(user_id: str) -> Tuple[Dict[str, Any], int]:
+    """Return achievements matching the player's current rank stage."""
+    _ensure_achievement_tables_once()
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "code": "NOT_FOUND", "message": "玩家不存在"}, 404
+    rank = int(user.get("rank", 1) or 1)
+    claimed_rows = fetch_all(
+        "SELECT achievement_id FROM user_achievements WHERE user_id = %s AND claimed = 1",
+        (user_id,),
+    )
+    claimed_set = {str(row.get("achievement_id") or "") for row in (claimed_rows or [])}
+    achievements = []
+    for ach in get_current_stage_achievements(rank):
+        prog = _progress(user, ach)
+        goal = int(ach.get("goal", 0) or 0)
+        achievements.append({
+            **ach,
+            "progress": prog,
+            "completed": prog >= goal,
+            "claimed": str(ach.get("id") or "") in claimed_set,
+        })
+    stage_name = achievements[0].get("stage_name", "") if achievements else ""
+    stage = achievements[0].get("stage", "") if achievements else ""
+    return {
+        "success": True,
+        "rank": rank,
+        "stage": stage,
+        "stage_name": stage_name,
+        "achievements": achievements,
+    }, 200

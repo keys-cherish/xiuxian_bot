@@ -1724,3 +1724,116 @@ def settle_enhance(
         },
     )
     return _dedup_return(resp, 200)
+
+
+# ---------------------------------------------------------------------------
+# Secret Realm Reset (paid)
+# ---------------------------------------------------------------------------
+
+SECRET_REALM_RESET_BASE_COST = 1000   # 下品灵石
+SECRET_REALM_RESET_MAX_DAILY = 5
+
+def _secret_realm_reset_cost(resets_done: int) -> int:
+    """费用公式: base * (1 + resets_done). 第1次1000, 第2次2000 ..."""
+    return SECRET_REALM_RESET_BASE_COST * (1 + int(resets_done))
+
+
+def get_secret_realm_reset_info(user_id: str) -> Tuple[Dict[str, Any], int]:
+    """查询秘境重置信息（不消耗资源）。"""
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "code": "NOT_FOUND", "message": "玩家不存在"}, 404
+
+    today = local_day_key()
+    stored_day = int(user.get("secret_realm_reset_day", 0) or 0)
+    resets_today = int(user.get("secret_realm_resets_today", 0) or 0) if stored_day == today else 0
+    can_reset = resets_today < SECRET_REALM_RESET_MAX_DAILY
+    next_cost = _secret_realm_reset_cost(resets_today) if can_reset else 0
+    copper = int(user.get("copper", 0) or 0)
+
+    return {
+        "success": True,
+        "resets_today": resets_today,
+        "max_resets": SECRET_REALM_RESET_MAX_DAILY,
+        "can_reset": can_reset and copper >= next_cost,
+        "next_cost": next_cost,
+        "copper": copper,
+        "attempts_left": get_secret_realm_attempts_left(user),
+    }, 200
+
+
+def settle_secret_realm_reset(user_id: str) -> Tuple[Dict[str, Any], int]:
+    """花费灵石重置秘境次数，每次重置费用递增。"""
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "code": "NOT_FOUND", "message": "玩家不存在"}, 404
+
+    today = local_day_key()
+    stored_day = int(user.get("secret_realm_reset_day", 0) or 0)
+    resets_today = int(user.get("secret_realm_resets_today", 0) or 0) if stored_day == today else 0
+
+    if resets_today >= SECRET_REALM_RESET_MAX_DAILY:
+        return {
+            "success": False,
+            "code": "RESET_LIMIT",
+            "message": f"今日重置次数已达上限 ({SECRET_REALM_RESET_MAX_DAILY}次)",
+        }, 400
+
+    cost = _secret_realm_reset_cost(resets_today)
+    copper = int(user.get("copper", 0) or 0)
+    if copper < cost:
+        return {
+            "success": False,
+            "code": "INSUFFICIENT_COPPER",
+            "message": f"下品灵石不足，需要 {cost}，当前 {copper}",
+        }, 400
+
+    new_resets = resets_today + 1
+    with db_transaction() as cur:
+        cur.execute(
+            "UPDATE users SET copper = copper - %s, "
+            "secret_realm_attempts = 0, "
+            "secret_realm_resets_today = %s, "
+            "secret_realm_reset_day = %s "
+            "WHERE user_id = %s AND copper >= %s",
+            (cost, new_resets, today, user_id, cost),
+        )
+        if int(cur.rowcount or 0) == 0:
+            return {
+                "success": False,
+                "code": "INSUFFICIENT_COPPER",
+                "message": "下品灵石不足（并发扣费失败）",
+            }, 400
+
+    updated_user = get_user_by_id(user_id) or user
+    can_reset_again = new_resets < SECRET_REALM_RESET_MAX_DAILY
+    next_cost = _secret_realm_reset_cost(new_resets) if can_reset_again else 0
+
+    log_event(
+        "secret_realm_reset",
+        user_id=user_id,
+        success=True,
+        rank=int(user.get("rank", 1) or 1),
+        meta={"cost": cost, "resets_today": new_resets},
+    )
+    log_economy_ledger(
+        user_id=user_id,
+        module="secret_realm",
+        action="reset",
+        delta_copper=-cost,
+        success=True,
+        rank=int(user.get("rank", 1) or 1),
+        meta={"resets_today": new_resets},
+    )
+
+    return {
+        "success": True,
+        "message": f"重置成功！消耗 {cost} 下品灵石",
+        "cost": cost,
+        "resets_today": new_resets,
+        "max_resets": SECRET_REALM_RESET_MAX_DAILY,
+        "next_cost": next_cost,
+        "can_reset": can_reset_again,
+        "copper": int(updated_user.get("copper", 0) or 0),
+        "attempts_left": get_secret_realm_attempts_left(updated_user),
+    }, 200

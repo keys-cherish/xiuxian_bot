@@ -123,8 +123,9 @@ def main_menu_keyboard(*, registered: bool = True) -> InlineKeyboardMarkup:
     builder.button(text="🦴 狩猎", callback_data="menu:hunt")
     builder.button(text="⚡ 突破", callback_data="menu:break")
     builder.button(text="🗺️ 秘境", callback_data="menu:secret")
+    builder.button(text="🏪 万宝阁", callback_data="menu:shop")
     builder.button(text="🔄 刷新菜单", callback_data="menu:home")
-    builder.adjust(2, 2, 1)
+    builder.adjust(2, 2, 1, 1)
     return builder.as_markup()
 
 
@@ -250,7 +251,42 @@ def secret_settlement_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def format_status_card(status: dict[str, Any]) -> str:
+def _next_step_guide(rank: int, status: dict[str, Any]) -> str:
+    """根据境界和状态生成下一步引导文案"""
+    exp = _to_int(status.get("exp"), 0)
+    next_exp = _to_int(status.get("next_exp"), 0)
+    is_cultivating = bool(status.get("state"))
+    is_weak = bool(status.get("is_weak"))
+
+    if is_weak:
+        return "⚠️ 你正处于虚弱状态，等待恢复后再行动。"
+    if is_cultivating:
+        return "🧘 正在修炼中，修炼结束后记得结算修为。"
+
+    if rank <= 1:
+        return "🌱 刚踏入修行之路！先去「修炼」积累修为，达到100点即可「突破」至练气期。"
+    if rank <= 5:
+        if next_exp > 0 and exp >= next_exp:
+            return "⚡ 修为已足够突破！立刻前往「突破」提升境界。"
+        return "🗡️ 练气阶段：「狩猎」赚灵石和修为，「修炼」提升根基。攒够修为就去「突破」！"
+    if rank <= 9:
+        if next_exp > 0 and exp >= next_exp:
+            return "⚡ 修为已满，准备好突破丹和灵石，前往「突破」冲击金丹！"
+        return "🗺️ 筑基阶段：探索「秘境」获取稀有材料，到「万宝阁」购置突破丹。尝试加入宗门获得修炼加成。"
+    if rank <= 13:
+        return "🔥 金丹阶段：「锻造」装备提升战力，挑战高级怪物。准备凝丹露突破元婴！"
+    if rank <= 17:
+        return "🌌 元婴阶段：前往星陨海探索，挑战更强的秘境Boss。收集元婴结晶冲击化神！"
+    if rank <= 21:
+        return "⛈️ 化神阶段：逆墟荒原等待你的探索，法则之力蕴含无上机缘。向渡劫之路迈进！"
+    return "🏔️ 你已是当世顶尖强者。继续探索未知领域，追寻长生大道！"
+
+
+def format_status_card(
+    status: dict[str, Any],
+    *,
+    quests: list[dict[str, Any]] | None = None,
+) -> str:
     weak_until = _to_int(status.get("weak_until"), 0)
     weak_remaining = _to_int(status.get("weak_remaining_seconds"), 0)
     if weak_remaining <= 0 and weak_until > 0:
@@ -259,17 +295,52 @@ def format_status_card(status: dict[str, Any]) -> str:
     if weak_remaining > 0 or bool(status.get("is_weak")):
         weak_line = f"虚弱中（剩余 {_fmt_seconds(weak_remaining)}）"
 
+    rank = _to_int(status.get("rank"), 1)
+    next_exp = _to_int(status.get("next_exp"), 0)
+    exp = _to_int(status.get("exp"), 0)
+    # 修为进度条
+    if next_exp > 0:
+        pct = min(100, int(exp / next_exp * 100)) if next_exp > 0 else 100
+        filled = pct // 10
+        bar = "█" * filled + "░" * (10 - filled)
+        exp_line = f"✨ 修为: {_fmt_num(exp)}/{_fmt_num(next_exp)}  [{bar} {pct}%]"
+    else:
+        exp_line = f"✨ 修为: {_fmt_num(exp)}（已满级）"
+
     lines = [
-        f"👤 {status.get('in_game_username', '修士')}",
-        f"🔮 境界: {status.get('realm_name', '凡人')}（Rank {status.get('rank', 1)}）",
+        f"👤 *{status.get('in_game_username', '修士')}*",
+        f"🔮 境界: *{status.get('realm_name', '凡人')}*",
         f"🌟 五行: {status.get('element', '无')}",
-        f"✨ 修为: {_fmt_num(status.get('exp', 0))}",
-        f"💰 下品灵石: {_fmt_num(status.get('copper', 0))}",
-        f"💎 中品灵石: {_fmt_num(status.get('gold', 0))}",
+        exp_line,
+        f"💰 灵石: {_fmt_num(status.get('copper', 0))} 下品 / {_fmt_num(status.get('gold', 0))} 中品",
         _fmt_status_short(status),
-        f"🧘 修炼状态: {'修炼中' if bool(status.get('state')) else '空闲'}",
-        f"☠️ 虚弱状态: {weak_line}",
+        f"🧘 {'*修炼中*' if bool(status.get('state')) else '空闲'}　☠️ {weak_line}",
     ]
+
+    # 每日任务进度
+    if quests:
+        lines.append("")
+        lines.append("📋 *今日任务*")
+        done_count = 0
+        for q in quests:
+            progress = _to_int(q.get("progress"), 0)
+            goal = _to_int(q.get("goal"), 1)
+            claimed = bool(q.get("claimed"))
+            name = q.get("name", "任务")
+            if claimed:
+                lines.append(f"  ✅ {name}")
+                done_count += 1
+            elif progress >= goal:
+                lines.append(f"  🎁 {name}（可领取）")
+            else:
+                lines.append(f"  ⬜ {name} ({progress}/{goal})")
+        if done_count == len(quests):
+            lines.append("  🎉 今日全部完成！")
+
+    # 下一步引导（加粗）
+    lines.append("")
+    lines.append(f"*{_next_step_guide(rank, status)}*")
+
     return "\n".join(lines)
 
 
@@ -515,4 +586,124 @@ def format_secret_settlement(payload: dict[str, Any]) -> str:
         lines.append("📌 失败原因")
         for reason in reasons[:3]:
             lines.append(f"• {reason}")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Shop (万宝阁)
+# ---------------------------------------------------------------------------
+
+_CURRENCY_LABELS: dict[str, str] = {
+    "copper": "下品灵石",
+    "gold": "中品灵石",
+    "spirit_high": "上品灵石",
+}
+
+_CATEGORY_LABELS: dict[str, str] = {
+    "pill": "丹药",
+    "array": "法阵",
+    "material": "材料",
+    "book": "功法",
+    "equipment": "装备",
+    "other": "其他",
+}
+
+
+def shop_currency_keyboard() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="💰 下品灵石", callback_data="shop:currency:copper")
+    builder.button(text="💎 中品灵石", callback_data="shop:currency:gold")
+    builder.button(text="✨ 上品灵石", callback_data="shop:currency:spirit_high")
+    builder.button(text="⬅️ 主菜单", callback_data="menu:home")
+    builder.adjust(1, 1, 1, 1)
+    return builder.as_markup()
+
+
+def shop_items_keyboard(
+    items: Iterable[dict[str, Any]],
+    page: int,
+    total_pages: int,
+    currency: str,
+) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    rows = list(items or [])
+    for item in rows[:8]:
+        item_id = str(item.get("item_id", "")).strip()
+        if not item_id:
+            continue
+        name = item.get("name", item_id)
+        price = _to_int(item.get("price"), 0)
+        tag = item.get("tag")
+        label = f"{name} - {_fmt_num(price)}"
+        if tag:
+            label = f"[{tag}] {label}"
+        builder.button(text=label, callback_data=f"shop:buy:{item_id}:{currency}")
+
+    nav_row: list[tuple[str, str]] = []
+    if page > 1:
+        nav_row.append(("⬅️ 上一页", f"shop:page:{currency}:{page - 1}"))
+    nav_row.append((f"{page}/{total_pages}", "shop:noop"))
+    if page < total_pages:
+        nav_row.append(("➡️ 下一页", f"shop:page:{currency}:{page + 1}"))
+    for text, cb in nav_row:
+        builder.button(text=text, callback_data=cb)
+
+    builder.button(text="🔄 刷新", callback_data=f"shop:page:{currency}:{page}")
+    builder.button(text="⬅️ 选择货币", callback_data="shop:back")
+    builder.button(text="⬅️ 主菜单", callback_data="menu:home")
+
+    # Layout: up to 8 item buttons (1 per row), then nav row, then action buttons
+    item_count = min(len(rows), 8)
+    adjust_args: list[int] = [1] * item_count
+    adjust_args.append(len(nav_row))  # nav row
+    adjust_args.extend([1, 1, 1])  # refresh, back currency, main menu
+    builder.adjust(*adjust_args)
+    return builder.as_markup()
+
+
+def format_shop_panel(
+    items: Iterable[dict[str, Any]],
+    currency: str,
+    page: int,
+    total_pages: int,
+    currency_role: str = "",
+) -> str:
+    currency_label = _CURRENCY_LABELS.get(currency, currency)
+    lines = [
+        f"🏪 万宝阁 — {currency_label}商店",
+    ]
+    if currency_role:
+        lines.append(f"💰 当前{currency_label}: {_fmt_num(currency_role)}")
+    lines.append(f"📖 第 {page}/{total_pages} 页")
+    lines.append("")
+
+    rows = list(items or [])
+    if not rows:
+        lines.append("暂无可购买商品")
+    for item in rows[:8]:
+        name = item.get("name", item.get("item_id", "未知物品"))
+        price = _to_int(item.get("price"), 0)
+        category = _CATEGORY_LABELS.get(str(item.get("category", "")), "")
+        tag = item.get("tag")
+
+        stock = item.get("stock")
+        remaining_limit = item.get("remaining_limit")
+        stock_text = ""
+        if remaining_limit is not None:
+            stock_text = f"限购剩余{remaining_limit}"
+        elif stock is not None and _to_int(stock) >= 0:
+            stock_text = f"库存{_to_int(stock)}"
+        else:
+            stock_text = "不限量"
+
+        line = f"• {name}  💲{_fmt_num(price)}"
+        if category:
+            line += f"  [{category}]"
+        if tag:
+            line += f"  🏷️{tag}"
+        line += f"  ({stock_text})"
+        lines.append(line)
+
+    lines.append("")
+    lines.append("点击商品按钮即可购买")
     return "\n".join(lines)

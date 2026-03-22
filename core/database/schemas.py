@@ -61,6 +61,8 @@ USER_SCHEMA = {
     # 秘境
     "secret_realm_attempts": int,
     "secret_realm_last_reset": int,
+    "secret_realm_resets_today": int,   # 今日已重置次数
+    "secret_realm_reset_day": int,      # 重置计数对应的日序号
 
     # 装备栏
     "equipped_weapon": Optional[str],
@@ -112,6 +114,16 @@ USER_SCHEMA = {
     # 玩法评分
     "secret_loot_score": int,
     "alchemy_output_score": int,
+
+    # 古塔（试炼塔）
+    "tower_floor": int,                # 最高通过层数
+    "tower_last_attempt_day": int,     # 上次挑战日期序号
+    "tower_resets_today": int,         # 今日重置次数
+
+    # 药园
+    "garden_level": int,              # 药园等级 (1-10)
+    "garden_exp": int,                # 药园经验
+    "garden_last_water": Optional[str],  # 上次浇水时间 (TIMESTAMPTZ)
 }
 
 USER_DEFAULT_VALUES = {
@@ -148,6 +160,8 @@ USER_DEFAULT_VALUES = {
     "max_signin_days": 0,
     "secret_realm_attempts": 0,
     "secret_realm_last_reset": 0,
+    "secret_realm_resets_today": 0,
+    "secret_realm_reset_day": 0,
     "last_hunt_time": 0,
     "hunts_today": 0,
     "hunts_today_reset": 0,
@@ -183,6 +197,12 @@ USER_DEFAULT_VALUES = {
     "daily_cultivate_stone_claimed": 0,
     "secret_loot_score": 0,
     "alchemy_output_score": 0,
+    "tower_floor": 0,
+    "tower_last_attempt_day": 0,
+    "tower_resets_today": 0,
+    "garden_level": 1,
+    "garden_exp": 0,
+    "garden_last_water": None,
 }
 
 # ── items 表 ──
@@ -429,6 +449,22 @@ BOUNTY_ORDER_SCHEMA = {
     "cancelled_at": int,
 }
 
+# ── herb_garden_plots 表 ──
+HERB_GARDEN_PLOT_SCHEMA = {
+    "id": int,
+    "user_id": str,
+    "plot_index": int,
+    "herb_name": str,
+    "planted_at": Optional[str],
+    "growth_minutes": float,
+    "water_count": int,
+    "watered": int,
+    "has_pest": int,
+    "pest_type": str,
+    "pest_at": Optional[str],
+    "is_dead": int,
+}
+
 COLLECTIONS = {
     "USERS": "users",
     "ITEMS": "items",
@@ -442,6 +478,7 @@ COLLECTIONS = {
     "REQUEST_DEDUP": "request_dedup",
     "AUDIT_LOGS": "audit_logs",
     "BOUNTY_ORDERS": "bounty_orders",
+    "HERB_GARDEN_PLOTS": "herb_garden_plots",
 }
 
 

@@ -12,6 +12,11 @@ class BreakthroughFSM(StatesGroup):
     selecting_strategy = State()
 
 
+class ShopFSM(StatesGroup):
+    selecting_currency = State()
+    browsing = State()
+
+
 class SecretRealmFSM(StatesGroup):
     selecting_realm = State()
     selecting_path = State()

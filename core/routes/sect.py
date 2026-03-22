@@ -35,6 +35,9 @@ from core.services.sect_service import (
     challenge_war,
     join_branch,
     review_branch_request,
+    check_sect_join_requirements,
+    attempt_sect_trial,
+    list_available_predefined_sects,
 )
 
 
@@ -274,6 +277,16 @@ def sect_buffs(user_id: str):
     return success(buffs=get_user_sect_buffs(user_id))
 
 
+@sect_bp.route("/api/sects/available/<user_id>", methods=["GET"])
+def sects_available(user_id: str):
+    """返回所有预定义宗门列表及用户是否满足条件。"""
+    _, auth_error = resolve_actor_path_user_id(user_id)
+    if auth_error:
+        return auth_error
+    sects = list_available_predefined_sects(user_id)
+    return success(sects=sects)
+
+
 @sect_bp.route("/api/sect/join", methods=["POST"])
 def sect_join():
     data, payload_error = parse_json_payload()
@@ -286,7 +299,8 @@ def sect_join():
     log_action("sect_join", user_id=user_id, sect_id=sect_id)
     if not sect_id:
         return error("MISSING_PARAMS", "Missing parameters", 400)
-    resp, http_status = join_sect(user_id, sect_id)
+    skip_trial = bool(data.get("skip_trial", False))
+    resp, http_status = join_sect(user_id, sect_id, skip_trial=skip_trial)
     return jsonify(resp), http_status
 
 

@@ -673,6 +673,8 @@ def create_tables(conn: Optional[object] = None) -> None:
             signin_month_claim_bits INTEGER DEFAULT 0,
             secret_realm_attempts INTEGER DEFAULT 0,
             secret_realm_last_reset INTEGER DEFAULT 0,
+            secret_realm_resets_today INTEGER DEFAULT 0,
+            secret_realm_reset_day INTEGER DEFAULT 0,
             equipped_weapon TEXT,
             equipped_armor TEXT,
             equipped_accessory1 TEXT,
@@ -710,9 +712,39 @@ def create_tables(conn: Optional[object] = None) -> None:
             gacha_daily_reset INTEGER DEFAULT 0,
             daily_cultivate_stone_day INTEGER DEFAULT 0,
             daily_cultivate_stone_claimed INTEGER DEFAULT 0,
-            telegram_id TEXT
+            telegram_id TEXT,
+            tower_floor INTEGER DEFAULT 0,
+            tower_last_attempt_day INTEGER DEFAULT 0,
+            tower_resets_today INTEGER DEFAULT 0,
+            garden_level INTEGER DEFAULT 1,
+            garden_exp INTEGER DEFAULT 0,
+            garden_last_water TIMESTAMPTZ
         )
         """
+    )
+
+    # 药园灵田表
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS herb_garden_plots (
+            id SERIAL PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            plot_index INT NOT NULL,
+            herb_name TEXT DEFAULT '',
+            planted_at TIMESTAMPTZ,
+            growth_minutes DOUBLE PRECISION DEFAULT 0,
+            water_count INTEGER DEFAULT 0,
+            watered BOOLEAN DEFAULT FALSE,
+            has_pest BOOLEAN DEFAULT FALSE,
+            pest_type TEXT DEFAULT '',
+            pest_at TIMESTAMPTZ,
+            is_dead BOOLEAN DEFAULT FALSE,
+            UNIQUE(user_id, plot_index)
+        )
+        """
+    )
+    cur.execute(
+        "CREATE INDEX IF NOT EXISTS idx_herb_garden_plots_user ON herb_garden_plots(user_id)"
     )
 
     # 修炼/活动计时表
@@ -813,6 +845,8 @@ def create_tables(conn: Optional[object] = None) -> None:
     for col_sql in [
         ("secret_realm_attempts", "ALTER TABLE users ADD COLUMN secret_realm_attempts INTEGER DEFAULT 0"),
         ("secret_realm_last_reset", "ALTER TABLE users ADD COLUMN secret_realm_last_reset INTEGER DEFAULT 0"),
+        ("secret_realm_resets_today", "ALTER TABLE users ADD COLUMN secret_realm_resets_today INTEGER DEFAULT 0"),
+        ("secret_realm_reset_day", "ALTER TABLE users ADD COLUMN secret_realm_reset_day INTEGER DEFAULT 0"),
         ("last_hunt_time", "ALTER TABLE users ADD COLUMN last_hunt_time INTEGER DEFAULT 0"),
         ("hunts_today", "ALTER TABLE users ADD COLUMN hunts_today INTEGER DEFAULT 0"),
         ("hunts_today_reset", "ALTER TABLE users ADD COLUMN hunts_today_reset INTEGER DEFAULT 0"),
@@ -864,6 +898,9 @@ def create_tables(conn: Optional[object] = None) -> None:
         ("signin_month_key", "ALTER TABLE users ADD COLUMN signin_month_key TEXT DEFAULT ''"),
         ("signin_month_days", "ALTER TABLE users ADD COLUMN signin_month_days INTEGER DEFAULT 0"),
         ("signin_month_claim_bits", "ALTER TABLE users ADD COLUMN signin_month_claim_bits INTEGER DEFAULT 0"),
+        ("tower_floor", "ALTER TABLE users ADD COLUMN tower_floor INTEGER DEFAULT 0"),
+        ("tower_last_attempt_day", "ALTER TABLE users ADD COLUMN tower_last_attempt_day INTEGER DEFAULT 0"),
+        ("tower_resets_today", "ALTER TABLE users ADD COLUMN tower_resets_today INTEGER DEFAULT 0"),
     ]:
         if col_sql[0] not in existing_columns:
             cur.execute(col_sql[1])
@@ -1619,6 +1656,7 @@ VALID_USER_COLUMNS = frozenset({
     "weak_until", "breakthrough_pity", "last_sign_timestamp",
     "consecutive_sign_days", "max_signin_days", "signin_month_key", "signin_month_days", "signin_month_claim_bits",
     "secret_realm_attempts", "secret_realm_last_reset",
+    "secret_realm_resets_today", "secret_realm_reset_day",
     "equipped_weapon", "equipped_armor", "equipped_accessory1", "equipped_accessory2",
     "last_hunt_time", "hunts_today", "hunts_today_reset",
     "last_secret_time", "last_quest_claim_time", "last_enhance_time",
@@ -1632,6 +1670,8 @@ VALID_USER_COLUMNS = frozenset({
     "gacha_free_today", "gacha_paid_today", "gacha_daily_reset",
     "daily_cultivate_stone_day", "daily_cultivate_stone_claimed",
     "secret_loot_score", "alchemy_output_score",
+    "tower_floor", "tower_last_attempt_day", "tower_resets_today",
+    "garden_level", "garden_exp", "garden_last_water",
 })
 
 
@@ -1871,7 +1911,7 @@ def add_item(user_id: str, item: Dict[str, Any]) -> int:
 
 
 def get_user_items(user_id: str) -> List[Dict[str, Any]]:
-    """获取用户所有物品，关联物品定义补充中文名和描述"""
+    """获取用户所有物品，合并同类道具数量，关联物品定义补充中文名和描述"""
     rows = fetch_all("SELECT * FROM items WHERE user_id = %s ORDER BY id DESC", (user_id,))
     try:
         from core.game.items import get_item_by_id
@@ -1884,7 +1924,15 @@ def get_user_items(user_id: str) -> List[Dict[str, Any]]:
                 row.setdefault("item_type", defn.get("type", ""))
     except Exception:
         pass
-    return rows
+    # 合并同 item_id + item_type 的条目，数量求和，保留第一条的元数据
+    merged: dict = {}
+    for row in rows:
+        key = f"{row.get('item_id', '')}:{row.get('item_type', '')}"
+        if key in merged:
+            merged[key]["quantity"] = int(merged[key].get("quantity", 0) or 0) + int(row.get("quantity", 0) or 0)
+        else:
+            merged[key] = dict(row)
+    return list(merged.values())
 
 
 def get_user_skills(user_id: str) -> List[Dict[str, Any]]:

@@ -21,13 +21,14 @@ from core.game.secret_realms import (
     get_secret_realm_attempts_left,
 )
 from core.services.settlement import settle_hunt, settle_secret_realm_explore
+from core.services.settlement import settle_secret_realm_reset, get_secret_realm_reset_info
 from core.services.turn_battle_service import (
     start_hunt_session,
     action_hunt_session,
     start_secret_realm_session,
     action_secret_session,
 )
-from core.utils.timeutil import midnight_timestamp
+from core.utils.timeutil import midnight_timestamp, local_day_key
 
 combat_bp = Blueprint("combat", __name__)
 
@@ -276,4 +277,28 @@ def secret_realms_turn_action():
         choice=choice,
         request_id=request_id,
     )
+    return jsonify(resp), http_status
+
+
+@combat_bp.route("/api/secret-realms/reset", methods=["POST"])
+def secret_realms_reset():
+    """花费灵石重置秘境次数"""
+    data, payload_error = parse_json_payload()
+    if payload_error:
+        return payload_error
+    user_id, auth_error = resolve_actor_user_id(data)
+    if auth_error:
+        return auth_error
+    log_action("secret_realm_reset", user_id=user_id)
+    resp, http_status = settle_secret_realm_reset(user_id)
+    return jsonify(resp), http_status
+
+
+@combat_bp.route("/api/secret-realms/reset-info/<user_id>", methods=["GET"])
+def secret_realms_reset_info(user_id: str):
+    """查询秘境重置信息"""
+    _, auth_error = resolve_actor_path_user_id(user_id)
+    if auth_error:
+        return auth_error
+    resp, http_status = get_secret_realm_reset_info(user_id)
     return jsonify(resp), http_status
