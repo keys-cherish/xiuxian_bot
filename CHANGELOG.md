@@ -6,6 +6,14 @@
 
 ## 2026-03-23
 
+### [56] 修炼面板补齐“开始/结束修炼”按钮
+- 记录时间：2026-03-23 12:39 (UTC+8)
+- 影响范围：`adapters/aiogram/ui.py`、`adapters/aiogram/handlers/cultivation.py`。
+- 修改摘要：
+  - 新增 `cultivation_keyboard`，按修炼状态动态展示按钮。
+  - 未修炼时显示“开始修炼”，修炼中显示“结束修炼”。
+  - 修炼面板统一保留“刷新状态 / 返回主菜单”按钮，避免入口缺失。
+
 ### [55] aiogram 主菜单按钮补全（修复迁移后入口缺失）
 - 记录时间：2026-03-23 12:26 (UTC+8)
 - 影响范围：`adapters/aiogram/ui.py`。

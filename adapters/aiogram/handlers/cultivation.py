@@ -60,38 +60,39 @@ async def _uid_from_query(query: CallbackQuery, state: FSMContext) -> str | None
     return uid
 
 
-async def _panel_text(uid: str) -> str:
+async def _panel_status(uid: str) -> tuple[str, bool]:
     status = await api_get(f"/api/cultivate/status/{uid}", actor_uid=uid)
     if not status.get("success"):
-        return f"🧘 修炼\n\n❌ {_error_text(status, '无法读取修炼状态')}"
+        return f"🧘 修炼\n\n❌ {_error_text(status, '无法读取修炼状态')}", False
     is_active = bool(status.get("is_cultivating"))
     elapsed = int(status.get("elapsed_seconds", 0) or 0)
     gained = int(status.get("exp_gained", 0) or 0)
     state_label = "进行中" if is_active else "未开始"
-    return (
+    text = (
         "🧘 修炼\n\n"
         f"状态：{state_label}\n"
         f"时长：{elapsed}s\n"
         f"累计修为：{gained}"
     )
+    return text, is_active
 
 
 async def _show_panel_message(message: Message, state: FSMContext, uid: str) -> None:
-    text = await _panel_text(uid)
+    text, is_active = await _panel_status(uid)
     await state.set_state(CultivationFSM.idle)
     await message.answer(
         text,
-        reply_markup=ui.main_menu_keyboard(registered=True),
+        reply_markup=ui.cultivation_keyboard(is_cultivating=is_active),
     )
 
 
 async def _show_panel_query(query: CallbackQuery, state: FSMContext, uid: str) -> None:
-    text = await _panel_text(uid)
+    text, is_active = await _panel_status(uid)
     await state.set_state(CultivationFSM.idle)
     await respond_query(
         query,
         text,
-        reply_markup=ui.main_menu_keyboard(registered=True),
+        reply_markup=ui.cultivation_keyboard(is_cultivating=is_active),
     )
 
 
@@ -126,7 +127,7 @@ async def cb_cultivation(query: CallbackQuery, state: FSMContext) -> None:
     if action == "start":
         data = await api_post("/api/cultivate/start", payload={"user_id": uid}, actor_uid=uid)
         if not data.get("success"):
-            await respond_query(query, f"❌ {_error_text(data, '开始修炼失败')}", reply_markup=ui.main_menu_keyboard(registered=True))
+            await respond_query(query, f"❌ {_error_text(data, '开始修炼失败')}", reply_markup=ui.cultivation_keyboard(is_cultivating=False))
             return
         await state.set_state(CultivationFSM.cultivating)
         await _show_panel_query(query, state, uid)
@@ -134,7 +135,7 @@ async def cb_cultivation(query: CallbackQuery, state: FSMContext) -> None:
     if action == "end":
         data = await api_post("/api/cultivate/end", payload={"user_id": uid}, actor_uid=uid)
         if not data.get("success"):
-            await respond_query(query, f"❌ {_error_text(data, '结束修炼失败')}", reply_markup=ui.main_menu_keyboard(registered=True))
+            await respond_query(query, f"❌ {_error_text(data, '结束修炼失败')}", reply_markup=ui.cultivation_keyboard(is_cultivating=True))
             return
         await state.set_state(CultivationFSM.reward_preview)
         await _show_panel_query(query, state, uid)

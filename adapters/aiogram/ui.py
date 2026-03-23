@@ -111,6 +111,18 @@ def register_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
+def cultivation_keyboard(*, is_cultivating: bool) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    if is_cultivating:
+        builder.button(text="⏹️ 结束修炼", callback_data="cul:end")
+    else:
+        builder.button(text="▶️ 开始修炼", callback_data="cul:start")
+    builder.button(text="🔄 刷新状态", callback_data="cul:status")
+    builder.button(text="⬅️ 主菜单", callback_data="menu:home")
+    builder.adjust(1, 1, 1)
+    return builder.as_markup()
+
+
 def main_menu_keyboard(*, registered: bool = True) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     if not registered:
