@@ -25,6 +25,13 @@ from adapters.aiogram.states.realms import SecretRealmsFSM
 router = Router(name="secret_realms")
 
 
+def _to_int(value, default=0):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def _error_text(payload: dict[str, Any] | None, default: str = "操作失败") -> str:
     if not isinstance(payload, dict):
         return default
@@ -75,10 +82,14 @@ async def _show_secret_panel_message(message: Message, state: FSMContext, uid: s
         )
         return
     realms = data.get("realms") or []
+    attempts_left = int(data.get("attempts_left", 0) or 0)
     await state.set_state(SecretRealmsFSM.selecting_realm)
     await state.update_data(uid=uid, secret_realms=realms)
+    panel_text = ui.format_secret_panel(realms, attempts_left=attempts_left)
+    if attempts_left <= 0:
+        panel_text = f"⚠️ 今日秘境次数已用完，请明日再来！\n\n{panel_text}"
     await message.answer(
-        ui.format_secret_panel(realms, attempts_left=int(data.get("attempts_left", 0) or 0)),
+        panel_text,
         reply_markup=ui.secret_realms_keyboard(realms),
     )
 
@@ -98,9 +109,12 @@ async def _show_secret_panel_query(
         )
         return
     realms = data.get("realms") or []
+    attempts_left = int(data.get("attempts_left", 0) or 0)
     await state.set_state(SecretRealmsFSM.selecting_realm)
     await state.update_data(uid=uid, secret_realms=realms)
-    panel_text = ui.format_secret_panel(realms, attempts_left=int(data.get("attempts_left", 0) or 0))
+    panel_text = ui.format_secret_panel(realms, attempts_left=attempts_left)
+    if attempts_left <= 0:
+        panel_text = f"⚠️ 今日秘境次数已用完，请明日再来！\n\n{panel_text}"
     if notice:
         panel_text = f"{notice}\n\n{panel_text}"
     await respond_query(
@@ -210,6 +224,11 @@ async def cb_secret(query: CallbackQuery, state: FSMContext) -> None:
                 await _show_path_panel_query(query, state, realm_id, notice="缺少路线参数，请重新选择路线。")
             else:
                 await _show_secret_panel_query(query, state, uid, notice="尚未选择秘境，已返回秘境列表。")
+            return
+        # Check remaining attempts before starting
+        check = await api_get(f"/api/secret-realms/{uid}", actor_uid=uid)
+        if check.get("success") and _to_int(check.get("attempts_left")) <= 0:
+            await _show_secret_panel_query(query, state, uid, notice="⚠️ 今日秘境次数已用完，请明日再来！")
             return
         if not realm_id:
             await _show_secret_panel_query(query, state, uid, notice="尚未选择秘境，已返回秘境列表。")

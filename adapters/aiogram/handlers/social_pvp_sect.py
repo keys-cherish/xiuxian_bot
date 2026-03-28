@@ -372,7 +372,7 @@ async def cb_social_pvp_sect(query: CallbackQuery, state: FSMContext) -> None:
             sect_id = args[1]
             result = await api_post(
                 "/api/sect/join",
-                {"user_id": uid, "sect_id": sect_id},
+                {"user_id": uid, "sect_id": sect_id, "skip_trial": True},
                 actor_uid=uid,
                 request_id=new_request_id(),
             )

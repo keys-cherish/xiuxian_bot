@@ -75,20 +75,21 @@ def _fmt_skills_lines(skills: Iterable[dict[str, Any]]) -> list[str]:
     return rows
 
 
-def _fmt_rewards(rewards: dict[str, Any] | None) -> list[str]:
+def _fmt_rewards(rewards: dict[str, Any] | None, *, drops: Iterable[dict[str, Any]] | None = None) -> list[str]:
     payload = rewards or {}
     exp = _to_int(payload.get("exp"), 0)
     copper = _to_int(payload.get("copper"), 0)
     gold = _to_int(payload.get("gold"), 0)
-    lines = ["🎁 奖励"]
+    lines: list[str] = ["🎁 奖励"]
     if exp > 0:
-        lines.append(f"• 修为 +{_fmt_num(exp)}")
+        lines.append(f"  ✨ 修为 +{_fmt_num(exp)}")
     if copper > 0:
-        lines.append(f"• 下品灵石 +{_fmt_num(copper)}")
+        lines.append(f"  🪙 下品灵石 +{_fmt_num(copper)}")
     if gold > 0:
-        lines.append(f"• 中品灵石 +{_fmt_num(gold)}")
-    if len(lines) == 1:
-        lines.append("• 无")
+        lines.append(f"  💰 中品灵石 +{_fmt_num(gold)}")
+    has_drops = bool(drops or payload.get("drops"))
+    if len(lines) == 1 and not has_drops:
+        lines.append("  • 无")
     return lines
 
 
@@ -154,9 +155,10 @@ def main_menu_keyboard(*, registered: bool = True) -> InlineKeyboardMarkup:
     builder.button(text="📖 剧情", callback_data="story:menu")
     builder.button(text="⚗️ 炼丹", callback_data="alchemy:menu")
     builder.button(text="🔨 锻造", callback_data="forge:menu")
+    builder.button(text="🗺️ 大地图", callback_data="map:world")
     builder.button(text="📖 指南", callback_data="story:chapter:guide")
     builder.button(text="🔄 刷新菜单", callback_data="menu:home")
-    builder.adjust(2, 2, 3, 2, 3, 3, 3, 3, 1)
+    builder.adjust(2, 2, 3, 2, 3, 3, 3, 2, 2, 1)
     return builder.as_markup()
 
 
@@ -442,8 +444,9 @@ def format_hunt_settlement(payload: dict[str, Any]) -> str:
     lines = [
         f"{'✅ 胜利' if payload.get('victory') else '❌ 战败'} - {payload.get('message', '狩猎结束')}",
     ]
-    lines.extend(_fmt_rewards(payload.get("rewards") or {}))
-    lines.extend(_fmt_drops(payload.get("drops") or []))
+    hunt_drops = payload.get("drops") or []
+    lines.extend(_fmt_rewards(payload.get("rewards") or {}, drops=hunt_drops))
+    lines.extend(_fmt_drops(hunt_drops))
     status = payload.get("post_status") or {}
     if status:
         lines.append("📊 当前状态")
@@ -470,11 +473,14 @@ def format_breakthrough_preview(preview: dict[str, Any]) -> str:
     tribulation_rate_multiplier = float(preview.get("tribulation_rate_multiplier", 1.0) or 1.0)
     tribulation_extra_cost = _to_int(preview.get("tribulation_extra_cost_copper"), 0)
     tribulation_extra_stamina = _to_int(preview.get("tribulation_extra_stamina"), 0)
+    next_exp = _to_int(preview.get("exp_required"), 0)
+    current_exp = _to_int(preview.get("current_exp"), 0)
     lines = [
         "⛈️ 渡劫突破预览" if is_tribulation else "⚡ 突破预览",
         f"策略: {strategy_name}",
         f"关卡类型: {'圆满渡劫（天雷劫）' if is_tribulation else '常规破境'}",
         f"当前境界: {preview.get('current_realm', '未知')} → {preview.get('next_realm', '未知')}",
+        f"修为需求: {_fmt_num(current_exp)}/{_fmt_num(next_exp)}",
         f"所在地: {location_name}（灵气×{spirit_density:.2f}，地脉{location_bonus}）",
         f"今日运势: {fortune_label}（{fortune_bonus}）",
         f"道友助阵: {'已召集' if call_for_help else '未召集'}（{ally_bonus if call_for_help else '0%'}）",
@@ -604,9 +610,9 @@ def format_secret_settlement(payload: dict[str, Any]) -> str:
     if payload.get("event"):
         lines.append(f"🌌 事件: {payload.get('event')}")
     rewards = payload.get("rewards") or {}
-    if rewards:
-        lines.extend(_fmt_rewards(rewards))
-        lines.extend(_fmt_drops(rewards.get("drops") or []))
+    secret_drops = (rewards.get("drops") if isinstance(rewards, dict) else None) or payload.get("drops") or []
+    lines.extend(_fmt_rewards(rewards if isinstance(rewards, dict) else {}, drops=secret_drops))
+    lines.extend(_fmt_drops(secret_drops))
     status = payload.get("post_status") or {}
     if status:
         lines.append("📊 当前状态")
@@ -619,6 +625,7 @@ def format_secret_settlement(payload: dict[str, Any]) -> str:
         for reason in reasons[:3]:
             lines.append(f"• {reason}")
     return "\n".join(lines)
+
 
 
 # ---------------------------------------------------------------------------
@@ -1261,6 +1268,26 @@ def format_rank_panel(payload: dict[str, Any] | None = None) -> str:
         lines.append("暂无排行数据。")
     for idx, row in enumerate(rows[:10], start=1):
         name = row.get("username") or row.get("name") or row.get("user_id") or "匿名修士"
-        score = row.get("score", row.get("value", row.get("rating", "-")))
+        score = row.get("score", row.get("wealth", row.get("pvp_rating", row.get("power", row.get("value", row.get("rating", "-"))))))
         lines.append(f"{idx}. {name} - {score}")
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# World Map (大地图)
+# ---------------------------------------------------------------------------
+
+def world_map_keyboard(adjacent: Iterable[dict[str, Any]] | None = None, actions: Iterable[dict[str, Any]] | None = None) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    for act in list(actions or [])[:4]:
+        builder.button(text=str(act.get("label", "操作")), callback_data=f"map:action:{act.get('action', '')}")
+    for adj in list(adjacent or [])[:6]:
+        builder.button(text=f"→ {adj.get('name', adj.get('id', ''))}", callback_data=f"map:travel:{adj.get('id', '')}")
+    builder.button(text="🔙 主菜单", callback_data="menu:home")
+    builder.adjust(2)
+    return builder.as_markup()
+
+
+def format_world_map_panel(map_text: str) -> str:
+    return map_text or "🗺️ 地图加载中..."
+

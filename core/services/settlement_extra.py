@@ -398,6 +398,8 @@ def get_breakthrough_preview(
     fortune_bonus = float(env_ctx.get("fortune_bonus", 0.0) or 0.0)
     ally_help_bonus = float(bt_cfg.get("ally_help_bonus", 0.06) or 0.06) if call_for_help else 0.0
     base_cost = calculate_breakthrough_cost(current_rank)
+    exp_required = int(next_realm.get("exp_required", 0) or 0)
+    current_exp = int(user.get("exp", 0) or 0)
     protect_need = _protect_material_need(current_rank, bt_cfg) if strategy == "protect" else 0
     base_total_cost = int(base_cost + protect_need)
     if is_tribulation:
@@ -558,6 +560,8 @@ def get_breakthrough_preview(
             "next_realm": next_realm.get("name", "下一境界"),
             "cost_copper": int(cost),
             "base_cost_copper": int(base_cost),
+            "exp_required": exp_required,
+            "current_exp": current_exp,
             "extra_cost_copper": int(protect_need if strategy == "protect" else 0),
             "is_tribulation": bool(is_tribulation),
             "tribulation_name": "天雷劫" if is_tribulation else "",
@@ -2099,6 +2103,26 @@ def _handle_breakthrough(*, cur, user_id, user, base_item, now) -> Dict[str, Any
     }
 
 
+
+
+def _handle_stamina(*, cur, user_id, user, base_item, now) -> Dict[str, Any]:
+    value = int(base_item.get("value", 3) or 3)
+    max_stamina = int(user.get("max_stamina", 24) or 24)
+    cur.execute(
+        "UPDATE users SET stamina = LEAST(%s, stamina + %s) WHERE user_id = %s",
+        (max_stamina, value, user_id),
+    )
+    return {
+        "success": True,
+        "message": f"使用成功！恢复 {value} 点精力",
+        "effect": "stamina",
+        "value": value,
+        "effect_type": "instant",
+        "effect_description": f"精力+{value}",
+        "effect_duration": 0,
+        "effect_value": value,
+    }
+
 # 效果名 -> 处理函数 映射表
 _ITEM_EFFECT_HANDLERS: Dict[str, Any] = {
     "exp": _handle_exp,
@@ -2113,6 +2137,7 @@ _ITEM_EFFECT_HANDLERS: Dict[str, Any] = {
     "breakthrough_protect": _handle_breakthrough_protect,
     "spirit_array": _handle_spirit_array,
     "breakthrough": _handle_breakthrough,
+    "stamina": _handle_stamina,
 }
 
 

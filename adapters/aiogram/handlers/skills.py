@@ -196,12 +196,21 @@ async def cb_skills(query: CallbackQuery, state: FSMContext) -> None:
             await _show_skill_menu_with_hint(query, state, uid, f"未找到技能 {skill_id}，可能已变更，请从列表重新进入。")
             return
         learned = bool(row.get("learned"))
-        name = str(row.get("name") or skill_id).strip()
-        text_lines = [f"📘 技能详情：{name}", f"技能ID：{skill_id}"]
+        display_name = str(row.get("name") or skill_id).strip()
+        clean_name = display_name
+        if clean_name.startswith("✅ ") or clean_name.startswith("📘 ") or clean_name.startswith("🆕 "):
+            clean_name = clean_name[2:].strip()
+        text_lines = [f"📘 技能详情：{clean_name}"]
         if row.get("desc"):
             text_lines.append(str(row.get("desc")))
         if row.get("unlock_rank") is not None:
-            text_lines.append(f"解锁境界：{row.get('unlock_rank')}")
+            try:
+                from core.game.realms import get_realm_by_id
+                _realm = get_realm_by_id(int(row.get("unlock_rank")))
+                _realm_name = _realm["name"] if _realm else str(row.get("unlock_rank"))
+            except Exception:
+                _realm_name = str(row.get("unlock_rank"))
+            text_lines.append(f"解锁境界：{_realm_name}")
         text_lines.append(f"状态：{'已学会' if learned else '未学会'}")
         await respond_query(
             query,

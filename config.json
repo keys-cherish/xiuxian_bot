@@ -350,7 +350,7 @@
     }
   },
   "secret_realm": {
-    "daily_limit": 3
+    "daily_limit": 5
   },
   "economy": {
     "exchange_rate": 1000
@@ -512,7 +512,7 @@
     "world_boss": {
       "id": "world_boss_1",
       "name": "赤炎妖王",
-      "max_hp": 3000,
+      "max_hp": 50000,
       "reward_copper": 1200,
       "reward_exp": 1200,
       "reward_gold": 2,

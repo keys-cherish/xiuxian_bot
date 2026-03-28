@@ -175,6 +175,7 @@ PILLS = [
     {"id": "spirit_array_high", "name": "上品聚灵阵", "type": ItemType.PILL, "effect": "spirit_array", "value": 25, "value_pct": 0.50, "duration": 10800, "price": 3600},
     
     # 恢复丹
+    {"id": "stamina_pill", "name": "精力丹", "type": ItemType.PILL, "effect": "stamina", "value": 3, "price": 150},
     {"id": "hp_pill", "name": "回血丹", "type": ItemType.PILL, "effect": "hp", "value_pct": 0.30, "price": 50},
     {"id": "mp_pill", "name": "回蓝丹", "type": ItemType.PILL, "effect": "mp", "value_pct": 0.30, "price": 50},
     {"id": "full_restore_pill", "name": "大还丹", "type": ItemType.PILL, "effect": "full_restore", "value": 0, "price": 300},
@@ -714,6 +715,7 @@ SHOP_ITEMS = {
         {"item_id": "hp_pill", "name": "回血丹", "price": 50, "stock": -1, "category": "pill"},
         {"item_id": "mp_pill", "name": "回蓝丹", "price": 50, "stock": -1, "category": "pill"},
         {"item_id": "breakthrough_pill", "name": "突破丹", "price": 500, "stock": -1, "category": "pill"},
+        {"item_id": "stamina_pill", "name": "精力丹", "price": 150, "stock": -1, "category": "pill"},
         # 法阵（低级在铜币）
         {"item_id": "spirit_array_low", "name": "下品聚灵阵", "price": 650, "stock": -1, "category": "array"},
         # 材料
@@ -730,6 +732,7 @@ SHOP_ITEMS = {
         {"item_id": "cultivation_sprint_pill", "name": "修炼冲刺丹", "price": 8, "stock": -1, "category": "pill"},
         {"item_id": "realm_drop_pill", "name": "秘境掉落丹", "price": 8, "stock": -1, "category": "pill"},
         {"item_id": "breakthrough_guard_pill", "name": "突破保护丹", "price": 12, "stock": -1, "category": "pill"},
+        {"item_id": "stamina_pill", "name": "精力丹", "price": 3, "stock": -1, "category": "pill"},
         # 法阵（中高级在金币）
         {"item_id": "spirit_array_mid", "name": "中品聚灵阵", "price": 12, "stock": -1, "category": "array"},
         {"item_id": "spirit_array_high", "name": "上品聚灵阵", "price": 24, "stock": -1, "category": "array"},

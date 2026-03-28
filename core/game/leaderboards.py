@@ -26,12 +26,18 @@ def calculate_power(user: Dict[str, Any]) -> int:
 
 
 def leaderboard_entry(user: Dict[str, Any]) -> Dict[str, Any]:
+    copper = int(user.get("copper", 0) or 0)
+    gold = int(user.get("gold", 0) or 0)
+    wealth = copper + gold * 1000
     return {
         "user_id": user.get("user_id"),
         "name": user.get("in_game_username", "未知修士"),
         "rank": user.get("rank", 1),
         "exp": user.get("exp", 0),
         "power": calculate_power(user),
+        "wealth": wealth,
+        "copper": copper,
+        "gold": gold,
         "dy_times": user.get("dy_times", 0),
         # Backward-compatible alias: historical "exp_growth" now explicitly means total exp.
         "exp_growth": user.get("exp", 0),

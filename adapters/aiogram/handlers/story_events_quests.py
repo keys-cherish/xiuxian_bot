@@ -213,9 +213,67 @@ def _normalize_bounty_payload(payload: dict | None, uid: str) -> dict:
     return data
 
 
+def _rank_mode_from_action(action: str) -> str:
+    if action == "realm":
+        return "exp"
+    if action == "wealth":
+        return "wealth"
+    return "power"
+
+
+def _rank_title_from_mode(mode: str) -> str:
+    if mode == "exp":
+        return "🏆 境界排行"
+    if mode == "wealth":
+        return "🏆 财富排行"
+    if mode == "pvp":
+        return "🏆 PVP排行"
+    return "🏆 战力排行"
+
+
+def _render_rank_panel(payload: dict) -> str:
+    title = _rank_title_from_mode(str(payload.get("mode") or ""))
+    text = ui.format_rank_panel(payload)
+    if text.startswith("🏆 排行面板"):
+        return text.replace("🏆 排行面板", title, 1)
+    return f"{title}\n\n{text}"
+
+
+async def _load_rank_payload(uid: str, action: str) -> dict:
+    mode = _rank_mode_from_action(action)
+    data = await api_get("/api/leaderboard", params={"mode": mode}, actor_uid=uid)
+    if isinstance(data, dict) and data.get("success"):
+        data.setdefault("mode", mode)
+        return data
+    fallback = await api_get("/api/pvp/ranking", params={"limit": 10}, actor_uid=uid)
+    if isinstance(fallback, dict):
+        fallback.setdefault("mode", "pvp")
+        return fallback
+    return {"success": False, "entries": []}
+
+
+async def _load_boss_rank_payload(uid: str) -> dict:
+    data = await api_get("/api/worldboss/status", actor_uid=uid)
+    if not isinstance(data, dict):
+        return {"success": False, "entries": []}
+    top = list(data.get("top_attackers") or [])
+    entries: list[dict[str, Any]] = []
+    for row in top:
+        if not isinstance(row, dict):
+            continue
+        entries.append(
+            {
+                "username": row.get("username") or row.get("name") or row.get("user_id") or "匿名修士",
+                "score": int(row.get("total_damage", 0) or 0),
+            }
+        )
+    return {"success": True, "entries": entries}
+
+
 async def _load_bounty_payload(uid: str) -> dict:
     data = await api_get("/api/bounties", params={"status": "all", "limit": 30}, actor_uid=uid)
     return _normalize_bounty_payload(data, uid)
+
 
 
 def _should_fallback_to_bounty_accept(result: dict | None) -> bool:
@@ -283,9 +341,9 @@ async def cmd_rank(message: Message, state: FSMContext) -> None:
     if not uid:
         await message.answer("未找到你的角色，请先注册。", reply_markup=ui.register_keyboard())
         return
-    data = await api_get("/api/pvp/ranking", params={"limit": 10}, actor_uid=uid)
+    data = await _load_rank_payload(uid, "menu")
     await state.set_state(StoryEventsFSM.rank_menu)
-    await message.answer(ui.format_rank_panel(data), reply_markup=ui.rank_menu_keyboard())
+    await message.answer(_render_rank_panel(data), reply_markup=ui.rank_menu_keyboard())
 
 
 @router.message(Command("xian_guide", "xian_realms", "guide", "realms"))
@@ -338,6 +396,7 @@ async def cmd_codex(message: Message, state: FSMContext) -> None:
     | F.data.startswith("boss:")
     | F.data.startswith("bounty:")
     | F.data.startswith("rank:")
+    | F.data.startswith("map:")
 )
 async def cb_story_events_quests(query: CallbackQuery, state: FSMContext) -> None:
     parsed = parse_callback(str(query.data or ""))
@@ -536,10 +595,9 @@ async def cb_story_events_quests(query: CallbackQuery, state: FSMContext) -> Non
             await safe_answer(query, text=message)
             return
         if action == "rank":
-            data = await api_get("/api/worldboss/status", actor_uid=uid)
-            text = f"{ui.format_boss_panel(data)}\n\n📌 暂无世界BOSS排行接口，已显示当前BOSS状态。"
-            await respond_query(query, text, reply_markup=ui.boss_menu_keyboard())
-            await safe_answer(query, text="暂无BOSS排行接口")
+            rank_payload = await _load_boss_rank_payload(uid)
+            await respond_query(query, ui.format_rank_panel(rank_payload), reply_markup=ui.boss_menu_keyboard())
+            await safe_answer(query, text="BOSS排行榜")
             return
 
     if domain == "bounty":
@@ -593,15 +651,71 @@ async def cb_story_events_quests(query: CallbackQuery, state: FSMContext) -> Non
         return
 
     if domain == "rank":
-        data = await api_get("/api/pvp/ranking", params={"limit": 10}, actor_uid=uid)
+        data = await _load_rank_payload(uid, action)
         await state.set_state(StoryEventsFSM.rank_menu)
-        await respond_query(query, ui.format_rank_panel(data), reply_markup=ui.rank_menu_keyboard())
+        await respond_query(query, _render_rank_panel(data), reply_markup=ui.rank_menu_keyboard())
         if action == "menu":
             await safe_answer(query)
         elif action in {"realm", "combat", "wealth"}:
-            await safe_answer(query, text="后端当前仅支持综合榜，已显示默认排行")
+            await safe_answer(query, text="已切换榜单")
         else:
             await safe_answer(query, text="该排行按钮已失效，已返回排行面板")
+        return
+
+
+    if domain == "map":
+        if action == "world":
+            stat_r = await api_get(f"/api/stat/{uid}", actor_uid=uid)
+            if not stat_r.get("success"):
+                await respond_query(query, "❌ 获取状态失败", reply_markup=ui.main_menu_keyboard(registered=True))
+                await safe_answer(query)
+                return
+            status = stat_r.get("status") or {}
+            current_map = status.get("current_map", "canglan_city")
+            rank = int(status.get("rank", 1) or 1)
+            dao_h = float(status.get("dao_heng", 0) or 0)
+            dao_n = float(status.get("dao_ni", 0) or 0)
+            dao_y = float(status.get("dao_yan", 0) or 0)
+            try:
+                from core.game.maps import format_world_map, get_adjacent_maps, get_area_actions, check_travel_requirements
+                map_text = format_world_map(current_map, rank, dao_h, dao_n, dao_y)
+                adj_raw = get_adjacent_maps(current_map)
+                adj = [a for a in adj_raw if check_travel_requirements(a["id"], rank, dao_h, dao_n, dao_y)[0]]
+                actions_list = get_area_actions(current_map)
+            except Exception:
+                map_text = f"🗺️ 当前位置：{current_map}"
+                adj = []
+                actions_list = []
+            await respond_query(query, ui.format_world_map_panel(map_text), reply_markup=ui.world_map_keyboard(adj, actions_list))
+            await safe_answer(query)
+            return
+        if action == "travel" and args:
+            to_map_id = args[0]
+            result = await api_post("/api/travel", {"user_id": uid, "to_map": to_map_id}, actor_uid=uid)
+            notice = str(result.get("message") or ("移动成功" if result.get("success") else "无法移动"))
+            stat_r = await api_get(f"/api/stat/{uid}", actor_uid=uid)
+            status = (stat_r.get("status") or {}) if stat_r.get("success") else {}
+            current_map = status.get("current_map", to_map_id)
+            rank = int(status.get("rank", 1) or 1)
+            dao_h = float(status.get("dao_heng", 0) or 0)
+            dao_n = float(status.get("dao_ni", 0) or 0)
+            dao_y = float(status.get("dao_yan", 0) or 0)
+            try:
+                from core.game.maps import format_world_map, get_adjacent_maps, get_area_actions, check_travel_requirements
+                map_text = format_world_map(current_map, rank, dao_h, dao_n, dao_y)
+                adj_raw = get_adjacent_maps(current_map)
+                adj = [a for a in adj_raw if check_travel_requirements(a["id"], rank, dao_h, dao_n, dao_y)[0]]
+                actions_list = get_area_actions(current_map)
+            except Exception:
+                map_text = f"🗺️ 当前位置：{current_map}"
+                adj = []
+                actions_list = []
+            panel = f"{notice}\n\n{ui.format_world_map_panel(map_text)}"
+            await respond_query(query, panel, reply_markup=ui.world_map_keyboard(adj, actions_list))
+            await safe_answer(query)
+            return
+        await respond_query(query, "该地图按钮已失效", reply_markup=ui.main_menu_keyboard(registered=True))
+        await safe_answer(query)
         return
 
     await handle_expired_callback(query)

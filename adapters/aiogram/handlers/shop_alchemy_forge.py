@@ -134,13 +134,22 @@ async def _show_forge_menu_query(query: CallbackQuery, state: FSMContext, uid: s
     await safe_answer(query)
 
 
+async def _mark_shop_visit(uid: str) -> None:
+    try:
+        await api_get("/api/shop", params={"currency": "copper", "page": 1, "page_size": 1, "user_id": uid}, actor_uid=uid)
+    except Exception:
+        pass
+
+
 async def _show_shop_currency_message(message: Message, state: FSMContext, uid: str) -> None:
+    await _mark_shop_visit(uid)
     await state.update_data(uid=uid, shop_currency="copper", shop_page=1)
     await state.set_state(ShopFSM.selecting_currency)
     await message.answer("🏪 请选择商店货币", reply_markup=ui.shop_currency_keyboard())
 
 
 async def _show_shop_currency_query(query: CallbackQuery, state: FSMContext, uid: str, notice: str | None = None) -> None:
+    await _mark_shop_visit(uid)
     await state.update_data(uid=uid, shop_currency="copper", shop_page=1)
     await state.set_state(ShopFSM.selecting_currency)
     text = "🏪 请选择商店货币"
