@@ -219,6 +219,11 @@ async def cb_secret(query: CallbackQuery, state: FSMContext) -> None:
         if not args:
             await _show_secret_panel_query(query, state, uid, notice="缺少秘境参数，已返回秘境列表，请重新选择。")
             return
+        # 选择秘境前再次检查次数
+        check = await api_get(f"/api/secret-realms/{uid}", actor_uid=uid)
+        if check.get("success") and _to_int(check.get("attempts_left")) <= 0:
+            await _show_secret_panel_query(query, state, uid, notice="⚠️ 今日秘境次数已用完，请明日再来！")
+            return
         realm_id = args[0]
         await _show_path_panel_query(query, state, realm_id)
         return
