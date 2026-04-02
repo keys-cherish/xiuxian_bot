@@ -1281,7 +1281,13 @@ def start_secret_realm_session(
     user = get_user_by_id(user_id) or user
     existing = _find_active_session_for_user(user_id)
     if existing:
-        return {"success": False, "message": "已有进行中的战斗", "session_id": existing.get("id"), "kind": existing.get("kind")}, 409
+        old_sid = existing.get("id") or ""
+        if old_sid:
+            _session_pop(old_sid)
+            _delete_session(old_sid)
+        existing = _find_active_session_for_user(user_id)
+        if existing:
+            return {"success": False, "message": "已有进行中的战斗", "session_id": existing.get("id"), "kind": existing.get("kind")}, 409
     user = _reset_secret_realm_attempts_if_needed(user_id, user, now)
     last_secret = int(user.get("last_secret_time", 0) or 0)
     remaining = secret_cooldown_seconds - (now - last_secret)
